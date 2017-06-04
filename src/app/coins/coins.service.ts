@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { URLSearchParams, Http} from "@angular/http";
+import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/toPromise';
 
 export class Coin {
@@ -10,7 +11,7 @@ export class Coin {
 @Injectable()
 export class CoinsService {
 
-    private apiUrl = 'http://localhost:8080/coins';
+    private apiUrl = environment.baseAPIUrl + 'coins';
     results: Coin[];
     constructor(private http: Http) {
         this.results = [];
