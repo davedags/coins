@@ -1,0 +1,12 @@
+.rankings {
+    margin-top: 75px;
+    width: 90%;
+}
+
+:host /deep/ ng2-smart-table tbody > tr > td {
+    font-size: 14px;
+}
+
+:host /deep/ ng2-smart-table thead > tr {
+    font-size: 14px;
+}
