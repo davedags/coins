@@ -1,5 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { Coin, CoinsService } from './coins.service';
+import { LocalDataSource } from "ng2-smart-table/index";
 
 @Component({
     selector: 'app-coins',
@@ -11,7 +12,10 @@ import { Coin, CoinsService } from './coins.service';
 })
 export class CoinsComponent implements OnInit {
     
-    public coins: Coin[] = [];
+    public coins: Coin[];
+    public source: LocalDataSource;
+    public init;
+    public searchTerm: string;
     public settings: Object = {
         columns: {
             'position': {
@@ -77,7 +81,11 @@ export class CoinsComponent implements OnInit {
 
     };
     
-    constructor(private coinService: CoinsService) {}
+    constructor(private coinService: CoinsService) {
+        this.coins = [];
+        this.init = false;
+        this.searchTerm = '';
+    }
     
     
     ngOnInit() {
@@ -88,10 +96,34 @@ export class CoinsComponent implements OnInit {
         this.coinService.getCoins()
             .then(coins => {
                 this.coins = coins;
+                this.source = new LocalDataSource(coins);
+                this.init = true;
             });
     }
 
+    doSearch(): void {
+        if (this.init) {
+            if (this.searchTerm) {
+                this.source.setFilter([
+                    {
+                        field: 'name',
+                        search: this.searchTerm
+                    },
+                    {
+                        field: 'symbol',
+                        search: this.searchTerm
+                    }
+                ], false);
+            } else {
+                this.source.reset();
+            }
+        }
+    }
 
+    clearSearch(): void {
+        this.searchTerm = '';
+        this.source.reset();
+    }
     
     
 }

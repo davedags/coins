@@ -10,3 +10,7 @@
 :host /deep/ ng2-smart-table thead > tr {
     font-size: 14px;
 }
+
+.search {
+    margin-bottom: 5px;
+}

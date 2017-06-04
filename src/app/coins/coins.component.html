@@ -1,3 +1,6 @@
 <div class="container rankings">
-    <ng2-smart-table [settings]="settings" [source]="coins"></ng2-smart-table>
+    <input [(ngModel)]="searchTerm" name="searchInput" class="search" type="text" placeholder="Search..." (keydown.enter)="doSearch()" />
+    <button type="button" class="btn btn-primary btn-sm" (click)="doSearch()">Search</button>
+    <button type="button" class="btn btn-secondary btn-sm" (click)="clearSearch()">Clear</button>
+    <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
 </div>
