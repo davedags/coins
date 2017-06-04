@@ -29,15 +29,25 @@ export class CoinsComponent implements OnInit {
 
             'price': {
                 title: 'Price',
-                width: '35px'
+                width: '35px',
+                valuePrepareFunction: (value) => {
+                    return '$' + Number(value).toLocaleString('en', { minimumFractionDigits: 4, maximumFractionDigits: 8})
+                }
             },
             'marketcap': {
                 title: 'Market Cap',
-                width: '40px'
+                width: '40px',
+                valuePrepareFunction: (value) => { 
+                    return '$' + Number(value).toLocaleString('en', 
+                        { maximumFractionDigits: 0 }) 
+                    }
             },
             'percent_24': {
                 title: '%24Hr',
-                width: '15px'
+                width: '15px',
+                valuePrepareFunction: (value) => {
+                    return value + '%';
+                }
             }
         },
         hideSubHeader: true,
