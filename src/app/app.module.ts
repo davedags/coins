@@ -6,7 +6,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 
 import { AppComponent } from './app.component';
-//import { CollapseDirective } from 'ng2-bootstrap';
 import { CoinsComponent } from './coins/coins.component';
 import { ConvertorComponent } from './convertor/convertor.component';
 
