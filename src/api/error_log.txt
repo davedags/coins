@@ -191,3 +191,43 @@ Trace: #0 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Handler\CurlFactory.php(150
 #32 {main}
 View in rendered output by enabling the "displayErrorDetails" setting.
 
+[05-Jun-2017 00:04:50 UTC] Slim Application Error:
+Type: GuzzleHttp\Exception\ConnectException
+Message: cURL error 28: Operation timed out after 2000 milliseconds with 0 bytes received (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)
+File: C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Handler\CurlFactory.php
+Line: 186
+Trace: #0 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Handler\CurlFactory.php(150): GuzzleHttp\Handler\CurlFactory::createRejection(Object(GuzzleHttp\Handler\EasyHandle), Array)
+#1 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Handler\CurlFactory.php(103): GuzzleHttp\Handler\CurlFactory::finishError(Object(GuzzleHttp\Handler\CurlHandler), Object(GuzzleHttp\Handler\EasyHandle), Object(GuzzleHttp\Handler\CurlFactory))
+#2 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Handler\CurlHandler.php(43): GuzzleHttp\Handler\CurlFactory::finish(Object(GuzzleHttp\Handler\CurlHandler), Object(GuzzleHttp\Handler\EasyHandle), Object(GuzzleHttp\Handler\CurlFactory))
+#3 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Handler\Proxy.php(28): GuzzleHttp\Handler\CurlHandler->__invoke(Object(GuzzleHttp\Psr7\Request), Array)
+#4 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Handler\Proxy.php(51): GuzzleHttp\Handler\Proxy::GuzzleHttp\Handler\{closure}(Object(GuzzleHttp\Psr7\Request), Array)
+#5 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\PrepareBodyMiddleware.php(42): GuzzleHttp\Handler\Proxy::GuzzleHttp\Handler\{closure}(Object(GuzzleHttp\Psr7\Request), Array)
+#6 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Middleware.php(30): GuzzleHttp\PrepareBodyMiddleware->__invoke(Object(GuzzleHttp\Psr7\Request), Array)
+#7 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\RedirectMiddleware.php(68): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Request), Array)
+#8 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Middleware.php(59): GuzzleHttp\RedirectMiddleware->__invoke(Object(GuzzleHttp\Psr7\Request), Array)
+#9 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\HandlerStack.php(67): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Request), Array)
+#10 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Client.php(275): GuzzleHttp\HandlerStack->__invoke(Object(GuzzleHttp\Psr7\Request), Array)
+#11 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Client.php(123): GuzzleHttp\Client->transfer(Object(GuzzleHttp\Psr7\Request), Array)
+#12 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Client.php(129): GuzzleHttp\Client->requestAsync('get', Object(GuzzleHttp\Psr7\Uri), Array)
+#13 C:\Code\Coins\vendor\guzzlehttp\guzzle\src\Client.php(87): GuzzleHttp\Client->request('get', 'http://www.coin...', Array)
+#14 C:\Code\Coins\backend_src\Service\Coin.php(37): GuzzleHttp\Client->__call('get', Array)
+#15 C:\Code\Coins\backend_src\Controller\Coin.php(27): Coins\Service\Coin->fetchCollection()
+#16 [internal function]: Coins\Controller\Coin->getList(Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#17 C:\Code\Coins\vendor\slim\slim\Slim\Handlers\Strategies\RequestResponse.php(41): call_user_func(Array, Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#18 C:\Code\Coins\vendor\slim\slim\Slim\Route.php(344): Slim\Handlers\Strategies\RequestResponse->__invoke(Array, Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#19 C:\Code\Coins\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(122): Slim\Route->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#20 C:\Code\Coins\vendor\slim\slim\Slim\Route.php(316): Slim\Route->callMiddlewareStack(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#21 C:\Code\Coins\vendor\slim\slim\Slim\App.php(476): Slim\Route->run(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#22 C:\Code\Coins\backend_src\App.php(30): Slim\App->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#23 [internal function]: Coins\App->Coins\{closure}(Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#24 C:\Code\Coins\vendor\slim\slim\Slim\DeferredCallable.php(43): call_user_func_array(Object(Closure), Array)
+#25 [internal function]: Slim\DeferredCallable->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#26 C:\Code\Coins\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(73): call_user_func(Object(Slim\DeferredCallable), Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#27 C:\Code\Coins\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(122): Slim\App->Slim\{closure}(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#28 C:\Code\Coins\vendor\slim\slim\Slim\App.php(370): Slim\App->callMiddlewareStack(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#29 C:\Code\Coins\vendor\slim\slim\Slim\App.php(295): Slim\App->process(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#30 C:\Code\Coins\backend_src\App.php(58): Slim\App->run()
+#31 C:\Code\Coins\src\api\index.php(6): Coins\App->run()
+#32 {main}
+View in rendered output by enabling the "displayErrorDetails" setting.
+

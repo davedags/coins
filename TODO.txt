@@ -1,0 +1,12 @@
+0. Add Server side caching of api results
+
+1. Add Modal Popup onclick on row or name to show details about coin
+ --> in details, add things like total supply and other info available
+
+2. Convertor - preev.com like convertor but for any coin to USD
+
+3. Simple Registration/Login
+
+4. When logged in, new section Portolio
+
+5. Ability to add/remove from portfolio

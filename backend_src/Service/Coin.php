@@ -39,7 +39,7 @@ class Coin
             $body = $response->getBody()->getContents();
             if (($decoded = json_decode($body, true)) !== null) {
                 usort($decoded, ["\Coins\Service\Coin", "sortCoins"]);
-                $collection['results'] = array_slice($decoded, 0, 100);
+                $collection['results'] = $decoded;
                 $collection['total'] = count($decoded);
             }
         }

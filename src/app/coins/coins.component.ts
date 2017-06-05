@@ -65,14 +65,14 @@ export class CoinsComponent implements OnInit {
             }
         },
         hideSubHeader: true,
-
         actions: {
             add: false,
             edit: false,
             delete: false
         },
         pager: {
-            display: false
+            display: true,
+            perPage: 50
         },
         attr: {
             class: 'table table-bordered table-striped table-hover table-rankings'
