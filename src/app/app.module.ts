@@ -16,7 +16,6 @@ const appRoutes: Routes = [
 
 @NgModule({
     declarations: [
-        //CollapseDirective,
         AppComponent,
         CoinsComponent,
         ConvertorComponent
