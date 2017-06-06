@@ -1,0 +1,5 @@
+<?php
+//Copy this file into config.inc and define various configuration options
+
+//define REDIS servers for caching support
+define('REDIS_SERVERS', ''[ "host1:6379", "host2:6379" ]');

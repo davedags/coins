@@ -29,6 +29,11 @@ class Coin
 
     public function fetchCollection(array $args = []) 
     {
+        $cache = \Coins\Cache::Instance();
+        if ($data = $cache->get('coins.list')) {
+            return $data;
+        }
+
         $collection = [
             'results' => [],
             'total' => 0
@@ -38,9 +43,11 @@ class Coin
         if ($response->getStatusCode() == 200) {
             $body = $response->getBody()->getContents();
             if (($decoded = json_decode($body, true)) !== null) {
+                $this->cleanseAPIResults($decoded);
                 usort($decoded, ["\Coins\Service\Coin", "sortCoins"]);
                 $collection['results'] = $decoded;
                 $collection['total'] = count($decoded);
+                $cache->set('coins.list', $data, 300);
             }
         }
 
@@ -48,6 +55,20 @@ class Coin
         
     }
 
+    public function cleanseAPIResults(&$data)
+    {
+        foreach ($data as $idx => $row) {
+            $fields = [
+                'price',
+                'mktcap'
+            ];
+            foreach ($fields as $field) {
+                if ($row[$field] === "NaN") {
+                    $data[$idx][$field] = 0;
+                }
+            }
+        }
+    }
     public static function sortCoins($a, $b)
     {
 

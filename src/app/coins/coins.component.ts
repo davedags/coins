@@ -34,34 +34,30 @@ export class CoinsComponent implements OnInit {
             'price': {
                 title: 'Price',
                 width: '35px',
+                sort: 'desc',
                 valuePrepareFunction: (value) => {
                     return '$' + Number(value).toLocaleString('en', { minimumFractionDigits: 4, maximumFractionDigits: 8})
-                }
+                },
+                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             },
             'marketcap': {
                 title: 'Market Cap',
                 width: '40px',
+                sort: 'desc',
                 valuePrepareFunction: (value) => { 
                     return '$' + Number(value).toLocaleString('en', 
                         { maximumFractionDigits: 0 }) 
-                    }
+                },
+                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             },
             'percent_24': {
                 title: '%24Hr',
                 width: '15px',
+                sort: 'desc',
                 valuePrepareFunction: (value) => {
                     return value + '%';
                 },
-                compareFunction: (dir, a, b) => {
-                    let a1 = Number(a);
-                    let b1 = Number(b);
-                    if (a1 < b1) {
-                        return -1 * dir;
-                    } else if (a1 > b1) {
-                        return dir;
-                    }
-                    return 0;
-                }
+                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             }
         },
         hideSubHeader: true,
@@ -124,6 +120,16 @@ export class CoinsComponent implements OnInit {
         this.searchTerm = '';
         this.source.reset();
     }
-    
+
+    compareNumbers(dir: number, a: any, b: any): number {
+        let a1 = Number(a);
+        let b1 = Number(b);
+        if (a1 < b1) {
+            return -1 * dir;
+        } else if (a1 > b1) {
+            return dir;
+        }
+        return 0;
+    }
     
 }
