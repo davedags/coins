@@ -9,9 +9,6 @@
 namespace Coins\Service;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\ResponseInterface;
 
 class Coin
 {
@@ -47,7 +44,7 @@ class Coin
                 usort($decoded, ["\Coins\Service\Coin", "sortCoins"]);
                 $collection['results'] = $decoded;
                 $collection['total'] = count($decoded);
-                $cache->set('coins.list', $data, 300);
+                $cache->set('coins.list', $collection, 300);
             }
         }
 

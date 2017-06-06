@@ -5,7 +5,9 @@ namespace Coins;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include_once(__DIR__ . "/../config/config.inc");
+if (file_exists($config = __DIR__ . "/../config/config.inc")) {
+    include_once($config);
+}
 
 class App
 {
