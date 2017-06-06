@@ -20,7 +20,7 @@ class Coin
     {
         $this->http = new Client([
            'base_uri' => self::API_BASE_URL,
-            'timeout' => 2
+            'timeout' => 3
         ]);
     }
 
