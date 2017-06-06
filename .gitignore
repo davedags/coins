@@ -42,3 +42,4 @@ testem.log
 Thumbs.db
 /vendor
 error_log.txt
+/config/config.inc
