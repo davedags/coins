@@ -27,7 +27,7 @@ class Cache
         try {
             if (class_exists('RedisArray', false) && defined('REDIS_SERVERS')) {
                 $servers = json_decode(REDIS_SERVERS);
-                $this->conn = new RedisArray(
+                $this->conn = new \RedisArray(
                     $servers,
                     [
                         'connect_timeout' => 2,
