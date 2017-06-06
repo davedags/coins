@@ -36,6 +36,7 @@ class Cache
                         'persistent' => true
                     ]
                 );
+                $this->conn->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
             }
         } catch (Exception $e) {
             $this->conn = null;
@@ -45,7 +46,6 @@ class Cache
     public function set($key, $val, $expiry = 0)
     {
         if ($this->conn) {
-            $val = gzcompress(serialize($val));
             $this->conn->set($key, $val, $expiry);
         }
     }
@@ -55,9 +55,6 @@ class Cache
         $val = null;
         if ($this->conn) {
             $val = $this->conn->get($key);
-            if ($val) {
-                $val = unserialize(gzuncompress($val));
-            }
         }
         return $val;
     }
