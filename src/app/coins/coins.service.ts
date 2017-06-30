@@ -60,7 +60,6 @@ export class CoinsService {
                         totalMarketCap: marketCap,
                         coins: collection
                     };
-                    console.log(returnVal);
                     return returnVal;
                 })
             .catch(
