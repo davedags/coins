@@ -33,7 +33,6 @@ export class CoinDetailComponent implements OnInit {
         this.coinService.getDetail(this.symbol)
             .then(res => {
                 this.detail = res;
-                console.log(this.detail);
             });
     }
 
@@ -41,7 +40,6 @@ export class CoinDetailComponent implements OnInit {
         this.coinService.getPrice(this.symbol)
             .then(res => {
                 this.price = res;
-                console.log(this.price);
             });
     }
 }
