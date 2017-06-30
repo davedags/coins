@@ -12,6 +12,10 @@ class Coin
 {
     protected $container;
     protected $service;
+    protected static $list_types = [
+        'mk' => 'getMarketCapList',
+        'cc' => 'getCryptoCompareList'
+    ];
 
     public function __construct($container) 
     {
@@ -20,13 +24,35 @@ class Coin
          
         
     }
-    
+
     public function getList($request, $response, $args)
     {
-
-        $list = $this->service->fetchCollection();
+        $type = 'mk'; //market cap list
+        if (isset($request->getQueryParams()['type'])) {
+           $type = $request->getQueryParams()['type'];
+            if (!isset(self::$list_types[$type])) {
+                return $response->withJson(['error_message' => "List Type: {$type} is not a valid type"], 400);
+            }
+        }
+        $function = self::$list_types[$type];
+        $list = $this->service->$function();
         return $response->withJson($list);
     }
 
 
+    public function getSymbolMap($request, $response, $args)
+    {
+        $list = $this->service->getCryptoCompareSymbolMap();
+        return $response->withJson($list);
+    }
+
+    public function getDetail($request, $response, $args)
+    {
+        return json_encode(['hi']);
+    }
+
+    public static function getListTypes()
+    {
+        return self::$list_types;
+    }
 }

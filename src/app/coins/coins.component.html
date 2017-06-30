@@ -2,5 +2,5 @@
     <input [(ngModel)]="searchTerm" name="searchInput" class="search" type="text" placeholder="Search..." (keydown.enter)="doSearch()" />
     <button type="button" class="btn btn-primary btn-sm" (click)="doSearch()">Search</button>
     <button type="button" class="btn btn-secondary btn-sm"*ngIf="searchTerm"(click)="clearSearch()">Clear</button>
-    <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+    <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
 </div>

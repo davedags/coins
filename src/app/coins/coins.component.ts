@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { Coin, CoinsService } from './coins.service';
 import { LocalDataSource } from "ng2-smart-table/index";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-coins',
@@ -12,8 +13,10 @@ import { LocalDataSource } from "ng2-smart-table/index";
 })
 export class CoinsComponent implements OnInit {
     
+    
     public coins: Coin[];
     public source: LocalDataSource;
+    public marketCap: number;
     public init;
     public searchTerm: string;
     public settings: Object = {
@@ -24,7 +27,16 @@ export class CoinsComponent implements OnInit {
             },
             'name': {
                 title: 'Name',
-                width: '20px'
+                width: '20px',
+                type: 'html',
+                valuePrepareFunction: (value, row) => {
+                    let imgUrl = row.cc_image_url;
+                    if (!imgUrl) {
+                        imgUrl = "/assets/icons/default.png";
+                        console.log('url = ' + imgUrl);
+                    }
+                    return "<img src='" + imgUrl + "' width='25px' height='25px' /> " + value;
+                }
             },
             'symbol': {
                 title: 'Symbol',
@@ -40,7 +52,7 @@ export class CoinsComponent implements OnInit {
                 },
                 compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             },
-            'marketcap': {
+            'marketCap': {
                 title: 'Market Cap',
                 width: '40px',
                 sort: 'desc',
@@ -50,7 +62,7 @@ export class CoinsComponent implements OnInit {
                 },
                 compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             },
-            'percent_24': {
+            'percent24': {
                 title: '%24Hr',
                 width: '15px',
                 sort: 'desc',
@@ -77,10 +89,11 @@ export class CoinsComponent implements OnInit {
 
     };
     
-    constructor(private coinService: CoinsService) {
+    constructor(private coinService: CoinsService, private router: Router) {
         this.coins = [];
         this.init = false;
         this.searchTerm = '';
+        this.marketCap = 0;
     }
     
     
@@ -132,4 +145,14 @@ export class CoinsComponent implements OnInit {
         return 0;
     }
     
+    clickRow(event): void {
+
+        let symbol = event.data.symbol;
+        if (symbol) {
+            console.log(event.data.symbol);
+           // this.router.navigate(['/coins', symbol]);
+        }
+
+    }
+
 }

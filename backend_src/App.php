@@ -13,6 +13,8 @@ class App
 {
 
     private $app;
+    public $mode = 'web';
+    public $db;
 
     public function __construct($args = [])
     {
@@ -22,10 +24,20 @@ class App
             $config['displayErrorDetails'] = true;
         }
 
+        $this->db = new DB();
+
+        if (!empty($args['mode']) && $args['mode'] == 'tools') {
+            $this->mode = 'tools';
+            return;
+        }
+        
+        $container['em'] = function () {
+            return $this->db->em;
+        };
+        
         $app = new \Slim\App([
             'settings' => $config
         ]);
-        
         $app->options('/{routes:.+}', function ($request, $response, $args) {
             return $response;
         });
@@ -40,11 +52,15 @@ class App
         
         //Routes
         $app->get('/coins', 'Coins\Controller\Coin:getList');
+        $app->get('/coins/:id', 'Coins\Controller\Coin:getDetail');
+        $app->get('/symbolmap', 'Coins\Controller\Coin:getSymbolMap');
                 
         $this->app = $app;
     }
 
-   
+
+
+    
     public function debugMode()
     {
         if (!empty($_GET['debug'])) {
