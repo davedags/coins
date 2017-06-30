@@ -102,9 +102,10 @@ export class CoinsComponent implements OnInit {
 
     initList(): void {
         this.coinService.getCoins()
-            .then(coins => {
-                this.coins = coins;
-                this.source = new LocalDataSource(coins);
+            .then(coinData => {
+                this.coins = coinData.coins;
+                this.marketCap = coinData.totalMarketCap;
+                this.source = new LocalDataSource(this.coins);
                 this.init = true;
             });
     }

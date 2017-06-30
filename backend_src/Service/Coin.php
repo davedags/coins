@@ -49,12 +49,22 @@ class Coin
                 usort($decoded, ["\Coins\Service\Coin", "sortMarketCapList"]);
                 $collection['results'] = $decoded;
                 $collection['total'] = count($decoded);
+                $collection['marketCap'] = $this->getTotalMarketCap($collection['results']);
                 $this->cache->set($cache_key, $collection, 300);
             }
         }
 
         return $collection;
         
+    }
+
+    public function getTotalMarketCap($data)
+    {
+        $total = 0;
+        foreach ($data as $row) {
+            $total += $row['mktcap'];
+        }
+        return $total;
     }
 
     public function mungeMarketCapResults(&$data)
@@ -196,15 +206,6 @@ class Coin
         return $data;
     }
 
-    public function mungeRawPriceData($symbol, $raw_data)
-    {
-        $data['short'] = $symbol;
-        $data['price'] = $raw_data['PRICE'];
-        $data['low24'] = $raw_data['LOW24HOUR'];
-        $data['high24'] = $raw_data['HIGH24HOUR'];
-        return $data;
-    }
-
 
     public function getDetailBySymbol($symbol)
     {
@@ -230,14 +231,7 @@ class Coin
         return $data;
     }
 
-    public function getTotalMarketCap($data)
-    {
-        $total = 0;
-        foreach ($data as $row) {
-            $total += $row['mktcap'];
-        }
-        return $total;
-    }
+
 
 
 }

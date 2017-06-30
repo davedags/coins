@@ -37,7 +37,7 @@ export class CoinsService {
             .toPromise()
             .then(
                 res => {
-                    return res.json().results.map(item => {
+                    let collection = res.json().results.map(item => {
                         idx = idx + 1;
                         let rowCoin = new Coin();
                         rowCoin.position = idx;
@@ -54,7 +54,14 @@ export class CoinsService {
                         }
                         return rowCoin;
                     });
-
+                    console.log('hi');
+                    let marketCap = res.json().marketCap;
+                    let returnVal = {
+                        totalMarketCap: marketCap,
+                        coins: collection
+                    };
+                    console.log(returnVal);
+                    return returnVal;
                 })
             .catch(
                 error => {
