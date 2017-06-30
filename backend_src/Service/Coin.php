@@ -17,6 +17,7 @@ class Coin
     public $cache;
     const API_MARKETCAP_BASE_URL = 'http://www.coincap.io/';
     const API_COMPARE_BASE_URL = 'https://www.cryptocompare.com/api/data/';
+    const API_SIMPLE_PRICE_URL = 'https://min-api.cryptocompare.com/data/price?';
 
     public function __construct(array $args = []) 
     {
@@ -179,16 +180,15 @@ class Coin
         }
         $query_params = [
             'fsym' => strtoupper($symbol),
-            'tsym' => 'USD'
+            'tsyms' => 'USD'
         ];
         $data = [];
-        $response = $this->http->get(self::API_COMPARE_BASE_URL . "coinsnapshot?" . http_build_query($query_params));
+        $response = $this->http->get(self::API_SIMPLE_PRICE_URL . http_build_query($query_params));
         if ($response->getStatusCode() == 200) {
             $body = $response->getBody()->getContents();
             if (($decoded = json_decode($body, true)) !== null) {
-                if (!empty($decoded['Data']['AggregatedData'])) {
-                    $raw_data = $decoded['Data']['AggregatedData'];
-                    $data = $this->mungeRawPriceData($symbol, $raw_data);
+                if (!empty($decoded['USD'])) {
+                    $data = $decoded['USD'];
                     $this->cache->set($cache_key, $data, 180);
                 }
             }
