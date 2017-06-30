@@ -54,7 +54,6 @@ export class CoinsService {
                         }
                         return rowCoin;
                     });
-                    console.log('hi');
                     let marketCap = res.json().marketCap;
                     let returnVal = {
                         totalMarketCap: marketCap,
