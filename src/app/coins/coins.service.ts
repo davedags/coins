@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { URLSearchParams, Http} from "@angular/http";
+import { Http } from "@angular/http";
 import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/toPromise';
 

@@ -30,14 +30,17 @@ class App
             $this->mode = 'tools';
             return;
         }
-        
-        $container['em'] = function () {
-            return $this->db->em;
-        };
-        
+
         $app = new \Slim\App([
             'settings' => $config
         ]);
+
+        $container = $app->getContainer();
+
+        $container['em'] = function () {
+
+            return $this->db->em;
+        };
         $app->options('/{routes:.+}', function ($request, $response, $args) {
             return $response;
         });
@@ -52,7 +55,8 @@ class App
         
         //Routes
         $app->get('/coins', 'Coins\Controller\Coin:getList');
-        $app->get('/coins/:id', 'Coins\Controller\Coin:getDetail');
+        $app->get('/coins/{id}', 'Coins\Controller\Coin:getDetail');
+        $app->get('/price/{id}', 'Coins\Controller\Coin:getPrice');
         $app->get('/symbolmap', 'Coins\Controller\Coin:getSymbolMap');
                 
         $this->app = $app;

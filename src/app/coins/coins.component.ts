@@ -33,7 +33,6 @@ export class CoinsComponent implements OnInit {
                     let imgUrl = row.cc_image_url;
                     if (!imgUrl) {
                         imgUrl = "/assets/icons/default.png";
-                        console.log('url = ' + imgUrl);
                     }
                     return "<img src='" + imgUrl + "' width='25px' height='25px' /> " + value;
                 }
@@ -149,8 +148,7 @@ export class CoinsComponent implements OnInit {
 
         let symbol = event.data.symbol;
         if (symbol) {
-            console.log(event.data.symbol);
-           // this.router.navigate(['/coins', symbol]);
+            this.router.navigate(['/coins', symbol]);
         }
 
     }

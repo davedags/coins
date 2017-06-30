@@ -31,7 +31,7 @@ class Coin
     {
      
         $cache_key = 'coins.mk.list';
-        if (0&&$data = $this->cache->get($cache_key)) {
+        if ($data = $this->cache->get($cache_key)) {
             return $data;
         }
 
@@ -60,7 +60,7 @@ class Coin
     {
         $symbol_map = $this->getCryptoCompareSymbolMap();
         foreach ($data as $idx => $row) {
-
+            $row['short'] = strtoupper($row['short']);
             if (!empty($symbol_map[$row['short']])) {
                 $map = $symbol_map[$row['short']];
                 if (!empty($map['ImageUrl'])) {
@@ -113,9 +113,8 @@ class Coin
                 $results = $decoded['Data'];
                 usort($results, ["\Coins\Service\Coin", "sortCryptoCompareList"]);
                 $collection['results'] = $results;
-
                 $collection['total'] = count($results);
-                $this->cache->set($cache_key, $collection, 60 * 60 * 24);
+                $this->cache->set($cache_key, $collection, 3600 * 24);
             }
         }
 
@@ -135,9 +134,9 @@ class Coin
         }
         if ($list['total'] > 0) {
             foreach ($list['results'] as $row) {
-                $map[$row['Name']] = $row;
+                $map[strtoupper($row['Name'])] = $row;
             }
-            $this->cache->set($cache_key, $map, 60 * 60 * 24);
+            $this->cache->set($cache_key, $map, 3600* 24);
         }
         return $map;
     }
@@ -152,6 +151,83 @@ class Coin
         } else {
             return 0;
         }
+    }
+
+    public function getCryptoCompareIDBySymbol($symbol)
+    {
+        $cache_key = 'coins.cc.id.' . $symbol;
+        if ($data = $this->cache->get($cache_key)) {
+            return $data;
+        }
+
+        $id = null;
+        if (!empty($symbol)) {
+            $map = $this->getCryptoCompareSymbolMap();
+            if (!empty($map[$symbol])) {
+                $id = $map[$symbol]['Id'];
+                $this->cache->set($cache_key, $id, 3600 * 24 * 30);
+            }
+        }
+        return $id;
+    }
+
+    public function getPriceBySymbol($symbol)
+    {
+        $cache_key = 'coins.cc.price.' . $symbol;
+        if ($data = $this->cache->get($cache_key)) {
+            return $data;
+        }
+        $query_params = [
+            'fsym' => strtoupper($symbol),
+            'tsym' => 'USD'
+        ];
+        $data = [];
+        $response = $this->http->get(self::API_COMPARE_BASE_URL . "coinsnapshot?" . http_build_query($query_params));
+        if ($response->getStatusCode() == 200) {
+            $body = $response->getBody()->getContents();
+            if (($decoded = json_decode($body, true)) !== null) {
+                if (!empty($decoded['Data']['AggregatedData'])) {
+                    $raw_data = $decoded['Data']['AggregatedData'];
+                    $data = $this->mungeRawPriceData($symbol, $raw_data);
+                    $this->cache->set($cache_key, $data, 180);
+                }
+            }
+        }
+        return $data;
+    }
+
+    public function mungeRawPriceData($symbol, $raw_data)
+    {
+        $data['short'] = $symbol;
+        $data['price'] = $raw_data['PRICE'];
+        $data['low24'] = $raw_data['LOW24HOUR'];
+        $data['high24'] = $raw_data['HIGH24HOUR'];
+        return $data;
+    }
+
+
+    public function getDetailBySymbol($symbol)
+    {
+        $cache_key = 'coins.cc.detail.' . $symbol;
+        if ($data = $this->cache->get($cache_key)) {
+            return $data;
+        }
+        $data = [];
+        $id = $this->getCryptoCompareIDBySymbol($symbol);
+        if ($id) {
+            $query_params = [
+                'id' => $id
+            ];
+            $response = $this->http->get(self::API_COMPARE_BASE_URL . "coinsnapshotfullbyid?" . http_build_query($query_params));
+            if ($response->getStatusCode() == 200) {
+                $body = $response->getBody()->getContents();
+                if (($decoded = json_decode($body, true)) !== null) {
+                    $data = $decoded['Data']['General'];
+                    $this->cache->set($cache_key, $data, 3600);
+                }
+            }
+        }
+        return $data;
     }
 
     public function getTotalMarketCap($data)

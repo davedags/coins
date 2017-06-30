@@ -1,4 +1,14 @@
 <div class="container coin-detail">
-  shit
+    <div class="row">
+        <div class="col-md-6 col-xs-4">
+            <img *ngIf="detail" class="img-rounded" width="100px" height="100px" src="{{ image_base_url }}{{ detail.ImageUrl }}" />
+        </div>
+        <div class="col-md-6 col-xs-8">
+            <span *ngIf="price" class="small">Current Price: </span><h2 *ngIf="price">${{ price.price }} </h2>
+        </div>
+    </div>
 
+    <div *ngIf="detail" class="row description-row">
+        <div [innerHTML]="detail.Description" class="col-md-12"></div>
+    </div>
 </div>

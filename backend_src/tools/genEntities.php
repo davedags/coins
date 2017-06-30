@@ -15,4 +15,8 @@ $classes = array(
     $em->getClassMetadata('\Coins\Entities\Coin'),
 );
 
-$tool->createSchema($classes);
+if ($argv[1] == 'update') {
+    $tool->updateSchema($classes);
+} else {
+    $tool->createSchema($classes);
+}

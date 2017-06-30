@@ -10,7 +10,7 @@ namespace Coins\Entities;
 
 /**
  * @Entity
- * @Table(name="coin")
+ * @Table(name="coin",indexes={@Index(name="symbol_idx", columns={"symbol"}),@Index(name="cc_idx", columns={"cryptocompare_id"})})
  */
 class Coin
 {
@@ -40,12 +40,6 @@ class Coin
      * @Column(type="string")
      */
     protected $cryptocompare_image_url;
-
-    /**
-     * @Column(type="string")
-     */
-    protected $cryptocompare_detail_url;
-
-
+    
     
 }

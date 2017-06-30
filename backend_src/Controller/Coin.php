@@ -20,9 +20,10 @@ class Coin
     public function __construct($container) 
     {
         $this->container = $container;
-        $this->service = new \Coins\Service\Coin();
-         
-        
+        $this->service = new \Coins\Service\Coin([
+            'em' => $this->container['em']
+            ]      
+        );
     }
 
     public function getList($request, $response, $args)
@@ -48,7 +49,16 @@ class Coin
 
     public function getDetail($request, $response, $args)
     {
-        return json_encode(['hi']);
+        $symbol = $args['id'];
+        $data = $this->service->getDetailBySymbol($symbol);
+        return $response->withJson($data);
+    }
+
+    public function getPrice($request, $response, $args)
+    {
+        $symbol = $args['id'];
+        $data = $this->service->getPriceBySymbol($symbol);
+        return $response->withJson($data);
     }
 
     public static function getListTypes()
