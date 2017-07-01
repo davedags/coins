@@ -1,4 +1,6 @@
+#!/usr/bin/php
 <?php
+chdir(__DIR__);
 /**
  * Created by PhpStorm.
  * User: daved_000
