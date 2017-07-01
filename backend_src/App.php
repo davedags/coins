@@ -62,6 +62,7 @@ class App
         $app->get('/coins', 'Coins\Controller\Coin:getList');
         $app->get('/coins/{id}', 'Coins\Controller\Coin:getDetail');
         $app->get('/price/{id}', 'Coins\Controller\Coin:getPrice');
+        $app->post('/login', 'Coins\Controller\User:login');
                 
         $this->app = $app;
     }

@@ -22,9 +22,7 @@ class Coin
 
     public function __construct(array $args = []) 
     {
-        if (!empty($args['em'])) {
-            $this->em = $args['em'];
-        }
+        $this->em = $args['em'];
         $this->http = new Client([
             'timeout' => 3
         ]);

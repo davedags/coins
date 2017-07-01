@@ -6,6 +6,7 @@
  * Time: 11:51 PM
  */
 
+use \Coins\Entities;
 
 require_once './bootstrap.php';
 $em = $app->db->em;
@@ -13,6 +14,7 @@ $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
 
 $classes = array(
     $em->getClassMetadata('\Coins\Entities\Coin'),
+    $em->getClassMetaData('\Coins\Entities\User')
 );
 
 if ($argv[1] == 'update') {
