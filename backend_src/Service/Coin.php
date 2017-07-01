@@ -176,7 +176,7 @@ class Coin
                 if (($decoded = json_decode($body, true)) !== null) {
                     $data = $decoded['Data']['General'];
                     $data['image_url'] = $coin->getImageWebPath();
-                    $this->cache->set($cache_key, $data, 3600);
+                    $this->cache->set($cache_key, $data, 3600 * 24);
                 }
             }
         }
