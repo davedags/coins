@@ -30,7 +30,7 @@ export class CoinsComponent implements OnInit {
                 width: '20px',
                 type: 'html',
                 valuePrepareFunction: (value, row) => {
-                    let imgUrl = row.cc_image_url;
+                    let imgUrl = row.image_url;
                     if (!imgUrl) {
                         imgUrl = "/assets/icons/default.png";
                     }

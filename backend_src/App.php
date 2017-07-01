@@ -9,6 +9,11 @@ if (file_exists($config = __DIR__ . "/../config/config.inc")) {
     include_once($config);
 }
 
+define('APP_BASE', dirname(dirname(getcwd())));
+define('ASSET_DIR' , APP_BASE . "/src/assets");
+define('ASSET_WEB_PATH', '/assets');
+define('COIN_IMAGE_PATH', ASSET_WEB_PATH . '/icons');
+
 class App
 {
 
@@ -57,7 +62,6 @@ class App
         $app->get('/coins', 'Coins\Controller\Coin:getList');
         $app->get('/coins/{id}', 'Coins\Controller\Coin:getDetail');
         $app->get('/price/{id}', 'Coins\Controller\Coin:getPrice');
-        $app->get('/symbolmap', 'Coins\Controller\Coin:getSymbolMap');
                 
         $this->app = $app;
     }

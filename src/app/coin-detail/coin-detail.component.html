@@ -1,14 +1,55 @@
-<div class="container coin-detail">
-    <div class="row">
-        <div class="col-md-6 col-xs-4">
-            <img *ngIf="detail" class="img-rounded" width="100px" height="100px" src="{{ image_base_url }}{{ detail.ImageUrl }}" />
-        </div>
-        <div class="col-md-6 col-xs-8">
-            <span *ngIf="price" class="small">Current Price: </span><h2 *ngIf="price">${{ price }} </h2>
-        </div>
+<div class="container coin-detail sb">
+    <div *ngIf="detail" class="page-header">
+        <h1> {{ detail.title }} </h1>
     </div>
+    <div class="row sb">
+        <div class="col-sm-7 col-md-9 sb">
+            <div class="row sb">
+                <div class="col-xs-6 sb">
+                    <img *ngIf="detail" class="img-rounded" width="100px" height="100px" src="{{ detail.image_url }}" />
+                </div>
+                <div class="col-xs-6 sb">
+                    <span *ngIf="price" class="small">1 {{ symbol }} = </span><h1 *ngIf="price">${{ price }} </h1>
+                </div>
+            </div>
 
-    <div *ngIf="detail" class="row description-row">
-        <div [innerHTML]="detail.Description" class="col-md-12"></div>
+            <div *ngIf="detail" class="row description-row sb">
+                <ul class="nav nav-tabs coin-tabs">
+                    <li *ngFor="let tab of tabs" (click)="selectTab(tab.id, $event)" [class.active]="tab.active">
+                        <a href="">{{ tab.name }}</a>
+                    </li>
+               </ul>
+               <div class="tab-content coin-tabs-text">
+                   <div *ngFor="let tab of tabs" [hidden]="!tab.active" [innerHTML]="detail[tab.id]" class="pane"></div>
+               </div>
+
+            </div>
+        </div>
+        <div class="col-sm-5 col-md-3 sidebar-column">
+            <div *ngIf="detail" class="sidebar panel panel-default">
+                <div class="panel-heading">
+                    <h3>{{ detail.name }} Stats</h3>
+                </div>
+               <table class="table table-responsive">
+                   <tr>
+                       <td>Total Supply</td>
+                       <td>{{ detail.total_supply | number:0.0-0 }}</td>
+                    </tr>
+                    <tr>
+                        <td>Algorithm</td>
+                        <td>{{ detail.algorithm }}</td>
+                    </tr>
+                    <tr>
+                        <td>Proof</td>
+                        <td>{{ detail.proof }}</td>
+                    </tr>
+                    <tr>
+                        <td>Start Date</td>
+                        <td>{{ detail.start_date }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>

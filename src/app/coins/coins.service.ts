@@ -11,13 +11,11 @@ export class Coin {
     public price: number;
     public marketCap: number;
     public percent24: number;
-    public cc_image_url?: string;
-    public cc_overview_url?: string;
+    public image_url?: string;
 
     constructor() {}
 
 }
-
 
 @Injectable()
 export class CoinsService {
@@ -37,7 +35,8 @@ export class CoinsService {
             .toPromise()
             .then(
                 res => {
-                    let collection = res.json().results.map(item => {
+                    let jsonResults = res.json();
+                    let collection = jsonResults.results.map(item => {
                         idx = idx + 1;
                         let rowCoin = new Coin();
                         rowCoin.position = idx;
@@ -46,15 +45,12 @@ export class CoinsService {
                         rowCoin.price = item.price;
                         rowCoin.marketCap = item.mktcap;
                         rowCoin.percent24 = item.cap24hrChange;
-                        if (item.cc_image) {
-                            rowCoin.cc_image_url = this.cc_base_url + item.cc_image;
-                        }
-                        if (item.cc_overview) {
-                            rowCoin.cc_overview_url = this.cc_base_url + item.cc_overview;
+                        if (item.image_url) {
+                            rowCoin.image_url = item.image_url;
                         }
                         return rowCoin;
                     });
-                    let marketCap = res.json().marketCap;
+                    let marketCap = jsonResults.marketCap;
                     let returnVal = {
                         totalMarketCap: marketCap,
                         coins: collection

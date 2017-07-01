@@ -3,6 +3,10 @@
     width: 90%;
 }
 
+.market-cap-list {
+    margin-left: 20px;
+    font-weight: bold;
+}
 :host /deep/ ng2-smart-table tbody > tr > td {
     font-size: 14px;
 }

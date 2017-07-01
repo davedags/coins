@@ -1,8 +1,28 @@
 .coin-detail {
-    margin-top: 75px;
+    margin-top: 25px;
+    width: 85%;
+}
+.sidebar {
+    margin-top: 15px;
+}
+.coin-tabs {
+    //width: 90%;
+}
+.coin-tabs-text {
+    margin-top: 15px;
     width: 90%;
 }
 
 .description-row {
     margin-top: 20px;
+}
+
+@media only screen and (max-width: 765px) {
+    .sidebar-column {
+        padding-left: 0px !important;
+    }
+}
+
+.sb {
+   // border: 1px dotted black;
 }

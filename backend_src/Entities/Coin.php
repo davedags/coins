@@ -32,14 +32,63 @@ class Coin
     protected $name;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="string", nullable=true)
      */
     protected $cryptocompare_id;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
-    protected $cryptocompare_image_url;
-    
-    
+    protected $image_file_name;
+
+    public function __construct() {}
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getSymbol()
+    {
+        return $this->symbol;
+    }
+
+    public function setSymbol($symbol)
+    {
+        $this->symbol = strtoupper($symbol);
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getCryptocompareId()
+    {
+        return $this->cryptocompare_id;
+    }
+
+    public function setCryptocompareId($id)
+    {
+        $this->cryptocompare_id = $id;
+    }
+
+    public function getImageFileName()
+    {
+        return $this->image_file_name;
+    }
+
+    public function setImageFileName($file)
+    {
+        $this->image_file_name = $file;
+    }
+
+    public function getImageWebPath() {
+        return COIN_IMAGE_PATH . '/' . $this->getImageFileName();
+    }
 }
