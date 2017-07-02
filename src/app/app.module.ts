@@ -4,20 +4,20 @@ import { HttpModule } from '@angular/http';
 import { FormsModule }   from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
-import { ModalModule } from 'ng2-bootstrap/modal';
+import { CollapseModule } from 'ngx-bootstrap';
 import { FocusModule } from './focus/focus.module';
 import { AppComponent } from './app.component';
 import { CoinsComponent } from './coins/coins.component';
 import { ConvertorComponent } from './convertor/convertor.component';
 import { CoinDetailComponent } from './coin-detail/coin-detail.component';
 import { UserComponent } from './user/user.component';
-import { LoginComponent } from './login/login.component';
+import { AuthService } from "./common/auth.service";
+import { LocalStorageService } from './common/local-storage.service';
 
 const appRoutes: Routes = [
     { path: 'convertor', component: ConvertorComponent },
     { path: 'coins/:id', component: CoinDetailComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: UserComponent },
+    { path: 'login', component: UserComponent },
     { path: '', component: CoinsComponent }
 ];
 
@@ -27,8 +27,7 @@ const appRoutes: Routes = [
         CoinsComponent,
         ConvertorComponent,
         CoinDetailComponent,
-        UserComponent,
-        LoginComponent
+        UserComponent
     ],
     imports: [
         BrowserModule,
@@ -36,10 +35,10 @@ const appRoutes: Routes = [
         FormsModule,
         Ng2SmartTableModule,
         FocusModule,
-        ModalModule.forRoot(),
+        CollapseModule,
         RouterModule.forRoot(appRoutes)
     ],
-    providers: [],
-    bootstrap: [AppComponent]
+    providers: [ AuthService, LocalStorageService ],
+    bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -8,34 +8,70 @@
 
 namespace Coins\Service;
 
+use Coins\Auth;
 
-class User
+class User extends Base
 {
-    protected $em = null;
+    public static $class = 'User';
+    
     public function __construct(array $args = [])
     {
-        $this->em = $args['em'];
+        parent::__construct($args);
+
     }
 
     public function login($credentials = [])
     {
-        $username = $credentials['username'];
-        $password = $credentials['password'];
-        //implement login
-        return [
+        $username = trim($credentials['username']);
+        $password = trim($credentials['password']);
+
+        $user = $this->getObjectByField($username, 'username');
+        $auth = new Auth([
             'username' => $username,
-            'token' => '123'
-        ];
+            'password' => $password,
+            'entity' => $user
+        ]);
+        
+        $authorized = $auth->checkUserAuth();
+        if ($authorized) {
+            return [
+                'user_id' => $user->getId(),
+                'username' => $username,
+                'token' => $auth->getToken()
+            ];
+        }
+        
+        return false;
     }
     
-    public function create()
+    public function create($data)
     {
-        //Fake User Object - TODO, implement creation
-        $user = [
-            'id' => 3,
-            'username'=> 'dags'
-        ];
+        $data['username'] = 'dags';
+        $data['password'] = '123';
+        $username = trim($data['username']);
+        $password = trim($data['password']);
+        if (!$username || !$password) {
+            return false;
+        }
+        $user = $this->getObjectByField($username, 'username');
+        if ($user) {
+            return false;
+        }
 
-        return $user;
+        $user = new \Coins\Entities\User();
+        $user->setUsername($username);
+        $user->setPassword(Auth::hashPassword($password));
+        $this->em->persist($user);
+        $this->em->flush();
+
+        $db_user = $this->getObjectByField($username, 'username');
+
+
+        $response = [
+            'user_id' => $db_user->getId(),
+            'username'=> $db_user->getUsername(),
+            'token' => '123'
+        ];
+        return $response;
     }
 }

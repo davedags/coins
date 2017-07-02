@@ -8,6 +8,7 @@
 
 namespace Coins\Controller;
 
+use Coins\Service;
 
 class User
 {
@@ -18,7 +19,7 @@ class User
     public function __construct($container)
     {
         $this->container = $container;
-        $this->service = new \Coins\Service\User([
+        $this->service = new Service\User([
                 'em' => $this->container['em']
             ]
         );
@@ -43,8 +44,14 @@ class User
             'username' => $payload['username'],
             'password' => $payload['password']
         ];
-
-        $user = $this->service->login($userData);
-        return $response->withJson($user);
+        try {
+            $user = $this->service->login($userData);
+            return $response->withJson($user);
+        } catch (\Exception $e) {
+            $error = [
+                'error_message' => $e->getMessage()
+            ];
+            return $response->withStatus(401)->withJson($error);
+        }
     }
 }

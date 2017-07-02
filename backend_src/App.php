@@ -29,7 +29,7 @@ class App
             $config['displayErrorDetails'] = true;
         }
 
-        $this->db = new DB();
+        $this->db = DB::Instance();
 
         if (!empty($args['mode']) && $args['mode'] == 'tools') {
             $this->mode = 'tools';
@@ -63,6 +63,8 @@ class App
         $app->get('/coins/{id}', 'Coins\Controller\Coin:getDetail');
         $app->get('/price/{id}', 'Coins\Controller\Coin:getPrice');
         $app->post('/login', 'Coins\Controller\User:login');
+        $app->post('/users', 'Coins\Controller\User:create');
+        //$app->get('/users', 'Coins\Controller\User:create');
                 
         $this->app = $app;
     }

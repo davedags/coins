@@ -8,6 +8,8 @@
 
 namespace Coins\Controller;
 
+use Coins\Service;
+
 class Coin
 {
     protected $container;
@@ -16,7 +18,7 @@ class Coin
     public function __construct($container) 
     {
         $this->container = $container;
-        $this->service = new \Coins\Service\Coin([
+        $this->service = new Service\Coin([
             'em' => $this->container['em']
             ]      
         );

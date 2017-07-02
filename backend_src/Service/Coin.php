@@ -10,29 +10,23 @@ namespace Coins\Service;
 
 use GuzzleHttp\Client;
 
-class Coin
+class Coin extends Base
 {
 
-    protected $em = null;
+    
     private $http = null;
-    public $cache;
+    public static $class = 'Coin';
     const API_MARKETCAP_BASE_URL = 'http://www.coincap.io/';
     const API_COMPARE_BASE_URL = 'https://www.cryptocompare.com/api/data/';
     const API_SIMPLE_PRICE_URL = 'https://min-api.cryptocompare.com/data/price?';
 
     public function __construct(array $args = []) 
     {
-        $this->em = $args['em'];
+        parent::__construct($args);
         $this->http = new Client([
             'timeout' => 3
         ]);
-        $this->cache = \Coins\Cache::Instance();
-    }
 
-    public function getObjectBySymbol($symbol)
-    {
-        $coin = $this->em->getRepository('Coins\Entities\Coin')->findOneBy(['symbol' => $symbol]);
-        return $coin;
     }
 
     public function getMarketCapList(array $args = []) 
@@ -163,7 +157,7 @@ class Coin
             return $data;
         }
         $data = [];
-        $coin = $this->getObjectBySymbol($symbol);
+        $coin = $this->getObjectByField($symbol, 'symbol');
         if ($coin) {
             $query_params = [
                 'id' => $coin->getCryptocompareId()

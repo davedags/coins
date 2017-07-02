@@ -1,3 +1,22 @@
-<p>
-  user works!
-</p>
+<div class="container section-header">
+    <div class="page-header login-header">
+        <h3>Log-In <small> for a customized experience.</small></h3>
+    </div>
+</div>
+<div class="container login-container">
+    <form name="form" #f="ngForm" >
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input [focus]="focusTriggerEventEmitter" [(ngModel)]="username" name="username" type="text" placeholder="username" class="form-control"  required />
+            </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" [(ngModel)]="password" name="password" class="form-control" placeholder="password" type="password" required />
+        </div>
+        <div class="form-group">
+            <button (click)="login()" [disabled]="!f.form.valid" class="btn btn-primary">Log-in</button>
+            <button (click)="register()" [disabled]="!f.form.valid" class="btn btn-secondary">Register</button>
+            <button routerLink="/" class="btn-link">Cancel</button>
+        </div>
+    </form>
+</div>

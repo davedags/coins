@@ -13,8 +13,17 @@ class DB
 {
 
     public $em = null;
+
+    public static function Instance()
+    {
+        static $inst = null;
+        if ($inst === null) {
+            $inst = new DB();
+        }
+        return $inst;
+    }
     
-    public function __construct()
+    private function __construct()
     {
         $this->em = $this->getDoctrineEntityManager();    
     }
