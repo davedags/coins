@@ -1,6 +1,12 @@
 <div class="container section-header coin-detail">
     <div *ngIf="detail" class="page-header">
         <h1> {{ detail.title }} </h1>
+        <button *ngIf="!inPortfolio" type="button" (click)="portfolioAdd(detail.symbol)" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add To Portfolio
+        </button>
+        <button *ngIf="inPortfolio" type="button" (click)="portfolioRem(detail.symbol)" class="btn btn-default">
+            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove From Portfolio
+        </button>
     </div>
     <div class="row">
         <div class="col-sm-7 col-md-9">

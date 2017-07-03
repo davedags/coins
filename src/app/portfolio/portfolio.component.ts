@@ -13,7 +13,7 @@ export class PortfolioComponent implements OnInit {
 
     listData: any;
 
-    constructor(private portfolioService: PortfolioService) { }
+    constructor(private portfolioService: PortfolioService) {}
 
     ngOnInit() {
         this.initList();

@@ -11,7 +11,6 @@ export class AuthGuardService implements CanActivate {
 
         let url = state.url;
         let isLoggedIn = !!this.authService.getCurrentUser();
-        console.log('is logged in ' + isLoggedIn);
         if (isLoggedIn) {
             if (url == "/login") {
                 //When logged in, login route should not be accessible

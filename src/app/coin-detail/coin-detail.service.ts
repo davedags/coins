@@ -32,6 +32,7 @@ export class CoinDetailService {
                     let response = res.json();
                     return {
                         title: response.Name + " (" + response.Symbol + ")",
+                        symbol: response.Symbol,
                         name: response.Name,
                         desc: response.Description,
                         features: response.Features,

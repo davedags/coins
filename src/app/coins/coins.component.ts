@@ -27,7 +27,16 @@ export class CoinsComponent implements OnInit {
             'position': {
                 title: '#',
                 width: '10px'
-            },
+            },/*
+            'portfolio': {
+                title: '+/-',
+                width: '10px',
+                type: 'html',
+                valuePrepareFunction: (value, row) => {
+                    return value + '<button type="button" (click)="addPortfolio(row.symbol, $event)" class="btn btn-default btn-xs">' +
+                        '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+                }
+            },*/
             'name': {
                 title: 'Name',
                 width: '20px',
@@ -157,6 +166,11 @@ export class CoinsComponent implements OnInit {
             this.router.navigate(['/coins', symbol]);
         }
 
+    }
+
+    addPortfolio(symbol, event): void {
+        event.preventDefault();
+        console.log('symbol = ' + symbol);
     }
 
 }

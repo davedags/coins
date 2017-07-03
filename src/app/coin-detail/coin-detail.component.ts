@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CoinDetailService } from './coin-detail.service';
+import { MessageService } from '../common/message.service';
 import { ActivatedRoute } from '@angular/router';
 
 
@@ -11,18 +12,19 @@ import { ActivatedRoute } from '@angular/router';
     templateUrl: './coin-detail.component.html',
     styleUrls: ['./coin-detail.component.css']
 })
-export class CoinDetailComponent implements OnInit, OnDestroy {
+export class CoinDetailComponent implements OnInit {
 
     symbol: string;
     detail: any;
     price: any;
     error: boolean;
+    inPortfolio: boolean = false;
     tabs: any;
 
     @Input()
     activeTab: string;
  
-    constructor(private coinService: CoinDetailService, private route: ActivatedRoute) {
+    constructor(private coinService: CoinDetailService, private route: ActivatedRoute, private messageService: MessageService) {
         
         this.detail = '';
         this.price = '';
@@ -38,12 +40,9 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        
         this.getData();
     }
 
-    ngOnDestroy() {
-    }
 
     getData(): void {
         this.coinService.getData(this.symbol)
@@ -69,5 +68,16 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
 
     preventDefault(event): void {
         event.preventDefault();
+    }
+
+    portfolioAdd(symbol: string) {
+        this.messageService.sendMessage(symbol + ' has been added to your portfolio', 'Portfolio Updated');
+        this.inPortfolio = true;
+    }
+
+    portfolioRem(symbol: string) {
+        this.messageService.sendMessage(symbol + ' has been removed from your portfolio', 'Portfolio Updated');
+        this.inPortfolio = false;
+
     }
 }
