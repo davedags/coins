@@ -18,6 +18,7 @@ export class CoinsService {
     }
     
     getCoins(): Observable<any> {
+      
         let idx = 0;
         return this.http.get(this.listUrl)
             .map(
