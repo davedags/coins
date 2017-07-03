@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CoinDetailService } from './coin-detail.service';
 import { MessageService } from '../common/message.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../common/auth.service';
 
 
 @Component({
@@ -19,12 +20,13 @@ export class CoinDetailComponent implements OnInit {
     price: any;
     error: boolean;
     inPortfolio: boolean = false;
+    loggedIn: boolean = false;
     tabs: any;
 
     @Input()
     activeTab: string;
  
-    constructor(private coinService: CoinDetailService, private route: ActivatedRoute, private messageService: MessageService) {
+    constructor(private coinService: CoinDetailService, private route: ActivatedRoute, private messageService: MessageService, private authService: AuthService) {
         
         this.detail = '';
         this.price = '';
@@ -36,7 +38,10 @@ export class CoinDetailComponent implements OnInit {
             { id: 'tech', name: 'Tech', active: false}
         ];
         this.activeTab = 'desc';
-
+        let token = this.authService.getToken();
+        if (token) {
+            this.loggedIn = true;
+        }
     }
 
     ngOnInit() {
