@@ -64,7 +64,6 @@ class App
         $app->get('/price/{id}', 'Coins\Controller\Coin:getPrice');
         $app->post('/login', 'Coins\Controller\User:login');
         $app->post('/users', 'Coins\Controller\User:create');
-        //$app->get('/users', 'Coins\Controller\User:create');
                 
         $this->app = $app;
     }

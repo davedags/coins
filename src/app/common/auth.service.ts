@@ -14,18 +14,20 @@ import 'rxjs/add/operator/map';
 export class AuthService {
     
     currentUser: any;
-    isLoggedInSubject = new BehaviorSubject<boolean>(false);
+    isLoggedInSubject = new BehaviorSubject<boolean>(this.hasCurrentUser());
+    loggedInUsernameSubject = new BehaviorSubject<string>(this.getCurrentUsername());
     private apiUrl = environment.baseAPIUrl;
     
     constructor(private http:Http, private router: Router, private localStorage: LocalStorageService) {
         this.currentUser = this.getCurrentUser();
-        if (this.currentUser) {
-            this.isLoggedInSubject.next(true);
-        }
     }
     
-    isLoggedIn(): Observable<boolean> {
-        return this.isLoggedInSubject.asObservable().share();
+    syncLoginStatus(): Observable<boolean> {
+        return this.isLoggedInSubject.asObservable();
+    }
+
+    syncUsername(): Observable<string> {
+        return this.loggedInUsernameSubject.asObservable();
     }
 
     login(credentials: any): Observable<any> {
@@ -37,39 +39,61 @@ export class AuthService {
             .catch(error => {
                 return Observable.throw(error.message || error)
             });
-
     }
     
-    logout(): void {
+    logout(clickEvent?): void {
+        if (clickEvent) {
+            event.preventDefault();
+        }
         this.currentUser = '';
         let storageKey = AuthService.getUserKey();
         this.localStorage.del(storageKey);
         this.isLoggedInSubject.next(false);
-        this.router.navigate(['/']);
+        this.loggedInUsernameSubject.next('');
+        let currentUrl = this.router.routerState.snapshot.url;
+        if (currentUrl != '/') {
+            this.router.navigate(['']);
+        }
     }
     
     static getUserKey(): string {
-        return LocalStorageService.genKey(LocalStorageService.authUserKey);
+        return LocalStorageService.authUserKey;
     }
-    
+
     getCurrentUser(): any {
         if (this.currentUser) {
             //in memory already
             return this.currentUser;
         }
         let storageKey = AuthService.getUserKey();
-        this.currentUser = this.localStorage.get(storageKey);
+        let currentUser = this.localStorage.get(storageKey);
+        this.currentUser = currentUser;
+        return currentUser;
     }
     
     setCurrentUser(user: any) : void {
         this.currentUser = user;
         this.isLoggedInSubject.next(true);
+        this.loggedInUsernameSubject.next(this.currentUser.username);
         let storageKey = AuthService.getUserKey();
         this.localStorage.set(storageKey, user);
     }
 
+    hasCurrentUser(): boolean {
+        let auth = !!this.getCurrentUser();
+        return auth;
+    }
+    
+    getCurrentUsername(): string {
+        let username = '';
+        if (this.currentUser) {
+            username = this.currentUser.username;
+        }
+        return username;
+    }
+
     register(registrationData: any): Observable<any> {
-        return this.http.post(this.apiUrl + "register", registrationData)
+        return this.http.post(this.apiUrl + "users", registrationData)
             .map(res => {
                 this.setCurrentUser(res.json());
                 return this.currentUser;

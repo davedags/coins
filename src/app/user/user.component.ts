@@ -12,12 +12,12 @@ export class UserComponent implements OnInit {
 
     username: string;
     password: string;
-    error: boolean;
+    login_error: boolean;
+    registration_error: boolean;
     
     public focusTriggerEventEmitter = new EventEmitter<boolean>();
     
     constructor(private authService: AuthService, private router: Router) {
-        this.error = false;
         this.username = '';
         this.password = '';
     }
@@ -31,7 +31,7 @@ export class UserComponent implements OnInit {
     focusInput(): void {
         this.focusTriggerEventEmitter.emit(true);
     }
-    
+
     login(): void {
         let credentials = {
             'username': this.username,
@@ -39,8 +39,13 @@ export class UserComponent implements OnInit {
         };
         this.authService.login(credentials)
             .subscribe(
-                data => this.router.navigate(['/']),
-                error => this.error = true
+                data => {
+                    this.router.navigate(['']);
+                },
+                error => {
+                    this.login_error = true;
+                    this.registration_error = false;
+                }
             );
     }
 
@@ -51,9 +56,13 @@ export class UserComponent implements OnInit {
         };
         this.authService.register(registrationData)
             .subscribe(
-                data => this.router.navigate(['/']),
-                error => this.error = true
+                data => this.router.navigate(['']),
+                error => {
+                    this.registration_error = true;
+                    this.login_error = false;
+                }
             );
+
     }
 
    

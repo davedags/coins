@@ -32,9 +32,15 @@ class User
             'username' => $payload['username'],
             'password' => $payload['password']
         ];
-
-        $user = $this->service->create($userData);
-        return $response->withJson($user);
+        try {
+            $user = $this->service->create($userData);
+            return $response->withJson($user);
+        } catch (\Exception $e) {
+            $error = [
+                'error_message' => $e->getMessage()
+            ];
+            return $response->withStatus(400)->withJson($error);
+        }
     }
 
     public function login($request, $response, $args)

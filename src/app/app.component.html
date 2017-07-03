@@ -12,15 +12,15 @@
             <div class="navbar-collapse collapse" [collapse]="isCollapsed">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a routerlLink="/">Market Cap Rankings</a>
+                        <a href="" routerLink="/">Market Cap Rankings</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li *ngIf="!(isLoggedIn | async)">
-                        <a routerLink="/login" routerLinkActive="active">Log-In</a>
+                        <a routerLink="/login" routerLinkActive="active">Log-In / Create Account</a>
                     </li>
-                    <li *ngIf="(isLoggedIn | async)" (click)="authService.logout()">
-                        <a>Log-Out</a>
+                    <li *ngIf="(isLoggedIn | async)" (click)="authService.logout($event)">
+                        <a href="">Log-Out [{{ loggedInUsername | async }}]</a>
                     </li>
                 </ul>
             </div>

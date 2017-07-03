@@ -1,21 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
 import { environment } from '../../environments/environment';
-import 'rxjs/add/operator/toPromise';
-
-export class Coin {
-    
-    public position: number;
-    public name: string;
-    public symbol: string;
-    public price: number;
-    public marketCap: number;
-    public percent24: number;
-    public image_url?: string;
-
-    constructor() {}
-
-}
+import { Observable } from 'rxjs/Observable'; 
+import { Coin } from './coin';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class CoinsService {
@@ -27,13 +16,11 @@ export class CoinsService {
     constructor(private http: Http) {
         this.results = [];
     }
-
-    getCoins(): Promise<any> {
+    
+    getCoins(): Observable<any> {
         let idx = 0;
-
         return this.http.get(this.listUrl)
-            .toPromise()
-            .then(
+            .map(
                 res => {
                     let jsonResults = res.json();
                     let collection = jsonResults.results.map(item => {
@@ -59,7 +46,7 @@ export class CoinsService {
                 })
             .catch(
                 error => {
-                    return Promise.reject(error.message || error)
+                    return Observable.throw(error.message || error)
                 });
     }
 

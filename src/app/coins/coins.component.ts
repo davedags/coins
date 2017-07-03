@@ -1,7 +1,9 @@
 import { Component, OnInit} from '@angular/core';
-import { Coin, CoinsService } from './coins.service';
+import { CoinsService } from './coins.service';
+import { Coin } from './coin';
 import { LocalDataSource } from "ng2-smart-table/index";
 import { Router } from "@angular/router";
+import { AuthService } from "../common/auth.service";
 
 @Component({
     selector: 'app-coins',
@@ -11,6 +13,7 @@ import { Router } from "@angular/router";
     templateUrl: './coins.component.html',
     styleUrls: ['./coins.component.css']
 })
+
 export class CoinsComponent implements OnInit {
     
     
@@ -88,7 +91,7 @@ export class CoinsComponent implements OnInit {
 
     };
     
-    constructor(private coinService: CoinsService, private router: Router) {
+    constructor(private coinService: CoinsService, private router: Router, authService: AuthService) {
         this.coins = [];
         this.init = false;
         this.searchTerm = '';
@@ -102,12 +105,14 @@ export class CoinsComponent implements OnInit {
 
     initList(): void {
         this.coinService.getCoins()
-            .then(coinData => {
-                this.coins = coinData.coins;
-                this.marketCap = coinData.totalMarketCap;
-                this.source = new LocalDataSource(this.coins);
-                this.init = true;
-            });
+            .subscribe(
+                coinData => {
+                    this.coins = coinData.coins;
+                    this.marketCap = coinData.totalMarketCap;
+                    this.source = new LocalDataSource(this.coins);
+                    this.init = true;
+                    }
+            );
     }
 
     doSearch(): void {

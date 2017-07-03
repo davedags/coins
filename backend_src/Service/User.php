@@ -46,16 +46,14 @@ class User extends Base
     
     public function create($data)
     {
-        $data['username'] = 'dags';
-        $data['password'] = '123';
         $username = trim($data['username']);
         $password = trim($data['password']);
         if (!$username || !$password) {
-            return false;
+            throw new \Exception('Username and password are required');
         }
         $user = $this->getObjectByField($username, 'username');
         if ($user) {
-            return false;
+            throw new \Exception('An account with this username already exists');
         }
 
         $user = new \Coins\Entities\User();
@@ -65,8 +63,7 @@ class User extends Base
         $this->em->flush();
 
         $db_user = $this->getObjectByField($username, 'username');
-
-
+        
         $response = [
             'user_id' => $db_user->getId(),
             'username'=> $db_user->getUsername(),

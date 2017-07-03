@@ -7,13 +7,15 @@ import { Observable } from 'rxjs/Observable';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-    title = 'Crypto Bliss';
+export class AppComponent  {
     isLoggedIn: Observable<boolean>;
+    loggedInUsername: Observable<string>;
     @Input()
     public isCollapsed: boolean = true;
     
     constructor(private authService: AuthService) {
-        this.isLoggedIn = authService.isLoggedIn();
+        this.isLoggedIn = authService.syncLoginStatus();
+        this.loggedInUsername = authService.syncUsername();
+
     }
 }

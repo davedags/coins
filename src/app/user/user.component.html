@@ -4,6 +4,13 @@
     </div>
 </div>
 <div class="container login-container">
+    <div *ngIf="login_error" class="alert alert-danger" role="alert">
+        <strong>Incorrect Username or Password.</strong>
+    </div>
+    <div *ngIf="registration_error" class="alert alert-danger" role="alert">
+        <strong>An account already exists with this username.</strong>
+        <br/><small>Please log-in or choose another username.</small>
+    </div>
     <form name="form" #f="ngForm" >
         <div class="form-group">
             <label for="username">Username</label>
@@ -15,8 +22,7 @@
         </div>
         <div class="form-group">
             <button (click)="login()" [disabled]="!f.form.valid" class="btn btn-primary">Log-in</button>
-            <button (click)="register()" [disabled]="!f.form.valid" class="btn btn-secondary">Register</button>
-            <button routerLink="/" class="btn-link">Cancel</button>
+            <button (click)="register()" [disabled]="!f.form.valid" class="btn btn-link">Register</button>
         </div>
     </form>
 </div>
