@@ -7,8 +7,8 @@
  */
 
 namespace Coins;
+use Firebase\JWT\JWT;
 
-use PHPUnit\Framework\Exception;
 
 class Auth
 {
@@ -18,7 +18,6 @@ class Auth
     private $entity;
     private $token;
     private $em;
-    public $table = 'user';
 
     public function __construct($args = [])
     {
@@ -107,5 +106,52 @@ class Auth
     public function getToken()
     {
         return $this->token;
+    }
+
+    public function genToken($data = [])
+    {
+        $secret = self::getSecret();
+        if (empty($secret)) {
+            throw new \Exception('AUTH_JWT_SECRET environment variable must be set');
+        }
+        $issued_time = time();
+        $expire_time = $issued_time + (3600 * 24 * 30); //1 month
+        $token = [
+            'iss' => 'dagscoin.com',
+            'aud' => 'dagscoin.com',
+            'iat' => $issued_time,
+            'nbf' => $issued_time,
+            'exp' => $expire_time
+        ];
+        if (!empty($data)) {
+            $token['data'] = $data;
+        }
+        $token  = JWT::encode($token, $secret);
+        $this->setToken($token);
+        return $token;
+    }
+
+    public static function decodeToken($token)
+    {
+        $secret = self::getSecret();
+        if (empty($secret)) {
+            throw new \Exception('AUTH_JWT_SECRET environment variable must be set');
+        }
+
+        try {
+            $decoded = (array)JWT::decode($token, $secret, array('HS256'));
+            return $decoded;
+        } catch(\Firebase\JWT\SignatureInvalidException $e) {
+            return false;
+        }
+    }
+    
+    public static function getSecret()
+    {
+        $secret = null;
+        if (!empty($_ENV['AUTH_JWT_SECRET'])) {
+            $secret = $_ENV['AUTH_JWT_SECRET'];
+        }
+        return $secret;
     }
 }

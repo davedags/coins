@@ -5,7 +5,7 @@ export class LocalStorageService {
 
     static readonly appKeyPrefix = 'dagscoin_';
     static readonly authUserKey = 'currentUser';
-
+    cache: any = {};
     isSupported: boolean;
     
     constructor() {
@@ -19,6 +19,7 @@ export class LocalStorageService {
     set(key, val): void {
         if (this.isSupported) {
             let storageKey = LocalStorageService.genKey(key);
+            //this.cache[storageKey] = val;
             let storageVal = (typeof val === "string" ? val : JSON.stringify(val));
             localStorage.setItem(storageKey, storageVal);
         }
@@ -27,6 +28,9 @@ export class LocalStorageService {
     get(key): any {
         if (this.isSupported) {
             let storageKey = LocalStorageService.genKey(key);
+            //if (this.cache[storageKey]) {
+             //   return this.cache[storageKey];
+           // }
             let storageVal = localStorage.getItem(storageKey);
             let returnVal = '';
             try {
@@ -41,12 +45,14 @@ export class LocalStorageService {
     del(key): void {
         if (this.isSupported) {
             let storageKey = LocalStorageService.genKey(key);
+           // this.cache[storageKey] = null;
             localStorage.removeItem(storageKey);
         }
     }
 
     delAll(): void {
         if (this.isSupported) {
+            this.cache = {};
             localStorage.clear();
         }
     }

@@ -44,17 +44,12 @@ class DB
     public static function getDBConfig()
     {
         $config = [];
-        if (file_exists(__DIR__ . '/../config/.env')) {
-            $dotenv = new \Dotenv\Dotenv(__DIR__ . '/../config');
-            $dotenv->load();
-
-            $config['host'] = $_ENV['COINS_DB_HOST'];
-            $config['dbname'] = $_ENV['COINS_DB'];
-            $config['user'] = $_ENV['COINS_DB_USER'];
-            $config['password'] = $_ENV['COINS_DB_PASSWORD'];
-            if (!empty($_ENV['driver'])) {
-                $config['driver'] = $_ENV['driver'];
-            }
+        $config['host'] = $_ENV['COINS_DB_HOST'];
+        $config['dbname'] = $_ENV['COINS_DB'];
+        $config['user'] = $_ENV['COINS_DB_USER'];
+        $config['password'] = $_ENV['COINS_DB_PASSWORD'];
+        if (!empty($_ENV['driver'])) {
+            $config['driver'] = $_ENV['driver'];
         }
         return $config;
     }

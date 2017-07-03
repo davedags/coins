@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
 import { Http, Headers, RequestOptions, Response } from "@angular/http";
-import { environment } from '../../environments/environment';
 import { LocalStorageService } from "./local-storage.service";
+import { MessageService } from "./message.service";
+import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -13,27 +13,21 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class AuthService {
     
-    currentUser: any;
-    isLoggedInSubject = new BehaviorSubject<boolean>(this.hasCurrentUser());
-    loggedInUsernameSubject = new BehaviorSubject<string>(this.getCurrentUsername());
+    currentUser: any = this.getCurrentUser();
+    loggedInUserSubject = new BehaviorSubject<any>(this.currentUser);
     private apiUrl = environment.baseAPIUrl;
     
-    constructor(private http:Http, private router: Router, private localStorage: LocalStorageService) {
-        this.currentUser = this.getCurrentUser();
-    }
-    
-    syncLoginStatus(): Observable<boolean> {
-        return this.isLoggedInSubject.asObservable();
-    }
+    constructor(private http:Http, private router: Router, private localStorage: LocalStorageService, private messageService: MessageService) {}
 
-    syncUsername(): Observable<string> {
-        return this.loggedInUsernameSubject.asObservable();
+    syncUser(): Observable<any> {
+        return this.loggedInUserSubject.asObservable()
     }
 
     login(credentials: any): Observable<any> {
         return this.http.post(this.apiUrl + "login", credentials)
             .map(res => {
                 this.setCurrentUser(res.json());
+                this.messageService.sendMessage('Welcome back ' + this.currentUser.username, 'Log-in Successful!');
                 return this.currentUser;
             })
             .catch(error => {
@@ -45,11 +39,13 @@ export class AuthService {
         if (clickEvent) {
             event.preventDefault();
         }
+        this.messageService.sendMessage('Come back soon ' + this.currentUser.username, 'Log-out Successful!');
+
         this.currentUser = '';
         let storageKey = AuthService.getUserKey();
         this.localStorage.del(storageKey);
-        this.isLoggedInSubject.next(false);
-        this.loggedInUsernameSubject.next('');
+        this.loggedInUserSubject.next('');
+
         let currentUrl = this.router.routerState.snapshot.url;
         if (currentUrl != '/') {
             this.router.navigate(['']);
@@ -67,35 +63,29 @@ export class AuthService {
         }
         let storageKey = AuthService.getUserKey();
         let currentUser = this.localStorage.get(storageKey);
-        this.currentUser = currentUser;
-        return currentUser;
+        return currentUser || '';
     }
     
     setCurrentUser(user: any) : void {
         this.currentUser = user;
-        this.isLoggedInSubject.next(true);
-        this.loggedInUsernameSubject.next(this.currentUser.username);
+        this.loggedInUserSubject.next(this.currentUser);
         let storageKey = AuthService.getUserKey();
         this.localStorage.set(storageKey, user);
     }
 
-    hasCurrentUser(): boolean {
-        let auth = !!this.getCurrentUser();
-        return auth;
-    }
-    
-    getCurrentUsername(): string {
-        let username = '';
+    getToken(): string {
         if (this.currentUser) {
-            username = this.currentUser.username;
+            return this.currentUser.token;
+        } else {
+            return '';
         }
-        return username;
     }
 
     register(registrationData: any): Observable<any> {
         return this.http.post(this.apiUrl + "users", registrationData)
             .map(res => {
                 this.setCurrentUser(res.json());
+                this.messageService.sendMessage('Welcome ' + this.currentUser.username + ". Your account has been created.", 'Registration Successful!');
                 return this.currentUser;
             })
             .catch(error => {

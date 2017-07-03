@@ -20,9 +20,10 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.css"
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
       ],
-      "scripts": [],
+      "scripts": [ ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

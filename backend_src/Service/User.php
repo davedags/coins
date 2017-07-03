@@ -32,12 +32,16 @@ class User extends Base
             'entity' => $user
         ]);
         
-        $authorized = $auth->checkUserAuth();
+        $authorized = $auth->checkUserAuth(true);
         if ($authorized) {
+            $token = $auth->genToken([
+                'user_id' => $user->getId(),
+                'username' => $username
+            ]);
             return [
                 'user_id' => $user->getId(),
                 'username' => $username,
-                'token' => $auth->getToken()
+                'token' => $token
             ];
         }
         
@@ -63,11 +67,15 @@ class User extends Base
         $this->em->flush();
 
         $db_user = $this->getObjectByField($username, 'username');
-        
+
+        $token = $auth->genToken([
+            'user_id' => $user->getId(),
+            'username' => $username
+        ]);
         $response = [
             'user_id' => $db_user->getId(),
             'username'=> $db_user->getUsername(),
-            'token' => '123'
+            'token' => $token
         ];
         return $response;
     }

@@ -5,11 +5,8 @@ namespace Coins;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-if (file_exists($config = __DIR__ . "/../config/config.inc")) {
-    include_once($config);
-}
-
-define('APP_BASE', dirname(dirname(getcwd())));
+define('APP_BASE', dirname(dirname(getcwd()))); 
+define('CONFIG_DIR', APP_BASE . "/config");
 define('ASSET_DIR' , APP_BASE . "/src/assets");
 define('ASSET_WEB_PATH', '/assets');
 define('COIN_IMAGE_PATH', ASSET_WEB_PATH . '/icons');
@@ -29,6 +26,8 @@ class App
             $config['displayErrorDetails'] = true;
         }
 
+        $this->initEnvironment();
+        
         $this->db = DB::Instance();
 
         if (!empty($args['mode']) && $args['mode'] == 'tools') {
@@ -57,14 +56,25 @@ class App
                 ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         });
-        
+
+
+        $app->add(new \Slim\Middleware\JwtAuthentication([
+            "path" => ["/portfolio"],
+            "secret" => Auth::getSecret(),
+            "callback" => function ($request, $response, $arguments) use ($container) {
+                $container["jwt"] = $arguments["decoded"];
+            }
+        ]));
+
         //Routes
         $app->get('/coins', 'Coins\Controller\Coin:getList');
         $app->get('/coins/{id}', 'Coins\Controller\Coin:getDetail');
         $app->get('/price/{id}', 'Coins\Controller\Coin:getPrice');
         $app->post('/login', 'Coins\Controller\User:login');
         $app->post('/users', 'Coins\Controller\User:create');
-                
+        
+        $app->get('/portfolio', 'Coins\Controller\Portfolio:getList');
+        
         $this->app = $app;
     }
 
@@ -86,6 +96,17 @@ class App
     public function run()
     {
         $this->getApp()->run();
+    }
+    
+    private function initEnvironment()
+    {
+        if (file_exists($config_file = CONFIG_DIR . "/config.inc")) {
+            include_once($config_file);
+        }
+        if (file_exists(CONFIG_DIR . "/.env")) {
+            $dotenv = new \Dotenv\Dotenv(CONFIG_DIR);
+            $dotenv->load();
+        }
     }
 
 }

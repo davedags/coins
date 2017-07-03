@@ -13,12 +13,16 @@ class Base
 {
     protected $em;
     protected $cache;
+    protected $currentUser;
     protected static $entity_namespace = 'Coins\Entities\\';
 
     public function __construct($args = [])
     {
         $this->em = $args['em'];
         $this->cache = \Coins\Cache::Instance();
+        if (!empty($args['jwt'])) {
+            $this->currentUser = $args['jwt']->data->user_id;
+        }
     }
 
 

@@ -1,19 +1,19 @@
-<div class="container section-header coin-detail sb">
+<div class="container section-header coin-detail">
     <div *ngIf="detail" class="page-header">
         <h1> {{ detail.title }} </h1>
     </div>
-    <div class="row sb">
-        <div class="col-sm-7 col-md-9 sb">
-            <div class="row sb">
-                <div class="col-xs-6 sb">
+    <div class="row">
+        <div class="col-sm-7 col-md-9">
+            <div class="row">
+                <div class="col-xs-6">
                     <img *ngIf="detail" class="img-rounded" width="100px" height="100px" src="{{ detail.image_url }}" />
                 </div>
-                <div class="col-xs-6 sb">
+                <div class="col-xs-6">
                     <span *ngIf="price" class="small">1 {{ symbol }} = </span><h1 *ngIf="price">${{ price }} </h1>
                 </div>
             </div>
 
-            <div *ngIf="detail" class="row description-row sb">
+            <div *ngIf="detail" class="row description-row">
                 <ul class="nav nav-tabs coin-tabs">
                     <li *ngFor="let tab of tabs" (click)="selectTab(tab.id, $event)" [class.active]="tab.active">
                         <a href="">{{ tab.name }}</a>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CoinDetailService } from './coin-detail.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -11,14 +11,13 @@ import { ActivatedRoute } from '@angular/router';
     templateUrl: './coin-detail.component.html',
     styleUrls: ['./coin-detail.component.css']
 })
-export class CoinDetailComponent implements OnInit {
+export class CoinDetailComponent implements OnInit, OnDestroy {
 
     symbol: string;
     detail: any;
     price: any;
     error: boolean;
     tabs: any;
-
 
     @Input()
     activeTab: string;
@@ -39,7 +38,11 @@ export class CoinDetailComponent implements OnInit {
     }
 
     ngOnInit() {
+        
         this.getData();
+    }
+
+    ngOnDestroy() {
     }
 
     getData(): void {

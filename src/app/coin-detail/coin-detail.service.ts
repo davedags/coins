@@ -37,7 +37,7 @@ export class CoinDetailService {
                         features: response.Features,
                         tech: response.Technology,
                         image_url: response.image_url,
-                        total_supply: response.TotalCoinSupply,
+                        total_supply: response.TotalCoinSupply || 0,
                         algorithm: response.Algorithm,
                         proof: response.ProofType,
                         start_date: response.StartDate

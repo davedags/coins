@@ -12,10 +12,12 @@ require_once './bootstrap.php';
 $em = $app->db->em;
 $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
 
-$classes = array(
+$classes = [
     $em->getClassMetadata('\Coins\Entities\Coin'),
-    $em->getClassMetaData('\Coins\Entities\User')
-);
+    $em->getClassMetaData('\Coins\Entities\User'),
+    $em->getClassMetaData('\Coins\Entities\Favorite')
+
+];
 
 if ($argv[1] == 'update') {
     $tool->updateSchema($classes);

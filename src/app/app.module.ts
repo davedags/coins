@@ -3,8 +3,11 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule }   from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import { CollapseModule } from 'ngx-bootstrap';
+import { ToastModule, ToastOptions } from 'ng2-toastr';
+import { ToastConfig } from './common/toast-config';
 import { FocusModule } from './focus/focus.module';
 
 import { AppComponent } from './app.component';
@@ -12,15 +15,20 @@ import { CoinsComponent } from './coins/coins.component';
 import { ConvertorComponent } from './convertor/convertor.component';
 import { CoinDetailComponent } from './coin-detail/coin-detail.component';
 import { UserComponent } from './user/user.component';
+import { NavComponent } from './nav/nav.component';
 
 import { AuthService } from "./common/auth.service";
 import { LocalStorageService } from './common/local-storage.service';
 import { AuthGuardService } from './common/auth-guard.service';
+import { MessageService } from './common/message.service';
+import { PortfolioComponent } from './portfolio/portfolio.component';
+
 
 const appRoutes: Routes = [
     { path: 'convertor', component: ConvertorComponent },
     { path: 'coins/:id', component: CoinDetailComponent },
     { path: 'login', component: UserComponent, canActivate: [ AuthGuardService ] },
+    { path: 'portfolio', component: PortfolioComponent, canActivate: [ AuthGuardService ]},
     { path: '', component: CoinsComponent }
 ];
 
@@ -30,18 +38,28 @@ const appRoutes: Routes = [
         CoinsComponent,
         ConvertorComponent,
         CoinDetailComponent,
-        UserComponent
+        UserComponent,
+        NavComponent,
+        PortfolioComponent
     ],
-    imports: [
+    imports: [  
         BrowserModule,
         HttpModule,
         FormsModule,
         Ng2SmartTableModule,
         FocusModule,
         CollapseModule,
+        BrowserAnimationsModule,
+        ToastModule.forRoot(),
         RouterModule.forRoot(appRoutes)
     ],
-    providers: [ AuthService, LocalStorageService, AuthGuardService ],
+    providers: [ 
+        AuthService, 
+        LocalStorageService, 
+        AuthGuardService, 
+        MessageService,
+        { provide: ToastOptions, useClass: ToastConfig }
+    ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule { }

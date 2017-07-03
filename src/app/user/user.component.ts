@@ -1,6 +1,8 @@
-import { Component, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService } from "../common/auth.service";
+import { MessageService } from '../common/message.service';
+
 
 @Component({
     selector: 'app-login',
@@ -8,7 +10,7 @@ import { AuthService } from "../common/auth.service";
     styleUrls: ['./user.component.css']
 })
 
-export class UserComponent implements OnInit {
+export class UserComponent implements  AfterViewInit {
 
     username: string;
     password: string;
@@ -17,16 +19,16 @@ export class UserComponent implements OnInit {
     
     public focusTriggerEventEmitter = new EventEmitter<boolean>();
     
-    constructor(private authService: AuthService, private router: Router) {
+    constructor(private authService: AuthService, private router: Router, private messageService: MessageService) {
         this.username = '';
         this.password = '';
     }
     
-    ngOnInit() {}
     
     ngAfterViewInit(): void {
         this.focusInput();
     }
+    
     
     focusInput(): void {
         this.focusTriggerEventEmitter.emit(true);
@@ -39,7 +41,7 @@ export class UserComponent implements OnInit {
         };
         this.authService.login(credentials)
             .subscribe(
-                data => {
+                success => {
                     this.router.navigate(['']);
                 },
                 error => {
@@ -49,6 +51,7 @@ export class UserComponent implements OnInit {
             );
     }
 
+
     register(): void {
         let registrationData = {
             'username': this.username,
@@ -56,7 +59,7 @@ export class UserComponent implements OnInit {
         };
         this.authService.register(registrationData)
             .subscribe(
-                data => this.router.navigate(['']),
+                success => this.router.navigate(['']),
                 error => {
                     this.registration_error = true;
                     this.login_error = false;
