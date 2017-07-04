@@ -1,3 +1,9 @@
-<p>
-  Coming Soon ...
-</p>
+<div class="container-fluid section-header">
+  <div class="page-header">
+    <h3>My Portfolio</h3>
+  </div>
+  <div class="row">
+    <span class="market-cap-list" *ngIf="marketCap">Total Market Cap: {{ marketCap | currency:'USD':true:'1.0-0' }}</span>
+    <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
+  </div>
+</div>

@@ -20,7 +20,7 @@ class Portfolio
         $this->container = $container;
         $this->service = new Service\Portfolio([
                 'em' => $this->container['em'],
-                'jwt' => $this->container['jwt']
+                'jwt' => !empty($this->container['jwt']) ? $this->container['jwt'] : null
             ]
         );
     }

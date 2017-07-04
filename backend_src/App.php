@@ -57,14 +57,14 @@ class App
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         });
 
-
+        /**
         $app->add(new \Slim\Middleware\JwtAuthentication([
             "path" => ["/portfolio"],
             "secret" => Auth::getSecret(),
             "callback" => function ($request, $response, $arguments) use ($container) {
                 $container["jwt"] = $arguments["decoded"];
             }
-        ]));
+        ]));**/
 
         //Routes
         $app->get('/coins', 'Coins\Controller\Coin:getList');
