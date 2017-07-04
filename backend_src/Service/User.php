@@ -22,9 +22,10 @@ class User extends Base
 
     public function login($credentials = [])
     {
+
         $username = trim($credentials['username']);
         $password = trim($credentials['password']);
-
+        
         $user = $this->getObjectByField($username, 'username');
         $auth = new Auth([
             'username' => $username,
@@ -50,6 +51,7 @@ class User extends Base
     
     public function create($data)
     {
+
         $username = trim($data['username']);
         $password = trim($data['password']);
         if (!$username || !$password) {
@@ -67,9 +69,14 @@ class User extends Base
         $this->em->flush();
 
         $db_user = $this->getObjectByField($username, 'username');
-
+        $auth = new Auth([
+            'username' => $username,
+            'password' => $password,
+            'entity' => $db_user
+        ]);
+     
         $token = $auth->genToken([
-            'user_id' => $user->getId(),
+            'user_id' => $db_user->getId(),
             'username' => $username
         ]);
         $response = [
