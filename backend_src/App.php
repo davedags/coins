@@ -74,6 +74,8 @@ class App
         $app->post('/users', 'Coins\Controller\User:create');
         
         $app->get('/portfolio', 'Coins\Controller\Portfolio:getList');
+        $app->post('/portfolio', 'Coins\Controller\Portfolio:create');
+        $app->delete('/portfolio/{id}', 'Coins\Controller\Portfolio:delete');
         
         $this->app = $app;
     }

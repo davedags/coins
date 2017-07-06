@@ -2,7 +2,7 @@ import { Component, AfterViewInit, EventEmitter } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService } from "../common/auth.service";
 import { MessageService } from '../common/message.service';
-
+import { BootstrapService } from '../common/bootstrap.service';
 
 @Component({
     selector: 'app-login',
@@ -19,7 +19,7 @@ export class UserComponent implements  AfterViewInit {
     
     public focusTriggerEventEmitter = new EventEmitter<boolean>();
     
-    constructor(private authService: AuthService, private router: Router, private messageService: MessageService) {
+    constructor(private authService: AuthService, private router: Router, private bootstrapService: BootstrapService) {
         this.username = '';
         this.password = '';
     }

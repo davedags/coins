@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PortfolioService } from './portfolio.service';
 import { LocalDataSource } from "ng2-smart-table/index";
-import { Coin } from '../coins/coin';
+import { Coin } from '../model/coin';
 import {Router } from '@angular/router';
 
 @Component({

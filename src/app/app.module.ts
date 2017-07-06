@@ -17,6 +17,7 @@ import { CoinDetailComponent } from './coin-detail/coin-detail.component';
 import { UserComponent } from './user/user.component';
 import { NavComponent } from './nav/nav.component';
 
+import { BootstrapService } from './common/bootstrap.service';
 import { AuthService } from "./common/auth.service";
 import { LocalStorageService } from './common/local-storage.service';
 import { AuthGuardService } from './common/auth-guard.service';
@@ -53,7 +54,8 @@ const appRoutes: Routes = [
         ToastModule.forRoot(),
         RouterModule.forRoot(appRoutes)
     ],
-    providers: [ 
+    providers: [
+        BootstrapService,
         AuthService, 
         LocalStorageService, 
         AuthGuardService, 

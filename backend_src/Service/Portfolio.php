@@ -25,6 +25,66 @@ class Portfolio extends Base
 
     }
 
+    public function addToPortfolio($symbol)
+    {
+        if (empty($this->currentUser) || empty($symbol)) {
+            throw new \Exception('Request cannot be processed');
+        }
+        $coin = $this->getObjectByField($symbol, 'symbol', [
+            'class' => 'Coin'
+        ]);
+        if (!$coin) {
+            throw new \Exception('Request cannot be processed');
+        }
+        
+        $object = $this->getPortfolioObject($this->currentUser, $coin->getId());
+        if ($object) {
+            throw new \Exception('Coin already in portfolio');
+        }
+        
+        $portfolioObject new \Coins\Entities\Favorite();
+        $portfolioObject->setCoin($coin->getId());
+        $portfolioObject->setUser($this->currentUser);
+
+      
+        $this->em->persist($portfolioObject);
+        $this->em->flush();
+
+        $object = $this->getPortfolioObject($this->currentUser, $coin->getId());
+        return true;
+    }
+
+    public function removeFromPortfolio($symbol)
+    {
+        if (empty($this->currentUser) || empty($symbol)) {
+            throw new \Exception('Request cannot be processed');
+        }
+        $coin = $this->getObjectByField($symbol, 'symbol', [
+            'class' => 'Coin'
+        ]);
+        if (!$coin) {
+            throw new \Exception('Request cannot be processed');
+        }
+        $object = $this->getPortfolioObject($this->currentUser, $coin->getId());
+        if (!$object) {
+            throw new \Exception('Coin not in portfolio');
+        }
+        
+        $this->em->remove($object);
+        $this->em->flush();
+        
+        return true;
+        
+    }
+
+    public function getPortfolioObject($user_id, $coin_id)
+    {
+        $object = $this->em->getRepository('\Coins\Entities\Favorite')->findOneBy([
+            'user' => $user_id,
+            'coin' => $coin_id
+        ]);
+        return $object;
+    }
     public function getList($args = [])
     {
 

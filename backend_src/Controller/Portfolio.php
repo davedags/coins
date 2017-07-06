@@ -31,4 +31,35 @@ class Portfolio
         $list = $this->service->getList();
         return $response->withJson($list);
     }
+
+    public function create($request, $response, $args)
+    {
+        $payload = $request->getParsedBody();
+        $coin = $payload['symbol'];
+        try {
+            $id = $this->service->addToPortfolio($coin);
+            return $response->withJson([
+                'id' => $id,
+            ]);
+        } catch (\Exception $e) {
+            $error = [
+                'error_message' => $e->getMessage()
+            ];
+            return $response->withStatus(400)->withJson($error);
+        }
+    }
+
+    public function delete($request, $response, $args)
+    {
+        $coin = $payload['symbol'];
+        try {
+            $this->service->removeFromPortfolio($coin);
+            return $response->withJson(true);
+        } catch (\Exception $e) {
+            $error = [
+                'error_message' => $e->getMessage()
+            ];
+            return $response->withStatus(400)->withJson($error);
+        }
+    }
 }

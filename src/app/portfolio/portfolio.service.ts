@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response } from "@angular/http";
 import { AuthService } from "../common/auth.service";
 import { environment } from '../../environments/environment';
 import { Observable } from "rxjs/Observable";
-import { Coin } from '../coins/coin';
+import { Coin } from '../model/coin';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -16,11 +16,10 @@ export class PortfolioService {
     }
 
     getList():Observable<any> {
-        let userToken = this.authService.getToken();
-        let headers = new Headers({'Authorization': 'Bearer ' + userToken});
-        let options = new RequestOptions({headers: headers});
+       
         let idx = 0;
-        return this.http.get(this.apiUrl)
+        let httpOptions = this.getAuthHTTPOptions();
+        return this.http.get(this.apiUrl, httpOptions)
             .map(
                 res => {
                     let jsonResults = res.json();
@@ -49,5 +48,12 @@ export class PortfolioService {
                 error => {
                     return Observable.throw(error.message || error)
                 });
+    }
+    
+    getAuthHTTPOptions(): RequestOptions {
+        let userToken = this.authService.getToken();
+        let headers = new Headers({'Authorization': 'Bearer ' + userToken});
+        let options = new RequestOptions({headers: headers});
+        return options;
     }
 }

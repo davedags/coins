@@ -27,6 +27,7 @@ export class AuthService {
         return this.http.post(this.apiUrl + "login", credentials)
             .map(res => {
                 this.setCurrentUser(res.json());
+                console.log(this.currentUser);
                 this.messageService.sendMessage('Welcome back ' + this.currentUser.username, 'Log-in Successful!');
                 return this.currentUser;
             })

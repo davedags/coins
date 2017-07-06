@@ -1,43 +1,28 @@
 import { Component, OnInit} from '@angular/core';
-import { CoinsService } from './coins.service';
-import { Coin } from './coin';
+import { BootstrapService } from '../common/bootstrap.service';
+import { Coin } from '../model/coin';
 import { LocalDataSource } from "ng2-smart-table/index";
 import { Router } from "@angular/router";
-import { AuthService } from "../common/auth.service";
-import { LocalStorageService } from "../common/local-storage.service";
 
 @Component({
     selector: 'app-coins',
-    providers: [
-        CoinsService
-    ],
     templateUrl: './coins.component.html',
     styleUrls: ['./coins.component.css']
 })
 
 export class CoinsComponent implements OnInit {
     
-    
-    public coins: Coin[];
+    public coins: Coin[] = [];
     public source: LocalDataSource;
-    public marketCap: number;
-    public init;
-    public searchTerm: string;
+    public marketCap: number = 0;
+    public init: boolean = false;
+    public searchTerm: string = '';
     public settings: Object = {
         columns: {
             'position': {
                 title: '#',
                 width: '10px'
-            },/*
-            'portfolio': {
-                title: '+/-',
-                width: '10px',
-                type: 'html',
-                valuePrepareFunction: (value, row) => {
-                    return value + '<button type="button" (click)="addPortfolio(row.symbol, $event)" class="btn btn-default btn-xs">' +
-                        '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-                }
-            },*/
+            },
             'name': {
                 title: 'Name',
                 width: '20px',
@@ -100,60 +85,19 @@ export class CoinsComponent implements OnInit {
         noDataMessage: "Loading ..."
 
     };
+
+    constructor(private router: Router,  private bootstrapService: BootstrapService) {}
     
-    constructor(private coinService: CoinsService, private router: Router, private localStorage: LocalStorageService) {
-        this.coins = [];
-        this.init = false;
-        this.searchTerm = '';
-        this.marketCap = 0;
-    }
-    
-    
-    ngOnInit() {
-        this.initList();
-    }
-
-    initList(): void {
-        if (this.cachedDataUnexpired()) {
-            let cachedData = this.localStorage.get('mkcapData');
-            if (cachedData) {
-                this.coins = cachedData.coins;
-                this.marketCap = cachedData.totalMarketCap;
-                this.source = new LocalDataSource(this.coins);
-                this.init = true;
-            }
-        }
-
-        if (!this.init) {
-            this.coinService.getCoins()
-                .subscribe(
-                    coinData => {
-
-                        this.coins = coinData.coins;
-                        this.marketCap = coinData.totalMarketCap;
-                        this.source = new LocalDataSource(this.coins);
-                        this.init = true;
-
-                        let nowtime = +new Date();
-                        this.localStorage.set('mkcapTime', nowtime);
-                        this.localStorage.set('mkcapData', coinData)
-                    }
-                );
-         }
-    }
-
-    cachedDataUnexpired(): boolean {
-        let cachedTime = this.localStorage.get('mkcapTime');
-        let nowtime = +new Date();
-        if (cachedTime) {
-            let diffTime: number = (nowtime - cachedTime);
-            if (diffTime < 180000) {
-                return true;
-            }
-        } else {
-            this.localStorage.set('mkcapTime', nowtime);
-        }
-        return false;
+    ngOnInit(): void {
+        this.bootstrapService.getCoins()
+            .subscribe(
+                coinData => {
+                    this.coins = coinData.coins;
+                    this.marketCap = coinData.totalMarketCap;
+                    this.source = new LocalDataSource(this.coins);
+                    this.init = true;
+                }
+            );
     }
 
     doSearch(): void {

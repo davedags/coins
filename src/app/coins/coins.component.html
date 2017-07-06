@@ -5,7 +5,7 @@
     <div class="row">
         <input [(ngModel)]="searchTerm" name="searchInput" class="search" type="text" placeholder="Search..." (keydown.enter)="doSearch()" />
         <button type="button" class="btn btn-primary btn-sm" (click)="doSearch()">Search</button>
-        <button type="button" class="btn btn-secondary btn-sm"*ngIf="searchTerm"(click)="clearSearch()">Clear</button>
+        <button type="button" class="btn btn-secondary btn-sm" *ngIf="searchTerm" (click)="clearSearch()">Clear</button>
         <span class="market-cap-list" *ngIf="marketCap">Total Market Cap: {{ marketCap | currency:'USD':true:'1.0-0' }}</span>
         <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
     </div>

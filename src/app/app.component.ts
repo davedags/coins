@@ -1,7 +1,8 @@
-import { Component, ViewContainerRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { MessageService } from './common/message.service';
 import { Subscription } from 'rxjs/Subscription';
+import { BootstrapService } from './common/bootstrap.service';
 
 
 @Component({
@@ -11,10 +12,16 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class AppComponent implements OnDestroy {
 
-    subscription: Subscription;
+    private subscription: Subscription;
 
-    constructor(private messageService: MessageService, private toastr: ToastsManager, vcr: ViewContainerRef) {
+    constructor(private messageService: MessageService, 
+                private toastr: ToastsManager, 
+                vcr: ViewContainerRef,
+                private bootstrapService: BootstrapService) {
+        
+
         this.toastr.setRootViewContainerRef(vcr);
+        this.bootstrapService.loadData();
     }
 
     ngOnInit() {
