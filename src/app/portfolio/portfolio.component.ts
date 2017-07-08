@@ -15,6 +15,7 @@ import {Router } from '@angular/router';
 export class PortfolioComponent implements OnInit {
 
     public coins: Coin[];
+    public showTable: boolean = true;
     public source: LocalDataSource;
     public marketCap: number;
     public init;
@@ -83,7 +84,7 @@ export class PortfolioComponent implements OnInit {
         attr: {
             class: 'table table-bordered table-striped table-hover table-rankings'
         },
-        noDataMessage: "Loading ..."
+        noDataMessage: "Loading Portfolio Data ..."
 
     };
 
@@ -98,8 +99,10 @@ export class PortfolioComponent implements OnInit {
             .subscribe(
                 coinData => {
                     this.coins = coinData.coins;
-                    this.marketCap = coinData.totalMarketCap;
                     this.source = new LocalDataSource(this.coins);
+                    if (this.coins.length == 0) {
+                        this.showTable = false;
+                    }
                     this.init = true;
                 }
             );

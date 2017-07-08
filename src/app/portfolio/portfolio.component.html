@@ -1,8 +1,16 @@
 <div class="container-fluid section-header">
-  <div class="page-header">
-    <h3>My Portfolio</h3>
-  </div>
-  <div class="row">
-    <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
-  </div>
+    <div class="page-header">
+        <h3>My Portfolio</h3>
+    </div>
+    <div class="row">
+        <div *ngIf="!showTable" class="alert alert-info" role="alert">
+            <h4>Portfolio Empty</h4>Follow these simple steps to get started:
+            <ul>
+                <li><a routerLink="/">Browse all coins</a> to find your favorites.</li>
+                <li>Click anywhere in a coin row to see a detailed view.</li>
+                <li>From within the detailed view, click the "Add To Portfolio" button to start populating this list.</li>
+            </ul>
+        </div>
+        <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
+    </div>
 </div>
