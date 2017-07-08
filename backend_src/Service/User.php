@@ -7,8 +7,8 @@
  */
 
 namespace Coins\Service;
-
 use Coins\Auth;
+
 
 class User extends Base
 {

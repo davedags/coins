@@ -11,12 +11,7 @@ import 'rxjs/add/observable/forkJoin';
 export class CoinDetailService {
     private detailApiUrl = environment.baseAPIUrl + 'coins/';
     private priceApiUrl = environment.baseAPIUrl + 'price/';
-    detail: any;
-    price: any;
-    constructor(private http: Http) {
-        this.detail = {};
-        this.price = {};
-    }
+    constructor(private http: Http) {}
 
     getData(id: string): Observable<any> {
         return Observable.forkJoin(
@@ -61,5 +56,7 @@ export class CoinDetailService {
                     return Observable.throw(error.message || error)
                 });
     }
+
+    
 
 }

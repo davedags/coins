@@ -10,24 +10,29 @@ namespace Coins\Controller;
 
 use Coins\Service;
 
-class Portfolio
+class Portfolio extends Base
 {
-    protected $container;
-    protected $service;
+
+    public static $service_class = 'Portfolio';
 
     public function __construct($container)
     {
-        $this->container = $container;
-        $this->service = new Service\Portfolio([
-                'em' => $this->container['em'],
-                'jwt' => !empty($this->container['jwt']) ? $this->container['jwt'] : null
-            ]
-        );
+        parent::__construct($container);
     }
 
+    public function get($request, $response, $args)
+    {
+        $coin = $args['id'];
+        try {
+            $this->service->get($coin);
+            return $response->withJson(true);
+        } catch (\Exception $e) {
+            return $response->withJson(false);
+        }
+    }
+    
     public function getList($request, $response, $args)
     {
-
         $list = $this->service->getList();
         return $response->withJson($list);
     }
@@ -51,7 +56,7 @@ class Portfolio
 
     public function delete($request, $response, $args)
     {
-        $coin = $payload['symbol'];
+        $coin = $args['id'];
         try {
             $this->service->removeFromPortfolio($coin);
             return $response->withJson(true);

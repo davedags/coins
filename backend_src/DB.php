@@ -37,6 +37,7 @@ class DB
                 $conn = array_merge(['driver' => 'pdo_mysql'], $db_config);
                 $this->em = \Doctrine\ORM\EntityManager::create($conn, $config);
             }
+            $this->em->getConfiguration()->addCustomHydrationMode('COLUMN_HYDRATOR', 'Coins\Hydrators\ColumnHydrator');
         }
         return $this->em;
     }

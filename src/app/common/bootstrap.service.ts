@@ -31,16 +31,8 @@ export class BootstrapService {
                     let jsonResults = res.json();
                     let collection = jsonResults.results.map(item => {
                         idx = idx + 1;
-                        let rowCoin = new Coin();
-                        rowCoin.position = idx;
-                        rowCoin.name = item.long;
-                        rowCoin.symbol = item.short;
-                        rowCoin.price = item.price;
-                        rowCoin.marketCap = item.mktcap;
-                        rowCoin.percent24 = item.cap24hrChange;
-                        if (item.image_url) {
-                          rowCoin.image_url = item.image_url;
-                        }
+                        item.idx = idx;
+                        let rowCoin = new Coin(item);
                         return rowCoin;
                         });
                     let marketCap = jsonResults.marketCap;

@@ -10,18 +10,14 @@ namespace Coins\Controller;
 
 use Coins\Service;
 
-class Coin
+class Coin extends Base
 {
-    protected $container;
-    protected $service;
 
+    public static $service_class = 'Coin';
+    
     public function __construct($container) 
     {
-        $this->container = $container;
-        $this->service = new Service\Coin([
-            'em' => $this->container['em']
-            ]      
-        );
+        parent::__construct($container);
     }
 
     public function getList($request, $response, $args)

@@ -11,17 +11,20 @@ namespace Coins\Service;
 
 class Base
 {
+    protected $container;
     protected $em;
     protected $cache;
-    protected $currentUser;
+    protected $currentUser = null;
     protected static $entity_namespace = 'Coins\Entities\\';
 
     public function __construct($args = [])
     {
-        $this->em = $args['em'];
+
+        $this->container = $args['container'];
+        $this->em = $this->container['em'];
         $this->cache = \Coins\Cache::Instance();
-        if (!empty($args['jwt'])) {
-            $this->currentUser = $args['jwt']->data->user_id;
+        if (!empty($this->container['user'])) {
+            $this->setUser($this->container['user']);
         }
     }
 
@@ -44,12 +47,24 @@ class Base
 
     public function getClassPath($class = null)
     {
-        $class = empty($args['class']) ? $this->getClass() : $args['class'];
+        if (is_null($class)) {
+            $class = $this->getClass();
+        }
         return self::$entity_namespace . $class;
     }
 
     public function getClass()
     {
         return static::$class;
+    }
+    
+    public function setUser($user)
+    {
+        $this->currentUser = $user;
+    }
+    
+    public function getUser()
+    {
+        return $this->currentUser;
     }
 }

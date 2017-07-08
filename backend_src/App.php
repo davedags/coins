@@ -42,9 +42,9 @@ class App
         $container = $app->getContainer();
 
         $container['em'] = function () {
-
             return $this->db->em;
         };
+        
         $app->options('/{routes:.+}', function ($request, $response, $args) {
             return $response;
         });
@@ -57,14 +57,16 @@ class App
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         });
 
-        /**
         $app->add(new \Slim\Middleware\JwtAuthentication([
             "path" => ["/portfolio"],
             "secret" => Auth::getSecret(),
             "callback" => function ($request, $response, $arguments) use ($container) {
-                $container["jwt"] = $arguments["decoded"];
+                if (!empty($arguments['decoded'])) {
+                    $container['jwt'] = $arguments["decoded"];
+                    $container['user'] = $container['jwt']->data->user_id;
+                }
             }
-        ]));**/
+        ]));
 
         //Routes
         $app->get('/coins', 'Coins\Controller\Coin:getList');
@@ -75,6 +77,7 @@ class App
         
         $app->get('/portfolio', 'Coins\Controller\Portfolio:getList');
         $app->post('/portfolio', 'Coins\Controller\Portfolio:create');
+        $app->get('/portfolio/{id}', 'Coins\Controller\Portfolio:get');
         $app->delete('/portfolio/{id}', 'Coins\Controller\Portfolio:delete');
         
         $this->app = $app;

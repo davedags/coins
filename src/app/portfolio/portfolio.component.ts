@@ -97,7 +97,6 @@ export class PortfolioComponent implements OnInit {
         this.portfolioService.getList()
             .subscribe(
                 coinData => {
-
                     this.coins = coinData.coins;
                     this.marketCap = coinData.totalMarketCap;
                     this.source = new LocalDataSource(this.coins);
