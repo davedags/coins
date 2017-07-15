@@ -98,7 +98,6 @@ export class CoinsComponent implements OnInit {
         renderComponent: CheckboxColumnComponent,
         onComponentInitFunction(instance) {
             instance.save.subscribe(row => {
-                console.log('in save?');
 
             });
         }
@@ -107,7 +106,7 @@ export class CoinsComponent implements OnInit {
     constructor(private router: Router,
                 private bootstrapService: BootstrapService,
                 private authService: AuthService) {
-        
+
         if (this.authService.getToken()) {
             this.settings['columns'].in_portfolio = this.portfolioColumn;
         }

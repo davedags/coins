@@ -64,7 +64,8 @@ class Portfolio extends Base
         $this->em->persist($portfolioObject);
         $this->em->flush();
 
-        $object = $this->getPortfolioObject($this->currentUser, $coin->getId());
+        Coin::clearMarketCapCache($this->currentUser);
+
         return true;
     }
 
@@ -74,6 +75,8 @@ class Portfolio extends Base
         $object = $this->get($symbol);
         $this->em->remove($object);
         $this->em->flush();
+
+        Coin::clearMarketCapCache($this->currentUser);
         
         return true;
         

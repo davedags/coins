@@ -29,10 +29,24 @@ class Coin extends Base
 
     }
 
+    public static function getMarketCapCacheKey($user = null)
+    {
+        return 'coins.mk.list.' . $user ?: 'public';
+    }
+    
+    public static function clearMarketCapCache($user = null) 
+    {
+        $cache_key = self::getMarketCapCacheKey($user);
+        $cache = \Coins\Cache::Instance();
+        if ($cache) {
+            $cache->set($cache_key, null);
+        }
+    }
+    
     public function getMarketCapList(array $args = []) 
     {
         
-        $cache_key = 'coins.mk.list.' . $this->getUser() ?: 'public';
+        $cache_key = self::getMarketCapCacheKey($this->getUser());
         if ($data = $this->cache->get($cache_key)) {
             return $data;
         }
