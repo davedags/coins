@@ -9,6 +9,7 @@ import { CollapseModule } from 'ngx-bootstrap';
 import { ToastModule, ToastOptions } from 'ng2-toastr';
 import { ToastConfig } from './common/toast-config';
 import { FocusModule } from './focus/focus.module';
+import { LoadingModule } from 'ngx-loading';
 
 import { AppComponent } from './app.component';
 import { CoinsComponent } from './coins/coins.component';
@@ -53,6 +54,7 @@ const appRoutes: Routes = [
         FocusModule,
         CollapseModule,
         BrowserAnimationsModule,
+        LoadingModule,
         ToastModule.forRoot(),
         RouterModule.forRoot(appRoutes)
     ],
