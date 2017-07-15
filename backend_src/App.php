@@ -20,7 +20,7 @@ class App
 
     public function __construct($args = [])
     {
-
+        
         $config = [];
         if ($this->debugMode()) {
             $config['displayErrorDetails'] = true;
@@ -58,7 +58,7 @@ class App
         });
 
         $app->add(new \Slim\Middleware\JwtAuthentication([
-            "path" => ["/portfolio"],
+            "path" => ["/portfolio", "/coins-auth"],
             "secret" => Auth::getSecret(),
             "callback" => function ($request, $response, $arguments) use ($container) {
                 if (!empty($arguments['decoded'])) {
@@ -74,7 +74,7 @@ class App
         $app->get('/price/{id}', 'Coins\Controller\Coin:getPrice');
         $app->post('/login', 'Coins\Controller\User:login');
         $app->post('/users', 'Coins\Controller\User:create');
-        
+        $app->get('/coins-auth', 'Coins\Controller\Coin:getList');
         $app->get('/portfolio', 'Coins\Controller\Portfolio:getList');
         $app->post('/portfolio', 'Coins\Controller\Portfolio:create');
         $app->get('/portfolio/{id}', 'Coins\Controller\Portfolio:get');

@@ -11,6 +11,7 @@ export class Coin {
     public marketCap: number;
     public percent24: number;
     public image_url?: string;
+    public in_portfolio?: boolean;
 
     constructor(data?: any) {
 
@@ -23,6 +24,11 @@ export class Coin {
             this.percent24 = data.cap24hrChange;
             if (data.image_url) {
                 this.image_url = data.image_url;
+            }
+            if (data.in_portfolio) {
+                this.in_portfolio = true;
+            } else {
+                this.in_portfolio = false;
             }
         }
     }

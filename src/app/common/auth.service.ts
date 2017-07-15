@@ -16,8 +16,12 @@ export class AuthService {
     currentUser: any = this.getCurrentUser();
     loggedInUserSubject = new BehaviorSubject<any>(this.currentUser);
     private apiUrl = environment.baseAPIUrl;
-    
-    constructor(private http:Http, private router: Router, private localStorage: LocalStorageService, private messageService: MessageService) {}
+
+
+    constructor(private http: Http,
+                private router: Router,
+                private localStorage: LocalStorageService,
+                private messageService: MessageService) {}
 
     syncUser(): Observable<any> {
         return this.loggedInUserSubject.asObservable()
@@ -28,6 +32,7 @@ export class AuthService {
             .map(res => {
                 this.setCurrentUser(res.json());
                 this.messageService.sendMessage('Welcome back ' + this.currentUser.username, 'Log-in Successful!');
+                //this.bootstrapService.loadData();
                 return this.currentUser;
             })
             .catch(error => {
@@ -45,13 +50,19 @@ export class AuthService {
         let storageKey = AuthService.getUserKey();
         this.localStorage.del(storageKey);
         this.loggedInUserSubject.next('');
-
-        let currentUrl = this.router.routerState.snapshot.url;
-        if (currentUrl != '/') {
-            this.router.navigate(['']);
-        }
+        this.localStorage.set('logout', true);
+        this.router.navigate(['/login']);
+        
     }
     
+    justLoggedOut(): boolean {
+        if (this.localStorage.get('logout')) {
+            this.localStorage.del('logout');
+            return true;
+        } else {
+            return false;
+        }
+    }
     static getUserKey(): string {
         return LocalStorageService.authUserKey;
     }

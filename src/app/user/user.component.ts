@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService } from "../common/auth.service";
 import { MessageService } from '../common/message.service';
@@ -10,11 +10,12 @@ import { BootstrapService } from '../common/bootstrap.service';
     styleUrls: ['./user.component.css']
 })
 
-export class UserComponent implements  AfterViewInit {
+export class UserComponent implements  OnInit, AfterViewInit {
 
     username: string;
     password: string;
     login_error: boolean;
+    logout: boolean = false;
     registration_error: boolean;
     
     public focusTriggerEventEmitter = new EventEmitter<boolean>();
@@ -24,6 +25,12 @@ export class UserComponent implements  AfterViewInit {
         this.password = '';
     }
     
+    ngOnInit() {
+        if (this.authService.justLoggedOut()) {
+            this.bootstrapService.loadData();
+            this.logout = true;
+        } 
+    }
     
     ngAfterViewInit(): void {
         this.focusInput();
@@ -42,6 +49,7 @@ export class UserComponent implements  AfterViewInit {
         this.authService.login(credentials)
             .subscribe(
                 success => {
+                    this.bootstrapService.loadData();
                     this.router.navigate(['']);
                 },
                 error => {
@@ -68,6 +76,8 @@ export class UserComponent implements  AfterViewInit {
 
     }
 
-   
+    returnHome(): void {
+        this.router.navigate(['']);
+    }   
 
 }

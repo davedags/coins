@@ -31,8 +31,8 @@ class Coin extends Base
 
     public function getMarketCapList(array $args = []) 
     {
-
-        $cache_key = 'coins.mk.list';
+        
+        $cache_key = 'coins.mk.list.' . $this->getUser() ?: 'public';
         if ($data = $this->cache->get($cache_key)) {
             return $data;
         }
@@ -62,6 +62,14 @@ class Coin extends Base
     public function mungeMarketCapResults(&$data)
     {
         $symbol_map = $this->getSymbolMap();
+        $portfolio_map = [];
+        if ($this->getUser()) {
+            $portfolio_service = new Portfolio([
+                    'container' => $this->container
+                ]
+            );
+            $portfolio_map = $portfolio_service->getSymbolMap();
+        }
         foreach ($data as $idx => $row) {
             $row['short'] = strtoupper($row['short']);
             if (!empty($symbol_map[$row['short']])) {
@@ -79,7 +87,13 @@ class Coin extends Base
                     $data[$idx][$field] = 0;
                 }
             }
+            if (!empty($portfolio_map[$row['short']])) {
+                $data[$idx]['in_portfolio'] = true;
+            } else {
+                $data[$idx]['in_portfolio'] = false;
+            }
         }
+
     }
     
     public function getTotalMarketCap($data)

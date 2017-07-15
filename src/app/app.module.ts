@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule }   from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CollapseModule } from 'ngx-bootstrap';
 import { ToastModule, ToastOptions } from 'ng2-toastr';
 import { ToastConfig } from './common/toast-config';
@@ -17,12 +17,13 @@ import { CoinDetailComponent } from './coin-detail/coin-detail.component';
 import { UserComponent } from './user/user.component';
 import { NavComponent } from './nav/nav.component';
 
-import { BootstrapService } from './common/bootstrap.service';
 import { AuthService } from "./common/auth.service";
+import { BootstrapService } from './common/bootstrap.service';
 import { LocalStorageService } from './common/local-storage.service';
 import { AuthGuardService } from './common/auth-guard.service';
 import { MessageService } from './common/message.service';
 import { PortfolioComponent } from './portfolio/portfolio.component';
+import { CheckboxColumnComponent } from './coins/checkbox-column.component';
 
 
 const appRoutes: Routes = [
@@ -41,7 +42,8 @@ const appRoutes: Routes = [
         CoinDetailComponent,
         UserComponent,
         NavComponent,
-        PortfolioComponent
+        PortfolioComponent,
+        CheckboxColumnComponent
     ],
     imports: [  
         BrowserModule,
@@ -55,13 +57,14 @@ const appRoutes: Routes = [
         RouterModule.forRoot(appRoutes)
     ],
     providers: [
+        AuthService,
         BootstrapService,
-        AuthService, 
         LocalStorageService, 
         AuthGuardService, 
         MessageService,
         { provide: ToastOptions, useClass: ToastConfig }
     ],
+    entryComponents: [ CheckboxColumnComponent ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule { }

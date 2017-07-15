@@ -4,6 +4,10 @@
     </div>
 </div>
 <div class="container login-container">
+    <div *ngIf="logout" class="alert alert-info" role="info">
+        <strong>Your session has been successfully logged out.</strong>
+        <a routerLink="/">Return to Market Cap Rankings</a>
+    </div>
     <div *ngIf="login_error" class="alert alert-danger" role="alert">
         <strong>Incorrect Username or Password.</strong>
     </div>

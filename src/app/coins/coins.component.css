@@ -4,6 +4,7 @@
 }
 :host /deep/ ng2-smart-table tbody > tr > td {
     font-size: 14px;
+    cursor: pointer;
 }
 
 :host /deep/ ng2-smart-table thead > tr {

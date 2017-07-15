@@ -107,6 +107,18 @@ class Portfolio extends Base
 
         return $collection;
     }
+    
+    public function getSymbolMap()
+    {
+        $map = [];
+        $res = $this->getPortfolio();
+        if (!empty($res)) {
+            foreach ($res as $symbol) {
+                $map[$symbol] = true;
+            }
+        }
+        return $map;
+    }
 
     public function mungePortfolio($list)
     {

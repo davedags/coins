@@ -23,6 +23,7 @@ class Base
         $this->container = $args['container'];
         $this->em = $this->container['em'];
         $this->cache = \Coins\Cache::Instance();
+        
         if (!empty($this->container['user'])) {
             $this->setUser($this->container['user']);
         }

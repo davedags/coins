@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CoinDetailService } from './coin-detail.service';
 import { PortfolioService } from '../portfolio/portfolio.service';
 import { MessageService } from '../common/message.service';
+import { BootstrapService } from '../common/bootstrap.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../common/auth.service';
 import 'rxjs/add/operator/switchMap';
@@ -35,7 +36,8 @@ export class CoinDetailComponent implements OnInit {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private authService: AuthService,
-        private portfolioService: PortfolioService) {
+        private portfolioService: PortfolioService,
+        private bootstrapService: BootstrapService) {
         
         this.detail = '';
         this.price = '';
@@ -97,6 +99,7 @@ export class CoinDetailComponent implements OnInit {
         this.portfolioService.add(this.symbol)
             .subscribe(
                 success => {
+                    this.bootstrapService.loadData();
                     this.inPortfolio = true;
                     this.messageService.sendMessage(this.symbol + ' has been added to your portfolio', 'Portfolio Updated');
                 },
@@ -108,6 +111,7 @@ export class CoinDetailComponent implements OnInit {
         this.portfolioService.remove(this.symbol)
             .subscribe(
                 success => {
+                    this.bootstrapService.loadData();
                     this.inPortfolio = false;
                     this.messageService.sendMessage(this.symbol + ' has been removed from your portfolio', 'Portfolio Updated');
                 },

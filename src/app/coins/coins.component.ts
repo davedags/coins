@@ -1,17 +1,19 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { BootstrapService } from '../common/bootstrap.service';
+import { AuthService } from '../common/auth.service';
 import { Coin } from '../model/coin';
-import { LocalDataSource } from "ng2-smart-table/index";
+import { LocalDataSource, ViewCell } from "ng2-smart-table/index";
 import { Router } from "@angular/router";
+import { CheckboxColumnComponent } from "./checkbox-column.component";
 
 @Component({
     selector: 'app-coins',
     templateUrl: './coins.component.html',
     styleUrls: ['./coins.component.css']
 })
-
 export class CoinsComponent implements OnInit {
-    
+
+
     public coins: Coin[] = [];
     public source: LocalDataSource;
     public marketCap: number = 0;
@@ -21,47 +23,50 @@ export class CoinsComponent implements OnInit {
         columns: {
             'position': {
                 title: '#',
-                width: '10px'
+                width: '5%'
             },
             'name': {
                 title: 'Name',
-                width: '20px',
+                width: '20%',
                 type: 'html',
                 valuePrepareFunction: (value, row) => {
                     let imgUrl = row.image_url;
                     if (!imgUrl) {
                         imgUrl = "/assets/icons/default.png";
                     }
-                    return "<img src='" + imgUrl + "' width='25px' height='25px' /> " + value;
+                    return "<img src='" + imgUrl + "' width='25px' height='25px' />" + value;
                 }
             },
             'symbol': {
                 title: 'Symbol',
-                width: '10px'
+                width: '10%'
             },
 
             'price': {
                 title: 'Price',
-                width: '35px',
+                width: '25%',
                 sort: 'desc',
                 valuePrepareFunction: (value) => {
-                    return '$' + Number(value).toLocaleString('en', { minimumFractionDigits: 4, maximumFractionDigits: 8})
+                    return '$' + Number(value).toLocaleString('en', {
+                            minimumFractionDigits: 4,
+                            maximumFractionDigits: 8
+                        })
                 },
                 compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             },
             'marketCap': {
                 title: 'Market Cap',
-                width: '40px',
+                width: '25%',
                 sort: 'desc',
-                valuePrepareFunction: (value) => { 
-                    return '$' + Number(value).toLocaleString('en', 
-                        { maximumFractionDigits: 0 }) 
+                valuePrepareFunction: (value) => {
+                    return '$' + Number(value).toLocaleString('en',
+                            {maximumFractionDigits: 0})
                 },
                 compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             },
             'percent24': {
                 title: '%24Hr',
-                width: '15px',
+                width: '10%',
                 sort: 'desc',
                 valuePrepareFunction: (value) => {
                     return value + '%';
@@ -86,7 +91,27 @@ export class CoinsComponent implements OnInit {
 
     };
 
-    constructor(private router: Router,  private bootstrapService: BootstrapService) {}
+    private portfolioColumn = {
+        title: 'Portfolio',
+        width: '5%',
+        type: 'custom',
+        renderComponent: CheckboxColumnComponent,
+        onComponentInitFunction(instance) {
+            instance.save.subscribe(row => {
+                console.log('in save?');
+
+            });
+        }
+    }
+
+    constructor(private router: Router,
+                private bootstrapService: BootstrapService,
+                private authService: AuthService) {
+        
+        if (this.authService.getToken()) {
+            this.settings['columns'].in_portfolio = this.portfolioColumn;
+        }
+    }
     
     ngOnInit(): void {
         this.bootstrapService.getCoins()
@@ -134,7 +159,7 @@ export class CoinsComponent implements OnInit {
         }
         return 0;
     }
-    
+
     clickRow(event): void {
 
         let symbol = event.data.symbol;
@@ -144,9 +169,6 @@ export class CoinsComponent implements OnInit {
 
     }
 
-    addPortfolio(symbol, event): void {
-        event.preventDefault();
-        console.log('symbol = ' + symbol);
-    }
 
+    
 }
