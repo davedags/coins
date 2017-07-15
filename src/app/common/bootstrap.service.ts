@@ -17,6 +17,7 @@ export class BootstrapService {
     private portfolioUrl = environment.baseAPIUrl + "portfolio";
     private data: any = [];
     private dataSubject = new BehaviorSubject<any>(this.data);
+    private loadingSubject = new BehaviorSubject<any>(true);
     private loaded: boolean = false;
     private portfolioMap: any = [];
 
@@ -27,7 +28,12 @@ export class BootstrapService {
         return this.dataSubject.asObservable()
     }
 
+    getLoading(): Observable<any> {
+        return this.loadingSubject.asObservable();   
+    }
+    
     loadData(): void {
+        this.loadingSubject.next(true);
         let idx = 0;
         let apiUrl = this.listUrl;
         if (this.authService.getToken()) {
@@ -57,6 +63,7 @@ export class BootstrapService {
             .subscribe(
                 coinData => {
                     this.dataSubject.next(coinData);
+                    this.loadingSubject.next(false);
                 }
             )
     }

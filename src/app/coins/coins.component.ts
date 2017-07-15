@@ -5,6 +5,7 @@ import { Coin } from '../model/coin';
 import { LocalDataSource, ViewCell } from "ng2-smart-table/index";
 import { Router } from "@angular/router";
 import { CheckboxColumnComponent } from "./checkbox-column.component";
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'app-coins',
@@ -18,6 +19,7 @@ export class CoinsComponent implements OnInit {
     public source: LocalDataSource;
     public marketCap: number = 0;
     public init: boolean = false;
+    public loading: Observable<boolean>;
     public searchTerm: string = '';
     public settings: Object = {
         columns: {
@@ -98,7 +100,6 @@ export class CoinsComponent implements OnInit {
         renderComponent: CheckboxColumnComponent,
         onComponentInitFunction(instance) {
             instance.save.subscribe(row => {
-
             });
         }
     }
@@ -107,6 +108,7 @@ export class CoinsComponent implements OnInit {
                 private bootstrapService: BootstrapService,
                 private authService: AuthService) {
 
+        this.loading = this.bootstrapService.getLoading();
         if (this.authService.getToken()) {
             this.settings['columns'].in_portfolio = this.portfolioColumn;
         }
