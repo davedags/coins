@@ -26,7 +26,7 @@ export class CoinsComponent implements OnInit {
         columns: {
             'in_portfolio': {
                 title: '+/-',
-                width: '5%',
+                width: '2%',
                 type: 'custom',
                 renderComponent: CheckboxColumnComponent,
                 onComponentInitFunction(instance) {
