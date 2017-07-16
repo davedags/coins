@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PortfolioService } from './portfolio.service';
 import { LocalDataSource } from "ng2-smart-table/index";
 import { Coin } from '../model/coin';
-import {Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { CheckboxColumnComponent } from '../coins/checkbox-column.component';
 
 @Component({
     selector: 'app-portfolio',
@@ -21,6 +22,16 @@ export class PortfolioComponent implements OnInit {
     public init;
     public settings: Object = {
         columns: {
+            'in_portfolio': {
+                title: '+/-',
+                width: '5%',
+                type: 'custom',
+                renderComponent: CheckboxColumnComponent,
+                onComponentInitFunction(instance) {
+                    instance.save.subscribe(row => {
+                    });
+                }
+            },
             'position': {
                 title: '#',
                 width: '10px'

@@ -21,8 +21,19 @@ export class CoinsComponent implements OnInit {
     public init: boolean = false;
     public loading: Observable<boolean>;
     public searchTerm: string = '';
-    public settings: Object = {
+    public settings: Object = {};
+    public allSettings: Object = {
         columns: {
+            'in_portfolio': {
+                title: '+/-',
+                width: '5%',
+                type: 'custom',
+                renderComponent: CheckboxColumnComponent,
+                onComponentInitFunction(instance) {
+                    instance.save.subscribe(row => {
+                    });
+                }
+            },
             'position': {
                 title: '#',
                 width: '5%'
@@ -107,10 +118,12 @@ export class CoinsComponent implements OnInit {
     constructor(private router: Router,
                 private bootstrapService: BootstrapService,
                 private authService: AuthService) {
-
+        this.settings = this.allSettings;
         this.loading = this.bootstrapService.getLoading();
-        if (this.authService.getToken()) {
-            this.settings['columns'].in_portfolio = this.portfolioColumn;
+        if (!this.authService.getToken()) {
+           console.log('should be deleting');
+            delete this.settings['columns'].in_portfolio;
+            //this.settings['columns'].in_portfolio = this.portfolioColumn;
         }
     }
     
