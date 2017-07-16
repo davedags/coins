@@ -40,14 +40,16 @@ export class CoinsComponent implements OnInit {
             },
             'name': {
                 title: 'Name',
-                width: '20%',
+                width: '15%',
                 type: 'html',
                 valuePrepareFunction: (value, row) => {
                     let imgUrl = row.image_url;
                     if (!imgUrl) {
                         imgUrl = "/assets/icons/default.png";
                     }
-                    return "<img src='" + imgUrl + "' width='25px' height='25px' />" + value;
+
+                    return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                        "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
                 }
             },
             'symbol': {
@@ -57,7 +59,7 @@ export class CoinsComponent implements OnInit {
 
             'price': {
                 title: 'Price',
-                width: '25%',
+                width: '27%',
                 sort: 'desc',
                 valuePrepareFunction: (value) => {
                     return '$' + Number(value).toLocaleString('en', {
@@ -69,7 +71,7 @@ export class CoinsComponent implements OnInit {
             },
             'marketCap': {
                 title: 'Market Cap',
-                width: '25%',
+                width: '27%',
                 sort: 'desc',
                 valuePrepareFunction: (value) => {
                     return '$' + Number(value).toLocaleString('en',

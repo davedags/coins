@@ -14,3 +14,11 @@
 .search {
     margin-bottom: 5px;
 }
+
+.coin-img {
+    float: left;
+}
+
+.coin-img-text {
+    overflow: hidden;
+}
