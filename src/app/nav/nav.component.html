@@ -1,27 +1,26 @@
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" (click)="isCollapsed = !isCollapsed">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+            <button type="button" class="navbar-toggle" (click)="toggleNav();">
+                <span class="icon-bar bar1"></span>
+                <span class="icon-bar bar2"></span>
+                <span class="icon-bar bar3"></span>
             </button>
             <a class="navbar-brand" routerLink="/" >DagsCoin</a>
         </div>
-        <div class="navbar-collapse collapse" [collapse]="isCollapsed">
-            <ul class="nav navbar-nav">
-                <li (click)="checkToggleOnMenuClick()">
+        <div class="navbar-collapse collapse" >
+            <ul class="nav navbar-nav navbar-right">
+                <li>
                     <a href="" routerLink="/">Market Cap Rankings</a>
                 </li>
-                <li *ngIf="(loggedInUser | async)" (click)="checkToggleOnMenuClick()">
+                <li *ngIf="(loggedInUser | async)">
                     <a href="" routerLink="/portfolio">Portfolio</a>
                 </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li *ngIf="!(loggedInUser | async)" (click)="checkToggleOnMenuClick()">
+
+                <li *ngIf="!(loggedInUser | async)">
                     <a routerLink="/login" routerLinkActive="active">Log-In / Create Account</a>
                 </li>
-                <li *ngIf="(loggedInUser | async)" (click)="checkToggleOnMenuClick();authService.logout($event)">
+                <li *ngIf="(loggedInUser | async)" (click)="authService.logout($event)">
                     <a href="">Log-Out [{{ (loggedInUser | async )?.username }}]</a>
                 </li>
             </ul>

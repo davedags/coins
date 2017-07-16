@@ -1,5 +1,5 @@
 <div class="container section-header coin-detail">
-    <div *ngIf="detail" class="page-header">
+    <div *ngIf="detail">
         <h1> {{ detail.title }} </h1>
         <button *ngIf="!inPortfolio && loggedIn" type="button" (click)="portfolioAdd(detail.symbol)" class="btn btn-default">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add To Portfolio

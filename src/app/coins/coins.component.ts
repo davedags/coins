@@ -123,9 +123,7 @@ export class CoinsComponent implements OnInit {
         this.settings = this.allSettings;
         this.loading = this.bootstrapService.getLoading();
         if (!this.authService.getToken()) {
-           console.log('should be deleting');
             delete this.settings['columns'].in_portfolio;
-            //this.settings['columns'].in_portfolio = this.portfolioColumn;
         }
     }
     

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { AuthService } from "../common/auth.service";
 import { Observable } from 'rxjs/Observable';
 
@@ -10,18 +10,19 @@ import { Observable } from 'rxjs/Observable';
 export class NavComponent {
 
     loggedInUser: Observable<boolean>;
-    
-    @Input()
-    public isCollapsed: boolean = true;
-    
+
+    public navExpanded: boolean = false;
+    @Output()
+    public navToggle = new EventEmitter();
+
     constructor(private authService: AuthService) {
         this.loggedInUser = authService.syncUser();
     }
-    
-    checkToggleOnMenuClick(): void {
-        if (this.isCollapsed == false) {
-            this.isCollapsed = true;
-        }
-    }
 
+    toggleNav() {
+        console.log('i am here');
+        this.navExpanded = !this.navExpanded;
+        console.log('expanded = ' + this.navExpanded);
+        this.navToggle.emit(this.navExpanded);
+    }
 }

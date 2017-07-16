@@ -13,7 +13,8 @@ import { BootstrapService } from './common/bootstrap.service';
 export class AppComponent implements OnDestroy {
 
     private subscription: Subscription;
-
+    navExpanded: boolean = false;
+    
     constructor(private messageService: MessageService, 
                 private toastr: ToastsManager, 
                 vcr: ViewContainerRef,
@@ -32,6 +33,11 @@ export class AppComponent implements OnDestroy {
         )
     }
 
+    handleNavToggle(expanded) {
+        console.log('in handle nav toggle wiht ');
+        console.log(expanded);
+        this.navExpanded = expanded;
+    }
     
     ngOnDestroy() {
         this.subscription.unsubscribe();

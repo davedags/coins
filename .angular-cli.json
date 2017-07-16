@@ -19,11 +19,20 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css",
+        "assets/css/styles.css",
         "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "assets/css/material-kit.css",
         "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
       ],
-      "scripts": [ ],
+      "scripts": [
+        "assets/js/jquery.min.js",
+        "assets/js/bootstrap.min.js",
+        "assets/js/material.min.js",
+        "assets/js/nouislider.min.js",
+        "assets/js/bootstrap-tagsinput.js",
+        "assets/js/atv-img-animation.js",
+        "assets/js/material-kit.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

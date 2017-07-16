@@ -3,8 +3,7 @@
 .section-header {
      max-width: 90%;
 }
-
-.page-header {
-    margin: 10px 0 20px !important;
+.main-content {
+    z-index: -1 !important;
 }
 

@@ -1,5 +1,5 @@
 <div class="container section-header">
-    <div class="page-header login-header">
+    <div class="login-header">
         <h3>Log-In <small> for a customized experience.</small></h3>
     </div>
 </div>
@@ -17,11 +17,9 @@
     </div>
     <form name="form" #f="ngForm" >
         <div class="form-group">
-            <label for="username">Username</label>
             <input [focus]="focusTriggerEventEmitter" [(ngModel)]="username" name="username" type="text" placeholder="username" class="form-control"  required />
             </div>
         <div class="form-group">
-            <label for="password">Password</label>
             <input type="password" [(ngModel)]="password" name="password" class="form-control" placeholder="password" type="password" required />
         </div>
         <div class="form-group">
