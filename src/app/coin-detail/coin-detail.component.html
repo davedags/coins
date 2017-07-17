@@ -1,4 +1,7 @@
 <div class="container section-header coin-detail">
+    <div *ngIf="!detail" class="container" style="height: 100vh">
+        <ngx-loading [show]="!detail" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
+    </div>
     <div *ngIf="detail">
         <h1> {{ detail.title }} </h1>
         <button *ngIf="!inPortfolio && loggedIn" type="button" (click)="portfolioAdd(detail.symbol)" class="btn btn-default">
@@ -8,7 +11,7 @@
             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove From Portfolio
         </button>
     </div>
-    <div class="row">
+    <div *ngIf="detail" class="row">
         <div class="col-sm-7 col-md-9">
             <div class="row">
                 <div class="col-xs-6">

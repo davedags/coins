@@ -1,9 +1,9 @@
 <header>
-    <app-nav (navToggle)="handleNavToggle($event)"></app-nav>
+    <app-nav></app-nav>
 </header>
 
 <section>
-    <div class="main"  [ngClass]="{'main-content': navExpanded }">
+    <div class="main main-raised">
         <router-outlet></router-outlet>
     </div>
 </section>

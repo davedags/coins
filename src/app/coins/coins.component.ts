@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BootstrapService } from '../common/bootstrap.service';
 import { AuthService } from '../common/auth.service';
 import { Coin } from '../model/coin';

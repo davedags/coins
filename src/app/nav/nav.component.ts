@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AuthService } from "../common/auth.service";
 import { Observable } from 'rxjs/Observable';
 
@@ -10,19 +10,14 @@ import { Observable } from 'rxjs/Observable';
 export class NavComponent {
 
     loggedInUser: Observable<boolean>;
-
-    public navExpanded: boolean = false;
-    @Output()
-    public navToggle = new EventEmitter();
+    @ViewChild('collapseButton') collapseButton: ElementRef;
 
     constructor(private authService: AuthService) {
         this.loggedInUser = authService.syncUser();
     }
 
-    toggleNav() {
-        console.log('i am here');
-        this.navExpanded = !this.navExpanded;
-        console.log('expanded = ' + this.navExpanded);
-        this.navToggle.emit(this.navExpanded);
+    collapseNav() {
+        let event = new MouseEvent('click', { bubbles: true});
+        this.collapseButton.nativeElement.dispatchEvent(event);
     }
 }
