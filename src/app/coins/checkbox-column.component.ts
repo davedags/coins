@@ -6,9 +6,13 @@ import { MessageService } from "../common/message.service";
 @Component({
     selector: 'button-view',
     template: `
-        <a href="" (click)="setChecked($event)">
-           <input type="checkbox" [checked]="checked" />
-        </a>
+       
+        <div class="checkbox" (click)="setChecked($event)" >  
+              <label>
+                  <input type="checkbox" [checked]="checked"  />  
+              </label>
+        </div>
+       
     `,
     providers: [ PortfolioService ]
 })
@@ -40,6 +44,7 @@ export class CheckboxColumnComponent implements ViewCell, OnInit {
         event.stopPropagation();
         this.rowData.in_portfolio = this.checked;
         this.save.emit(this.rowData);
+        event.preventDefault();
     }
 
     portfolioAdd() {
