@@ -1,10 +1,11 @@
 <div class="container-fluid section-header">
-    <div>
-        <h3>Price and Market Cap Rankings</h3>
-    </div>
     <div *ngIf="(loading | async)" class="container" style="height: 100vh">
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
     </div>
+    <div *ngIf="!(loading | async)">
+        <h3>Price and Market Cap Rankings</h3>
+    </div>
+
     <div *ngIf="!(loading | async)" class="row">
         <input [(ngModel)]="searchTerm" name="searchInput" class="search" type="text" placeholder="Search..."
                (keydown.enter)="doSearch()" />
