@@ -59,7 +59,7 @@ export class CoinsComponent implements OnInit {
 
             'price': {
                 title: 'Price',
-                width: '27%',
+                width: '30%',
                 sort: 'desc',
                 valuePrepareFunction: (value) => {
                     return '$' + Number(value).toLocaleString('en', {
@@ -71,7 +71,7 @@ export class CoinsComponent implements OnInit {
             },
             'marketCap': {
                 title: 'Market Cap',
-                width: '27%',
+                width: '30%',
                 sort: 'desc',
                 valuePrepareFunction: (value) => {
                     return '$' + Number(value).toLocaleString('en',

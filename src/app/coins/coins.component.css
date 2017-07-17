@@ -22,3 +22,7 @@
 .coin-img-text {
     overflow: hidden;
 }
+
+.table-container {
+    overflow: auto;
+}
