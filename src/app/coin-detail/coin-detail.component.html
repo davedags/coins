@@ -18,7 +18,9 @@
                     <img *ngIf="detail" class="img-rounded" width="100px" height="100px" src="{{ detail.image_url }}" />
                 </div>
                 <div class="col-xs-6">
-                    <span *ngIf="price" class="small">1 {{ symbol }} = </span><h1 *ngIf="price">${{ price }} </h1>
+                    <span *ngIf="price" class="small">1 {{ symbol }} = </span>
+                    <h2 *ngIf="price >= 1">${{ price | number:'1.0-0'}} </h2>
+                    <h2 *ngIf="price < 1">${{ price | number:'1.2-2'}}</h2>
                 </div>
             </div>
 

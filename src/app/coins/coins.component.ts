@@ -106,17 +106,6 @@ export class CoinsComponent implements OnInit {
 
     };
 
-    private portfolioColumn = {
-        title: 'Portfolio',
-        width: '5%',
-        type: 'custom',
-        renderComponent: CheckboxColumnComponent,
-        onComponentInitFunction(instance) {
-            instance.save.subscribe(row => {
-            });
-        }
-    }
-
     constructor(private router: Router,
                 private bootstrapService: BootstrapService,
                 private authService: AuthService) {

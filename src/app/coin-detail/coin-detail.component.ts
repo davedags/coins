@@ -27,6 +27,7 @@ export class CoinDetailComponent implements OnInit {
     loggedIn: boolean = false;
     currentUser: any;
     tabs: any;
+    digitInfo: string = '1.0-0';
 
     @Input()
     activeTab: string;
@@ -64,7 +65,7 @@ export class CoinDetailComponent implements OnInit {
         this.coinService.getData(this.symbol)
             .subscribe(
                 data => {
-                    this.detail = data[0],
+                        this.detail = data[0], 
                         this.price = data[1]
                 },
                 error => this.error = true

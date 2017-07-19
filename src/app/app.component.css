@@ -1,12 +1,5 @@
 .main-raised {
-    margin-top: 75px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 85px 20px 0 20px;
+    padding-bottom: 10px;
 }
 
-
-.main-content{
-    height: 100%;
-    min-height: 100%;
-    box-sizing:border-box;
-}

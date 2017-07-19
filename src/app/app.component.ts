@@ -26,7 +26,7 @@ export class AppComponent implements OnDestroy {
     ngOnInit() {
         this.subscription = this.messageService.getMessage().subscribe(
             message => {
-                this.toastr.success(message.body, message.title);
+                this.toastr.custom(message.body, message.title);
             }
         )
     }

@@ -1,5 +1,5 @@
 <div class="container-fluid section-header">
-    <div *ngIf="(loading | async)" class="container" style="height: 100vh">
+    <div *ngIf="(loading | async)" class="container loading-container">
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
     </div>
     <div *ngIf="!(loading | async)">
@@ -15,5 +15,7 @@
         <div class="table-container">
             <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
         </div>
+    </div>
 </div>
+
 

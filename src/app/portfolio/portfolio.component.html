@@ -1,8 +1,11 @@
 <div class="container-fluid section-header">
-    <div>
+    <div *ngIf="!init" class="container loading-container">
+        <ngx-loading [show]="!init" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
+    </div>
+    <div *ngIf="init">
         <h3>My Portfolio</h3>
     </div>
-    <div class="row">
+    <div *ngIf="init" class="row">
         <div *ngIf="!showTable" class="alert alert-info" role="alert">
             <h4>Portfolio Empty</h4>Follow these simple steps to get started:
             <ul>
@@ -11,6 +14,8 @@
                 <li>From within the detailed view, click the "Add To Portfolio" button to start populating this list.</li>
             </ul>
         </div>
-        <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
+        <div class="table-container">
+            <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
+        </div>
     </div>
 </div>
