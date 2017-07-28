@@ -1,15 +1,13 @@
-<div class="container-fluid top-panel">
-
-    <div class="title">
-        <h4>Popular Coins</h4>
+<div class="container-fluid">
+    <div class="title convertor">
+        <h3>Convertor</h3>
     </div>
-
-    <span class="label label-primary" (click)="changeCoin('BTC')">BTC</span>
-    <span class="label label-info" (click)="changeCoin('ETH')">ETH</span>
-    <span class="label label-success" (click)="changeCoin('LTC')">LTC</span>
-    <span class="label label-danger" (click)="changeCoin('XMR')">XMR</span>
-    <span class="label label-rose" (click)="changeCoin('XRP')">XRP</span>
-
+    <div class="top-panel">
+        <span class="label label-primary" (click)="changeCoin('BTC')">BTC</span>
+        <span class="label label-info" (click)="changeCoin('ETH')">ETH</span>
+        <span class="label label-success" (click)="changeCoin('LTC')">LTC</span>
+        <span class="label label-danger" (click)="changeCoin('XMR')">XMR</span>
+    </div>
 </div>
 <div class="Pane">
 
@@ -19,21 +17,18 @@
                 <span class="Segmented">
                     <input class="Num Seg LeftSeg" id="invField"
                            [(ngModel)]="coinAmount" (change)="updateFiatPrice()" name="coinAmount" type="text">
-                    <button class="Cur Seg RightSeg" id="unitABut"
-                            asdfonclick="showUnitField(unitAField)" style="cursor: default" tabindex="-1">
+                    <span class="Cur Seg RightSeg" id="unitABut" style="cursor: default" tabindex="-1">
                         <span class="Prefix" id="prefixField" style="display: none"></span>
                         <span id="unitASym">{{ coinSymbol }}</span>
-                        <span class="Arrow"></span>
-                    </button>
+                    </span>
                 </span>
                 <span class="Equal">=</span>
                 <span class="Segmented">
                     <input class="Num Seg LeftSeg" id="numField"
-                           [(ngModel)]="fiatAmount" name="fiatAmount" type="text">
-                    <button class="Cur Seg RightSeg" id="curBut" asdfonclick="showUnitBField()" tabindex="-1">
+                           [(ngModel)]="fiatAmount" (change)="updateCoinAmount()" name="fiatAmount" type="text">
+                    <span class="Cur Seg RightSeg" id="curBut" tabindex="-1">
                         <span id="unitBSym">USD</span>
-                        <span class="Arrow"></span>
-                    </button>
+                    </span>
                 </span>
                 <div class="Gauge" id="gaugeField"></div>
 

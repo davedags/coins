@@ -13,7 +13,7 @@ export class ConvertorComponent implements OnInit {
     coinAmount: number = 1;
     coinSymbol: string = 'BTC';
     coinBasePrice: any = 'loading ...';
-    fiatAmount: any = 'loading ...'
+    fiatAmount: any = 'loading ...';
     loaded: boolean = false;
     popularCoins = [ 
             { name: 'BTC', class: 'primary'},
@@ -31,6 +31,7 @@ export class ConvertorComponent implements OnInit {
     }
 
     getCoinPrice() {
+        this.fiatAmount = 'loading ...';
         this.coinService.getPrice(this.coinSymbol)
             .subscribe(price => {
                 this.coinBasePrice = price;
@@ -50,11 +51,22 @@ export class ConvertorComponent implements OnInit {
         }
     }
 
+    updateCoinAmount() {
+        if (this.coinBasePrice) {
+            if (this.fiatAmount <= 0) {
+                this.coinAmount = 0;
+            } else {
+                let amount = parseFloat(this.fiatAmount.replace(/,/g, '')) / this.coinBasePrice;
+                this.coinAmount = Number(amount.toLocaleString('en-US', { maximumFractionDigits: 5 }));
+            }
+        }
+    }
+
     formatNumber(num) {
         return Number(num).toLocaleString('en-US', { maximumFractionDigits: 0 });
     }
 
-    
+
     changeCoin(symbol) {
         this.coinSymbol = symbol;
         this.getCoinPrice();
