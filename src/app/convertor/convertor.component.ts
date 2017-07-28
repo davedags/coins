@@ -15,16 +15,28 @@ export class ConvertorComponent implements OnInit {
     coinBasePrice: any = 'loading ...';
     fiatAmount: any = 'loading ...'
     loaded: boolean = false;
-
+    popularCoins = [ 
+            { name: 'BTC', class: 'primary'},
+            { name: 'ETH', class: 'info'},
+            { name: 'LTC', class: 'success'},
+            { name: 'XMR', class: 'danger'},
+            { name: 'XRP', class: 'warning'}
+        ];
+    
     constructor(private coinService: CoinDetailService) {}
 
     ngOnInit() {
+        this.getCoinPrice();
 
+    }
+
+    getCoinPrice() {
         this.coinService.getPrice(this.coinSymbol)
-        .subscribe(price => {
-            this.coinBasePrice = price;
-            this.fiatAmount = this.formatNumber(this.coinBasePrice);
-        });
+            .subscribe(price => {
+                this.coinBasePrice = price;
+                let amount = this.coinAmount * this.coinBasePrice;
+                this.fiatAmount = this.formatNumber(amount);
+            });
     }
 
     updateFiatPrice() {
@@ -40,5 +52,11 @@ export class ConvertorComponent implements OnInit {
 
     formatNumber(num) {
         return Number(num).toLocaleString('en-US', { maximumFractionDigits: 0 });
+    }
+
+    
+    changeCoin(symbol) {
+        this.coinSymbol = symbol;
+        this.getCoinPrice();
     }
 }

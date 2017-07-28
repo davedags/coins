@@ -1,4 +1,18 @@
+<div class="container-fluid top-panel">
+
+    <div class="title">
+        <h4>Popular Coins</h4>
+    </div>
+
+    <span class="label label-primary" (click)="changeCoin('BTC')">BTC</span>
+    <span class="label label-info" (click)="changeCoin('ETH')">ETH</span>
+    <span class="label label-success" (click)="changeCoin('LTC')">LTC</span>
+    <span class="label label-danger" (click)="changeCoin('XMR')">XMR</span>
+    <span class="label label-rose" (click)="changeCoin('XRP')">XRP</span>
+
+</div>
 <div class="Pane">
+
     <div class="Sub">
         <div class="Focus" id="ratePane">
             <div class="Center">
@@ -8,7 +22,7 @@
                     <button class="Cur Seg RightSeg" id="unitABut"
                             asdfonclick="showUnitField(unitAField)" style="cursor: default" tabindex="-1">
                         <span class="Prefix" id="prefixField" style="display: none"></span>
-                        <span id="unitASym">BTC</span>
+                        <span id="unitASym">{{ coinSymbol }}</span>
                         <span class="Arrow"></span>
                     </button>
                 </span>

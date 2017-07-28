@@ -2,6 +2,23 @@
     margin-top: 100px;
 }
 
+.top-panel {
+     padding-top: 20px;
+    margin-left: 40px;
+}
+
+.label {
+    cursor: pointer;
+}
+.top-panel > span {
+    width: 100%;
+    font-weight: bold !important;
+    zoom: 0 !important;
+    border-radius: 12px !important;
+    font-size: 10px !important;
+    padding: 5px 12px !important;
+    box-sizing: unset !important;
+}
 .Focus {
     margin: auto;
     padding: 40px;
