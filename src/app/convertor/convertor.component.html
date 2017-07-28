@@ -1,5 +1,29 @@
-<div class="container convertor">
-    <div class="jumbotron">
-        Coming Soon
+<div class="Pane">
+    <div class="Sub">
+        <div class="Focus" id="ratePane">
+            <div>
+                <span class="Segmented">
+                    <input class="Num Seg LeftSeg" id="invField"
+                           [(ngModel)]="coinAmount" (change)="updateFiatPrice()" name="coinAmount" type="text">
+                    <button class="Cur Seg RightSeg" id="unitABut"
+                            asdfonclick="showUnitField(unitAField)" style="cursor: default" tabindex="-1">
+                        <span class="Prefix" id="prefixField" style="display: none"></span>
+                        <span id="unitASym">BTC</span>
+                        <span class="Arrow"></span>
+                    </button>
+                </span>
+                <span class="Equal">=</span>
+                <span class="Segmented">
+                    <input class="Num Seg LeftSeg" id="numField"
+                           [(ngModel)]="fiatAmount" name="fiatAmount" type="text">
+                    <button class="Cur Seg RightSeg" id="curBut" asdfonclick="showUnitBField()" tabindex="-1">
+                        <span id="unitBSym">USD</span>
+                        <span class="Arrow"></span>
+                    </button>
+                </span>
+                <div class="Gauge" id="gaugeField"></div>
+
+            </div>
+        </div>
     </div>
- </div>
+</div>
