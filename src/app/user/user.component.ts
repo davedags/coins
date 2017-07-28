@@ -31,12 +31,12 @@ export class UserComponent implements  OnInit, AfterViewInit {
             this.logout = true;
         } 
     }
-    
+
     ngAfterViewInit(): void {
-        this.focusInput();
+        //this.focusInput();
     }
-    
-    
+
+
     focusInput(): void {
         this.focusTriggerEventEmitter.emit(true);
     }

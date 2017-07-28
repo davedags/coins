@@ -28,6 +28,7 @@ export class PortfolioComponent implements OnInit {
                 type: 'custom',
                 renderComponent: CheckboxColumnComponent,
                 onComponentInitFunction(instance) {
+                    instance.portfolio = true;
                     instance.save.subscribe(row => {
                     });
                 }

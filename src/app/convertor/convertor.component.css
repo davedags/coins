@@ -2,7 +2,9 @@
     padding-top: 20px;
     padding-left: 55px;
 }
-
+.dropdown-toggle {
+    color: white;
+}
 .top-panel {
      padding-top: 10px;
     padding-left: 50px;

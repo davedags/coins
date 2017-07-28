@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ViewCell } from "ng2-smart-table/index";
 import { PortfolioService } from "../portfolio/portfolio.service";
 import { MessageService } from "../common/message.service";
+import { BootstrapService } from '../common/bootstrap.service';
 
 @Component({
     selector: 'button-view',
@@ -19,12 +20,15 @@ import { MessageService } from "../common/message.service";
 export class CheckboxColumnComponent implements ViewCell, OnInit {
     checked: boolean = false;
     symbol: string = '';
+    portfolio: boolean = false;
     @Input() value: string | number;
     @Input() rowData: any;
     
     @Output() save: EventEmitter<any> = new EventEmitter();
     
-    constructor( private portfolioService: PortfolioService, private messageService: MessageService) {}
+    constructor( private portfolioService: PortfolioService, private messageService: MessageService, private bootstrapService: BootstrapService) {
+
+    }
 
     ngOnInit() {
         this.symbol = this.rowData.symbol;
@@ -44,6 +48,9 @@ export class CheckboxColumnComponent implements ViewCell, OnInit {
         event.stopPropagation();
         this.rowData.in_portfolio = this.checked;
         this.save.emit(this.rowData);
+        if (this.portfolio) {
+            this.bootstrapService.loadData();
+        }
         event.preventDefault();
     }
 
