@@ -71,4 +71,8 @@ export class ConvertorComponent implements OnInit {
         this.coinSymbol = symbol;
         this.getCoinPrice();
     }
+    
+    selectText(event) {
+        event.target.select()
+    }
 }
