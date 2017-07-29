@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BootstrapService } from '../common/bootstrap.service';
 import { AuthService } from '../common/auth.service';
+import { LocalStorageService } from '../common/local-storage.service';
 import { Coin } from '../model/coin';
 import { LocalDataSource, ViewCell } from "ng2-smart-table/index";
 import { Router } from "@angular/router";
@@ -14,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class CoinsComponent implements OnInit {
 
-
+    public cardView: boolean = false;
     public coins: Coin[] = [];
     public source: LocalDataSource;
     public marketCap: number = 0;
@@ -108,11 +109,16 @@ export class CoinsComponent implements OnInit {
 
     constructor(private router: Router,
                 private bootstrapService: BootstrapService,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private localStorageService: LocalStorageService) {
         this.settings = this.allSettings;
         this.loading = this.bootstrapService.getLoading();
         if (!this.authService.getToken()) {
             delete this.settings['columns'].in_portfolio;
+        }
+        let cv = this.localStorageService.get('listCardView');
+        if (cv) {
+            this.cardView = true;
         }
     }
     
@@ -172,6 +178,13 @@ export class CoinsComponent implements OnInit {
 
     }
 
-
+    clickCard(symbol): void {
+        this.router.navigate(['/coins', symbol]);
+    }
+    
+    toggleCardView() {
+        this.cardView = !this.cardView;
+        this.localStorageService.set('listCardView', this.cardView);
+    }
     
 }

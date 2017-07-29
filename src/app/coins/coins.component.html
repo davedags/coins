@@ -6,17 +6,23 @@
         <h3>Coin Price List</h3>
     </div>
     <div *ngIf="!(loading | async)" class="row">
+
         <input [(ngModel)]="searchTerm" name="searchInput" class="search" type="text" placeholder="Search..."
                (keydown.enter)="doSearch()" />
+
         <button type="button" class="btn btn-primary btn-sm" (click)="doSearch()">Search</button>
         <button type="button" class="btn btn-secondary btn-sm" *ngIf="searchTerm" (click)="clearSearch()">Clear</button>
         <a href="javascript:void(0)" title="Refresh List" (click)="bootstrapService.loadData()">
             <i class="material-icons">autorenew</i>
         </a>
+        <!--<a href="javascript:void(0)" title="Card View" (click)="toggleCardView()">
+            <i class="material-icons">apps</i>
+        </a>-->
         <span class="market-cap-list" *ngIf="marketCap">Total Market Cap: {{ marketCap | currency:'USD':true:'1.0-0' }}</span>
-        <div class="table-container">
+        <div *ngIf="!cardView" class="table-container">
             <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
         </div>
+
     </div>
 </div>
 

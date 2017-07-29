@@ -25,6 +25,7 @@ import { AuthGuardService } from './common/auth-guard.service';
 import { MessageService } from './common/message.service';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { CheckboxColumnComponent } from './coins/checkbox-column.component';
+import { AboutComponent } from './about/about.component';
 
 
 const appRoutes: Routes = [
@@ -32,6 +33,7 @@ const appRoutes: Routes = [
     { path: 'coins/:id', component: CoinDetailComponent },
     { path: 'login', component: UserComponent, canActivate: [ AuthGuardService ] },
     { path: 'portfolio', component: PortfolioComponent, canActivate: [ AuthGuardService ]},
+    { path: 'about', component: AboutComponent },
     { path: '', component: CoinsComponent }
 ];
 
@@ -44,7 +46,8 @@ const appRoutes: Routes = [
         UserComponent,
         NavComponent,
         PortfolioComponent,
-        CheckboxColumnComponent
+        CheckboxColumnComponent,
+        AboutComponent
     ],
     imports: [  
         BrowserModule,

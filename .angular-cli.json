@@ -29,6 +29,7 @@
         "assets/js/bootstrap.min.js",
         "assets/js/material.min.js",
         "assets/js/nouislider.min.js",
+        "assets/js/bootstrap-selectpicker.js",
         "assets/js/bootstrap-tagsinput.js",
         "assets/js/atv-img-animation.js",
         "assets/js/material-kit.js"
