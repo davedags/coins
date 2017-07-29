@@ -73,6 +73,8 @@ export class ConvertorComponent implements OnInit {
     }
     
     selectText(event) {
-        event.target.select()
+        event.target.select();
+        event.target.setSelectionRange(0,9999);
+
     }
 }
