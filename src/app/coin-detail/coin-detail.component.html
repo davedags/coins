@@ -20,7 +20,7 @@
                     <h5 class="card-title">{{ symbol }} Price</h5>
                     <div class="card-description">
                         <h3 class="current-price-text" *ngIf="price >= 1">${{ price | number:'1.0-0'}} </h3>
-                        <h3 class="current-price-text" *ngIf="price < 1">${{ price | number:'1.2-2'}} </h3>
+                        <h3 class="current-price-text" *ngIf="price < 1">${{ price | number:'1.2-6'}} </h3>
                     </div>
                 </div>
             </div>
@@ -58,6 +58,7 @@
                         <label class="control-label"># Coins Owned</label>
                         <input type="text" [(ngModel)]="quantityOwned" name="quantityOwned" class="form-control" />
                         <button class="btn btn-default btn-xs" (click)="saveAsset()">Save</button>
+                        <button *ngIf="ownsAsset" class="btn btn-default btn-xs btn-simple" (click)="delAsset()">Delete</button>
                     </div>
                     <div *ngIf="!assetFetched" class="card-description">
                         Loading ...

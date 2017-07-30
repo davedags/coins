@@ -18,8 +18,8 @@ export class BootstrapService {
     private data: any = [];
     private dataSubject = new BehaviorSubject<any>(this.data);
     private loadingSubject = new BehaviorSubject<any>(true);
-    private loaded: boolean = false;
-    private portfolioMap: any = [];
+    private symbolToPriceMap: any = {};
+    private portfolioMap: any = {};
 
     constructor(private http: Http, private authService: AuthService) {
     }
@@ -34,6 +34,7 @@ export class BootstrapService {
     
     loadData(): void {
         this.loadingSubject.next(true);
+        this.symbolToPriceMap = {}; 
         let idx = 0;
         let apiUrl = this.listUrl;
         if (this.authService.getToken()) {
@@ -48,6 +49,7 @@ export class BootstrapService {
                         idx = idx + 1;
                         item.idx = idx;
                         let rowCoin = new Coin(item);
+                        this.symbolToPriceMap[rowCoin.symbol] = rowCoin.price;
                         return rowCoin;
                         });
                     let marketCap = jsonResults.marketCap;
@@ -86,6 +88,14 @@ export class BootstrapService {
                     this.portfolioMap = symbolMap;
                 }
             )
+    }
+
+    getPriceBySymbol(symbol: string): number {
+        let price = 0;
+        if (this.symbolToPriceMap[symbol]) {
+            price = this.symbolToPriceMap[symbol];
+        }
+        return price;
     }
 
 }

@@ -10,45 +10,54 @@ import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class AssetService {
+    
+    private apiUrl = environment.baseAPIUrl + "asset";
 
-  private apiUrl = environment.baseAPIUrl + "asset";
+    constructor(private http:Http, private authService: AuthService) {}
 
-  constructor(private http:Http, private authService: AuthService) {}
-
-  get(id: string): Observable<number> {
-    return this.http.get(this.apiUrl + "/" + id, AuthHelper.getAuthorizationOptions(this.authService.getToken()))
-        .map(res => res.json())
-        .catch(
-            error => {
-              return Observable.throw(error.message || error)
-            });
-  }
-
-  create(id: string, quantity: number): Observable<any> {
-    let payload = {
-      symbol: id,
-      quantity: quantity
+    get(id: string): Observable<number> {
+        return this.http.get(this.apiUrl + "/" + id, AuthHelper.getAuthorizationOptions(this.authService.getToken()))
+            .map(res => res.json())
+            .catch(
+                error => {
+                  return Observable.throw(error.message || error)
+                });
     }
-    return this.http.post(this.apiUrl, payload, AuthHelper.getAuthorizationOptions(this.authService.getToken()))
-        .map(res => res.json())
-        .catch(
-            error => {
-              return Observable.throw(error.message || error)
-            });
 
-  }
+    create(id: string, quantity: number): Observable<any> {
+        let payload = {
+          symbol: id,
+          quantity: quantity
+        }
+        return this.http.post(this.apiUrl, payload, AuthHelper.getAuthorizationOptions(this.authService.getToken()))
+            .map(res => res.json())
+            .catch(
+                error => {
+                  return Observable.throw(error.message || error)
+                });
+    }
 
-  update(id: string, quantity: number): Observable<any> {
-    let payload = {
-      quantity: quantity
-    };
-    return this.http.put(this.apiUrl + "/" + id, payload, AuthHelper.getAuthorizationOptions(this.authService.getToken()))
-        .map(res => res.json())
-        .catch(
-            error => {
-              return Observable.throw(error.message || error)
-            });
-
-  }
+    update(id: string, quantity: number): Observable<any> {
+        let payload = {
+          quantity: quantity
+        };
+        return this.http.put(this.apiUrl + "/" + id, payload, AuthHelper.getAuthorizationOptions(this.authService.getToken()))
+            .map(res => res.json())
+            .catch(
+                error => {
+                  return Observable.throw(error.message || error)
+                });
+    
+    }
+    
+    delete(id: string): Observable<any> {
+        return this.http.delete(this.apiUrl + "/" + id, AuthHelper.getAuthorizationOptions(this.authService.getToken()))
+            .map(res => res.json())
+            .catch(
+                error => {
+                    return Observable.throw(error.message || error)
+                });
+    }
+    
 
 }

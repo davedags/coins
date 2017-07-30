@@ -163,6 +163,18 @@ export class CoinDetailComponent implements OnInit {
         this.setPortfolioValue();
     }
 
+    delAsset() {
+        this.assetService.delete(this.symbol)
+            .subscribe(
+                data => {
+                    this.ownsAsset = false;
+                    this.portfolioValueCalculated = false;
+                    this.portfolioValue = 0;
+                    this.quantityOwned = void 0;
+                }
+            );
+    }
+
     setPortfolioValue() {
         if (this.price && this.quantityOwned && !this.portfolioValueCalculated) {
             let amount = this.price * this.quantityOwned;
