@@ -15,7 +15,8 @@ $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
 $classes = [
     $em->getClassMetadata('\Coins\Entities\Coin'),
     $em->getClassMetaData('\Coins\Entities\User'),
-    $em->getClassMetaData('\Coins\Entities\Favorite')
+    $em->getClassMetaData('\Coins\Entities\Favorite'),
+    $em->getClassMetaData('\Coins\Entities\Asset')
 
 ];
 

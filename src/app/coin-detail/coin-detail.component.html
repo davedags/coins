@@ -37,28 +37,43 @@
             </div>
         </div>
         <div class="col-sm-5 col-md-3 sidebar-column">
-            <div *ngIf="detail" class="sidebar panel panel-default">
-                <div class="panel-heading">
-                    <h3>{{ detail.name }} Stats</h3>
+            <div *ngIf="loggedIn" class="card">
+                <div class="card-content">
+                    <h5 class="category text-default">Portolio</h5>
+                    <div *ngIf="assetFetched" [class.is-focused]="ownsAsset" class="card-description form-group label-floating">
+                        <label class="control-label"># Coins Owned</label>
+                        <input type="text" [(ngModel)]="quantityOwned" name="quantityOwned" class="form-control" />
+                        <button class="btn btn-default btn-xs" (click)="saveAsset()">Save</button>
+                    </div>
+                    <div *ngIf="!assetFetched" class="card-description">
+                        Loading ...
+                    </div>
                 </div>
-               <table class="table table-responsive">
-                   <tr>
-                       <td>Total Supply</td>
-                       <td>{{ detail.total_supply | number:0.0-0 }}</td>
-                    </tr>
-                    <tr>
-                        <td>Algorithm</td>
-                        <td>{{ detail.algorithm }}</td>
-                    </tr>
-                    <tr>
-                        <td>Proof</td>
-                        <td>{{ detail.proof }}</td>
-                    </tr>
-                    <tr>
-                        <td>Start Date</td>
-                        <td>{{ detail.start_date }}</td>
-                    </tr>
-                </table>
+            </div>
+            <div *ngIf="detail" class="card">
+                <div class="card-content">
+                    <h5 class="category text-default">{{ detail.name }} Stats</h5>
+                    <div class="card-description">
+                       <table class="table table-responsive">
+                           <tr>
+                               <td>Total Supply</td>
+                               <td>{{ detail.total_supply | number:0.0-0 }}</td>
+                            </tr>
+                            <tr>
+                                <td>Algorithm</td>
+                                <td>{{ detail.algorithm }}</td>
+                            </tr>
+                            <tr>
+                                <td>Proof</td>
+                                <td>{{ detail.proof }}</td>
+                            </tr>
+                            <tr>
+                                <td>Start Date</td>
+                                <td>{{ detail.start_date }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 

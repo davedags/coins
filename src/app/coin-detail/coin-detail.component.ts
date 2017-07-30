@@ -5,6 +5,7 @@ import { MessageService } from '../common/message.service';
 import { BootstrapService } from '../common/bootstrap.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../common/auth.service';
+import { AssetService } from '../common/asset.service';
 import 'rxjs/add/operator/switchMap';
 
 
@@ -12,7 +13,8 @@ import 'rxjs/add/operator/switchMap';
     selector: 'app-coin-detail',
     providers: [
         CoinDetailService,
-        PortfolioService
+        PortfolioService,
+        AssetService
     ],
     templateUrl: './coin-detail.component.html',
     styleUrls: ['./coin-detail.component.css']
@@ -24,6 +26,9 @@ export class CoinDetailComponent implements OnInit {
     price: any;
     error: boolean;
     inPortfolio: boolean = false;
+    ownsAsset: boolean = false;
+    quantityOwned: number;
+    assetFetched: boolean = false;
     loggedIn: boolean = false;
     currentUser: any;
     tabs: any;
@@ -31,15 +36,16 @@ export class CoinDetailComponent implements OnInit {
 
     @Input()
     activeTab: string;
- 
+
     constructor(
         private coinService: CoinDetailService,
         private route: ActivatedRoute,
         private messageService: MessageService,
         private authService: AuthService,
         private portfolioService: PortfolioService,
-        private bootstrapService: BootstrapService) {
-        
+        private bootstrapService: BootstrapService,
+        private assetService: AssetService) {
+
         this.detail = '';
         this.price = '';
         this.error = false;
@@ -77,6 +83,16 @@ export class CoinDetailComponent implements OnInit {
                         this.inPortfolio = data;
                     },
                     error => this.inPortfolio = false
+                );
+            this.assetService.get(this.symbol)
+                .subscribe(
+                    data => {
+                        this.assetFetched = true;
+                        if (data) {
+                            this.ownsAsset = true;
+                            this.quantityOwned = data;
+                        }
+                    }
                 );
         }
     }
@@ -118,5 +134,25 @@ export class CoinDetailComponent implements OnInit {
                 },
                 error => this.error = true
             );
+    }
+
+    saveAsset() {
+        if (this.ownsAsset) {
+            this.assetService.update(this.symbol, this.quantityOwned)
+                .subscribe(
+                    data => {
+                        this.ownsAsset = true;
+                        this.messageService.sendMessage('', 'Quantity Saved');
+                    }
+                );
+        } else {
+            this.assetService.create(this.symbol, this.quantityOwned)
+                .subscribe(
+                    data => {
+                        this.ownsAsset = true;
+                        this.messageService.sendMessage('', 'Quantity Saved');
+                    }
+                );
+        }
     }
 }

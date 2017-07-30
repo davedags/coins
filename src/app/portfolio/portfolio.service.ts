@@ -12,7 +12,7 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class PortfolioService {
 
-    private apiUrl = environment.baseAPIUrl + "portfolio"
+    private apiUrl = environment.baseAPIUrl + "portfolio";
 
     constructor(private http:Http, private authService:AuthService) {}
 

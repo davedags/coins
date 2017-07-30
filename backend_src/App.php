@@ -58,7 +58,7 @@ class App
         });
 
         $app->add(new \Slim\Middleware\JwtAuthentication([
-            "path" => ["/portfolio", "/coins-auth"],
+            "path" => ["/portfolio", "/coins-auth", "/asset"],
             "secret" => Auth::getSecret(),
             "callback" => function ($request, $response, $arguments) use ($container) {
                 if (!empty($arguments['decoded'])) {
@@ -79,6 +79,12 @@ class App
         $app->post('/portfolio', 'Coins\Controller\Portfolio:create');
         $app->get('/portfolio/{id}', 'Coins\Controller\Portfolio:get');
         $app->delete('/portfolio/{id}', 'Coins\Controller\Portfolio:delete');
+
+        $app->get('/asset', 'Coins\Controller\Asset:getList');
+        $app->get('/asset/{id}', 'Coins\Controller\Asset:get');
+        $app->post('/asset', 'Coins\Controller\Asset:create');
+        $app->put('/asset/{id}', 'Coins\Controller\Asset:update');
+        $app->delete('/asset/{id}', 'Coins\Controller\Asset:delete');
         
         $this->app = $app;
     }
