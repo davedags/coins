@@ -25,21 +25,31 @@
             </div>
 
             <div *ngIf="detail" class="row description-row">
-                <ul class="nav nav-tabs coin-tabs">
-                    <li *ngFor="let tab of tabs" (click)="selectTab(tab.id, $event)" [class.active]="tab.active">
-                        <a href="">{{ tab.name }}</a>
-                    </li>
-               </ul>
-               <div class="tab-content coin-tabs-text">
-                   <div *ngFor="let tab of tabs" [hidden]="!tab.active" [innerHTML]="detail[tab.id]" class="pane"></div>
-               </div>
-
+                <div class="card card-nav-tabs">
+                    <div class="header header-primary">
+                        <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <ul class="nav nav-tabs coin-tabs" data-background-color="white">
+                                    <li *ngFor="let tab of tabs" (click)="selectTab(tab.id, $event)" [class.active]="tab.active">
+                                        <a href="javascript:void(0)">{{ tab.name }}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="tab-content coin-tabs-text">
+                            <div *ngFor="let tab of tabs" [hidden]="!tab.active" [innerHTML]="detail[tab.id]" class="pane"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-sm-5 col-md-3 sidebar-column">
             <div *ngIf="loggedIn" class="card">
+
                 <div class="card-content">
-                    <h5 class="category text-default">Portolio</h5>
+                    <h5 class="card-title">Portolio</h5>
                     <div *ngIf="assetFetched" [class.is-focused]="ownsAsset" class="card-description form-group label-floating">
                         <label class="control-label"># Coins Owned</label>
                         <input type="text" [(ngModel)]="quantityOwned" name="quantityOwned" class="form-control" />
@@ -48,16 +58,19 @@
                     <div *ngIf="!assetFetched" class="card-description">
                         Loading ...
                     </div>
+                    <span *ngIf="portfolioValue" class="card-footer text-default">
+                       <strong>Total Value: {{ portfolioValue }}</strong>
+                    </span>
                 </div>
             </div>
             <div *ngIf="detail" class="card">
-                <div class="card-content">
-                    <h5 class="category text-default">{{ detail.name }} Stats</h5>
-                    <div class="card-description">
-                       <table class="table table-responsive">
-                           <tr>
-                               <td>Total Supply</td>
-                               <td>{{ detail.total_supply | number:0.0-0 }}</td>
+                <div class="card-content table-responsive">
+                    <h5 class="card-title">{{ detail.name }} Stats</h5>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Total Supply</td>
+                                <td>{{ detail.total_supply | number:0.0-0 }}</td>
                             </tr>
                             <tr>
                                 <td>Algorithm</td>
@@ -71,11 +84,10 @@
                                 <td>Start Date</td>
                                 <td>{{ detail.start_date }}</td>
                             </tr>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

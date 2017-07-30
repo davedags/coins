@@ -26,6 +26,8 @@ export class CoinDetailComponent implements OnInit {
     price: any;
     error: boolean;
     inPortfolio: boolean = false;
+    portfolioValue: any;
+    portfolioValueCalculated: boolean = false;
     ownsAsset: boolean = false;
     quantityOwned: number;
     assetFetched: boolean = false;
@@ -71,8 +73,11 @@ export class CoinDetailComponent implements OnInit {
         this.coinService.getData(this.symbol)
             .subscribe(
                 data => {
-                        this.detail = data[0], 
-                        this.price = data[1]
+                        this.detail = data[0];
+                        this.price = data[1];
+                        if (this.loggedIn) {
+                            this.setPortfolioValue();
+                        }
                 },
                 error => this.error = true
             );
@@ -91,6 +96,7 @@ export class CoinDetailComponent implements OnInit {
                         if (data) {
                             this.ownsAsset = true;
                             this.quantityOwned = data;
+                            this.setPortfolioValue();
                         }
                     }
                 );
@@ -137,6 +143,7 @@ export class CoinDetailComponent implements OnInit {
     }
 
     saveAsset() {
+        this.portfolioValueCalculated = false;
         if (this.ownsAsset) {
             this.assetService.update(this.symbol, this.quantityOwned)
                 .subscribe(
@@ -154,5 +161,15 @@ export class CoinDetailComponent implements OnInit {
                     }
                 );
         }
+        this.setPortfolioValue();
     }
+
+    setPortfolioValue() {
+        if (this.price && this.quantityOwned && !this.portfolioValueCalculated) {
+            let amount = this.price * this.quantityOwned;
+            this.portfolioValue = Number(amount).toLocaleString('en-US', { maximumFractionDigits: 2 });
+            this.portfolioValueCalculated = true;
+        }
+    }
+
 }
