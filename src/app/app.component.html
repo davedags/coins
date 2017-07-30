@@ -4,29 +4,12 @@
 
 <section>
     <div class="main main-raised">
-        <router-outlet></router-outlet>
+        <router-outlet (deactivate)="onDeactivateRoute()"></router-outlet>
     </div>
 </section>
 
 <footer class="footer">
     <div class="container">
         <a class="footer-brand" href="https://dags.io">Dags 2017</a>
-        <!--<ul class="social-buttons pull-right">
-            <li>
-                <a href="https://github.com/davedags" target="_blank" class="btn btn-just-icon btn-simple btn-github">
-                    <i class="fa fa-github"></i>
-                </a>
-            </li>
-            <li>
-                <a href="https://linkedin.com/in/davedags" target="_blank" class="btn btn-just-icon btn-simple btn-linkedin">
-                    <i class="fa fa-linkedin"></i>
-                </a>
-            </li>
-            <li>
-                <a href="https://soundcloud.com/daviddagostino" target="_blank" class="btn btn-just-icon btn-simple btn-soundcloud">
-                    <i class="fa fa-soundcloud"></i>
-                </a>
-            </li>
-        </ul>-->
     </div>
 </footer>
