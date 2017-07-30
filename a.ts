@@ -12,7 +12,6 @@ export class Asset {
     public in_portfolio: boolean = true;
 
     constructor(data?: any) {
-
         if (data) {
             this.name = data.long;
             this.symbol = data.short;
