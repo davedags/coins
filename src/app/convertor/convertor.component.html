@@ -16,7 +16,8 @@
             <div class="Center">
                 <span class="Segmented">
                     <input class="Num Seg LeftSeg" id="invField" [(ngModel)]="coinAmount"
-                           (change)="updateFiatPrice()" (click)="selectText($event)" ame="coinAmount" type="text">
+                           (change)="updateFiatPrice()" (click)="selectText($event)" ame="coinAmount" type="tel"
+                           pattern="[0-9]*" novalidate formnovalidate>
                     <span class="Cur Seg RightSeg" id="unitABut" style="cursor: default" tabindex="-1">
                         <span class="Prefix" id="prefixField" style="display: none"></span>
                         <span id="unitASym">{{ coinSymbol }}</span>

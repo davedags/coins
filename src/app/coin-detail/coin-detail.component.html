@@ -39,9 +39,7 @@
         <div class="col-sm-5 col-md-3 sidebar-column">
             <div *ngIf="loggedIn" class="card">
                 <div class="card-content">
-                    <div class="card-title">
-                        <h5>Portolio</h5>
-                    </div>
+                    <h5 class="card-title">Portolio</h5>
                     <div *ngIf="assetFetched" [class.is-focused]="ownsAsset" class="card-description form-group label-floating">
                         <label class="control-label"># Coins Owned</label>
                         <input type="text" [(ngModel)]="quantityOwned" name="quantityOwned" class="form-control" />

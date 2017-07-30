@@ -41,6 +41,7 @@ export class ConvertorComponent implements OnInit {
     }
 
     updateFiatPrice() {
+
         if (this.coinBasePrice) {
             if (this.coinAmount <= 0) {
                 this.fiatAmount = 0;
