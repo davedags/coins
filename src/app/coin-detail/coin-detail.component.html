@@ -2,19 +2,33 @@
     <div *ngIf="!detail" class="container" style="height: 100vh">
         <ngx-loading [show]="!detail" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
     </div>
-    <div *ngIf="detail">
-        <h1><img *ngIf="detail" class="img-rounded" width="55px" height="55px" src="{{ detail.image_url }}" />  {{ detail.title }}</h1>
-        <div >
-        <button *ngIf="!inPortfolio" type="button" (click)="portfolioAdd(detail.symbol)" class="btn btn-round">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add To Portfolio
-        </button>
-        <button *ngIf="inPortfolio" type="button" (click)="portfolioRem(detail.symbol)" class="btn btn-round">
-            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove From Portfolio
-        </button>
+    <div *ngIf="detail" class="row">
+        <div class="col-sm-8">
+            <h1 class="detail-title"><img *ngIf="detail" class="img-rounded" width="55px" height="55px" src="{{ detail.image_url }}" />  {{ detail.name }}</h1>
+            <div>
+                <button *ngIf="!inPortfolio" type="button" (click)="portfolioAdd(detail.symbol)" class="btn btn-round">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add To Portfolio
+                </button>
+                <button *ngIf="inPortfolio" type="button" (click)="portfolioRem(detail.symbol)" class="btn btn-round">
+                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove From Portfolio
+                </button>
+            </div>
+        </div>
+        <div class="col-sm-4 ">
+            <div class="card current-price">
+                <div class="card-content">
+                    <h5 class="card-title">{{ symbol }} Price</h5>
+                    <div class="card-description">
+                        <h3 class="current-price-text" *ngIf="price >= 1">${{ price | number:'1.0-0'}} </h3>
+                        <h3 class="current-price-text" *ngIf="price < 1">${{ price | number:'1.2-2'}} </h3>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div *ngIf="detail" class="row">
-        <div class="col-sm-7 col-md-9">
+        <div class="col-sm-8">
+
             <div *ngIf="detail" class="row description-row">
                 <div class="card card-nav-tabs">
                     <div class="header header-primary">
@@ -36,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-5 col-md-3 sidebar-column">
+        <div class="col-sm-4 sidebar-column">
             <div *ngIf="loggedIn" class="card">
                 <div class="card-content">
                     <h5 class="card-title">Portolio</h5>

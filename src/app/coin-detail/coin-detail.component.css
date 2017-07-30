@@ -9,7 +9,34 @@
 
     //width: 90%;
 }
-
+.detail-title {
+    margin-bottom: 5px;
+}
+.card-nav-tabs {
+    margin-top: 35px;
+}
+@media only screen and (min-width: 765px) {
+    .current-price {
+        margin-top: 30px;
+    }
+    .card {
+        margin-bottom: 15px;
+    }
+}
+@media only screen and (max-width: 765px) {
+    .current-price {
+        margin-top: 5px;
+    }
+    .card {
+        margin-bottom: 15px;
+    }
+}
+.current-price h5 {
+    margin-bottom: 5px;
+}
+.current-price-text {
+    margin: 5px 0 0 0;
+}
 .description-row {
    //margin-top: 10px;
 }

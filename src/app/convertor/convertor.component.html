@@ -16,8 +16,8 @@
             <div class="Center">
                 <span class="Segmented">
                     <input class="Num Seg LeftSeg" id="invField" [(ngModel)]="coinAmount"
-                           (change)="updateFiatPrice()" (click)="selectText($event)" ame="coinAmount" type="tel"
-                           pattern="[0-9]*" novalidate formnovalidate>
+                           (change)="updateFiatPrice()" (click)="selectText($event)" name="coinAmount" type="tel"
+                           pattern="[0-9]*" formnovalidate>
                     <span class="Cur Seg RightSeg" id="unitABut" style="cursor: default" tabindex="-1">
                         <span class="Prefix" id="prefixField" style="display: none"></span>
                         <span id="unitASym">{{ coinSymbol }}</span>
@@ -26,7 +26,8 @@
                 <span class="Equal">=</span>
                 <span class="Segmented">
                     <input class="Num Seg LeftSeg" id="numField" [(ngModel)]="fiatAmount"
-                           (change)="updateCoinAmount()" (click)="selectText($event)" name="fiatAmount" type="text">
+                           (change)="updateCoinAmount()" (click)="selectText($event)" name="fiatAmount" type="tel"
+                           pattern="[0-9]*" formnovalidate>
                     <span class="Cur Seg RightSeg" id="curBut" tabindex="-1">
                         <span id="unitBSym">USD</span>
                     </span>
