@@ -14,6 +14,7 @@
                 <li>From within the detailed view, click the "Add To Portfolio" button to start populating this list.</li>
             </ul>
         </div>
+        <span class="total-value" *ngIf="totalValue">Total Value: {{ totalValue | currency:'USD':true:'1.0-0' }}</span>
         <div class="table-container">
             <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
         </div>

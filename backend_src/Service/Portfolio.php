@@ -104,10 +104,10 @@ class Portfolio extends Base
             'total' => 0
         ];
 
-        $portfolio = $this->mungePortfolio($list);
+        list($portfolio, $totalValue) = $this->mungePortfolio($list);
         $collection['results'] = $portfolio;
         $collection['total'] = count($portfolio);
-
+        $collection['totalValue'] = $totalValue;
         return $collection;
     }
     
@@ -116,7 +116,7 @@ class Portfolio extends Base
         $map = [];
         $res = $this->getPortfolio();
         if (!empty($res)) {
-            foreach ($res as $symbol) {
+            foreach ($res as $symbol => $quantity) {
                 $map[$symbol] = true;
             }
         }
@@ -126,26 +126,45 @@ class Portfolio extends Base
     public function mungePortfolio($list)
     {
         $output = [];
+        $totalValue = 0;
         $portfolio = $this->getPortfolio();
         if (!empty($portfolio)) {
             foreach ($list as $row) {
-                if (in_array($row['short'], $portfolio)) {
-                    $output[] = $row;
+                if (isset($portfolio[$row['short']])) {
+                    $quantity = $portfolio[$row['short']][0];
+                    $value = 0;
+                    if ($quantity) {
+                        $value = $row['price'] * $quantity;
+                        $totalValue += $value;
+                    }
+                    $output[] = [
+                        'name' => $row['long'],
+                        'short' => $row['short'],
+                        'price' => $row['price'],
+                        'value' => $value,
+                        'quantity' => $quantity,
+                        'image_url' => !empty($row['image_url']) ? $row['image_url'] : ''
+                    ];
                 }
             }
         }
-        return $output;
+        return [$output, $totalValue];
     }
 
     public function getPortfolio()
     {
-        $sql = 'SELECT c.symbol FROM \Coins\Entities\Favorite f
-               INNER JOIN \Coins\Entities\Coin c
-               WHERE f.coin=c.id AND f.user = :value';
-        $portfolio = $this->em->createQuery($sql)
-            ->setParameter('value', $this->currentUser)
-            ->getResult('COLUMN_HYDRATOR');
-
+        static $portfolio = false;
+        if ($portfolio !== false) {
+            return $portfolio;
+        }
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('c.symbol', 'a.quantity')
+            ->from('\Coins\Entities\Favorite', 'f')
+            ->innerJoin('\Coins\Entities\Coin', 'c', \Doctrine\ORM\Query\Expr\Join::WITH, 'f.coin=c.id')
+            ->leftJoin('\Coins\Entities\Asset', 'a', \Doctrine\ORM\Query\Expr\Join::WITH, '(a.coin=c.id AND a.user=:value)')
+            ->where('f.user = :value')
+            ->setParameter('value', $this->currentUser);
+        $portfolio = $qb->getQuery()->getResult('ASSOC_HYDRATOR');
         return $portfolio;
     }
 }

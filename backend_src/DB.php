@@ -38,6 +38,7 @@ class DB
                 $this->em = \Doctrine\ORM\EntityManager::create($conn, $config);
             }
             $this->em->getConfiguration()->addCustomHydrationMode('COLUMN_HYDRATOR', 'Coins\Hydrators\ColumnHydrator');
+            $this->em->getConfiguration()->addCustomHydrationMode('ASSOC_HYDRATOR', 'Coins\Hydrators\AssocArrayHydrator');
         }
         return $this->em;
     }

@@ -3,7 +3,7 @@ import { Http } from "@angular/http";
 import { AuthService } from "../common/auth.service";
 import { environment } from '../../environments/environment';
 import { Observable } from "rxjs/Observable";
-import { Coin } from '../model/coin';
+import { Asset } from '../model/asset';
 import { AuthHelper } from '../common/auth-helper';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -17,21 +17,18 @@ export class PortfolioService {
     constructor(private http:Http, private authService:AuthService) {}
 
     getList(): Observable<any> {
-       
-        let idx = 0;
+        
         return this.http.get(this.apiUrl, AuthHelper.getAuthorizationOptions(this.authService.getToken()))
             .map(
                 res => {
                     let jsonResults = res.json();
                     let collection = jsonResults.results.map(item => {
-                        idx = idx + 1;
-                        item.idx = idx;
-                        let rowCoin = new Coin(item);
+                        let rowCoin = new Asset(item);
                         return rowCoin;
                     });
-                    let marketCap = jsonResults.marketCap;
+                    let totalValue = jsonResults.totalValue;
                     let returnVal = {
-                        totalMarketCap: marketCap,
+                        totalValue: totalValue,
                         coins: collection
                     };
                     return returnVal;

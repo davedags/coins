@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PortfolioService } from './portfolio.service';
 import { LocalDataSource } from "ng2-smart-table/index";
-import { Coin } from '../model/coin';
+import { Asset } from '../model/asset';
 import { Router } from '@angular/router';
 import { CheckboxColumnComponent } from '../coins/checkbox-column.component';
 
@@ -15,10 +15,10 @@ import { CheckboxColumnComponent } from '../coins/checkbox-column.component';
 })
 export class PortfolioComponent implements OnInit {
 
-    public coins: Coin[];
+    public coins: Asset[];
     public showTable: boolean = true;
     public source: LocalDataSource;
-    public marketCap: number;
+    public totalValue: number;
     public init;
     public settings: Object = {
         columns: {
@@ -33,13 +33,9 @@ export class PortfolioComponent implements OnInit {
                     });
                 }
             },
-            'position': {
-                title: '#',
-                width: '10px'
-            },
             'name': {
                 title: 'Name',
-                width: '20px',
+                width: '15%',
                 type: 'html',
                 valuePrepareFunction: (value, row) => {
                     let imgUrl = row.image_url;
@@ -51,34 +47,34 @@ export class PortfolioComponent implements OnInit {
             },
             'symbol': {
                 title: 'Symbol',
-                width: '10px'
+                width: '10%'
             },
 
             'price': {
                 title: 'Price',
-                width: '35px',
+                width: '30%',
                 sort: 'desc',
                 valuePrepareFunction: (value) => {
                     return '$' + Number(value).toLocaleString('en', { minimumFractionDigits: 4, maximumFractionDigits: 8})
                 },
                 compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             },
-            'marketCap': {
-                title: 'Market Cap',
-                width: '40px',
-                sort: 'desc',
+            'value': {
+                title: 'Value',
+                width: '30%',
+                sort: 'asc',
                 valuePrepareFunction: (value) => {
-                    return '$' + Number(value).toLocaleString('en',
-                            { maximumFractionDigits: 0 })
+                    return '$' + Number(value).toLocaleString('en', { minimumFractionDigits: 0, maximumFractionDigits: 2})
                 },
                 compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             },
-            'percent24': {
-                title: '%24Hr',
-                width: '15px',
+            'quantity': {
+                title: '# Owned',
+                width: '10%',
                 sort: 'desc',
                 valuePrepareFunction: (value) => {
-                    return value + '%';
+                    return Number(value).toLocaleString('en',
+                            { maximumFractionDigits: 5 })
                 },
                 compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             }
@@ -111,7 +107,7 @@ export class PortfolioComponent implements OnInit {
             .subscribe(
                 coinData => {
                     this.coins = coinData.coins;
-                    this.marketCap = coinData.totalMarketCap;
+                    this.totalValue = coinData.totalValue;
                     this.source = new LocalDataSource(this.coins);
                     if (this.coins.length == 0) {
                         this.showTable = false;

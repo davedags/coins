@@ -98,6 +98,7 @@ export class CoinsComponent implements OnInit {
         },
         pager: {
             display: true,
+            top: true,
             perPage: 50
         },
         attr: {
