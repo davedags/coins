@@ -1,17 +1,17 @@
 .coin-detail {
-    width: 85%;
+    width: 95%;
 }
 
 .coin-tabs {
     //width: 90%;
 }
 .coin-tabs-text {
-    margin-top: 8px;
+
     //width: 90%;
 }
 
 .description-row {
-    margin-top: 20px;
+   //margin-top: 10px;
 }
 
 @media only screen and (max-width: 765px) {

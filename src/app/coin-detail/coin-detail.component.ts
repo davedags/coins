@@ -149,7 +149,6 @@ export class CoinDetailComponent implements OnInit {
                 .subscribe(
                     data => {
                         this.ownsAsset = true;
-                        this.messageService.sendMessage('', 'Quantity Saved');
                     }
                 );
         } else {
@@ -157,7 +156,7 @@ export class CoinDetailComponent implements OnInit {
                 .subscribe(
                     data => {
                         this.ownsAsset = true;
-                        this.messageService.sendMessage('', 'Quantity Saved');
+                        this.messageService.sendMessage('', 'Portfolio Updated');
                     }
                 );
         }
