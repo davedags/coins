@@ -15,11 +15,12 @@
         <a href="javascript:void(0)" title="Refresh List" (click)="bootstrapService.loadData()">
             <i class="material-icons">autorenew</i>
         </a>
+
         <a *ngIf="mobileDevice && hideColumns" href="javascript:void(0)" title="Show All Columns" (click)="toggleColumnView()">
-            <i class="material-icons">add</i>
+            <i class="material-icons">add</i> <small>All Columns</small>
         </a>
         <a *ngIf="mobileDevice && !hideColumns" href="javascript:void(0)" title="Hide Columns" (click)="toggleColumnView()">
-            <i class="material-icons">remove</i>
+            <i class="material-icons">remove</i> <small>Hide Columns</small>
         </a>
         <!--<a href="javascript:void(0)" title="Card View" (click)="toggleCardView()">
             <i class="material-icons">apps</i>
