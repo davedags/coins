@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BootstrapService } from '../common/bootstrap.service';
 import { AuthService } from '../common/auth.service';
 import { LocalStorageService } from '../common/local-storage.service';
+import { Ng2DeviceService } from 'ng2-device-detector';
 import { Coin } from '../model/coin';
 import { LocalDataSource, ViewCell } from "ng2-smart-table/index";
 import { Router } from "@angular/router";
@@ -11,7 +12,8 @@ import { Observable } from 'rxjs/Observable';
 @Component({
     selector: 'app-coins',
     templateUrl: './coins.component.html',
-    styleUrls: ['./coins.component.css']
+    styleUrls: ['./coins.component.css'],
+    providers: [ Ng2DeviceService ]
 })
 export class CoinsComponent implements OnInit {
 
@@ -19,6 +21,8 @@ export class CoinsComponent implements OnInit {
     public coins: Coin[] = [];
     public source: LocalDataSource;
     public marketCap: number = 0;
+    public marketCapVol: number = 0;
+    public marketCapBTC: number = 0;
     public init: boolean = false;
     public loading: Observable<boolean>;
     public searchTerm: string = '';
@@ -111,11 +115,17 @@ export class CoinsComponent implements OnInit {
     constructor(private router: Router,
                 private bootstrapService: BootstrapService,
                 private authService: AuthService,
-                private localStorageService: LocalStorageService) {
+                private localStorageService: LocalStorageService,
+                private deviceService: Ng2DeviceService) {
         this.settings = this.allSettings;
         this.loading = this.bootstrapService.getLoading();
         if (!this.authService.getToken()) {
             delete this.settings['columns'].in_portfolio;
+        }
+        if (this.deviceService.isMobile()) {
+            delete this.settings['columns'].name;
+            delete this.settings['columns'].marketCap;
+
         }
         let cv = this.localStorageService.get('listCardView');
         if (cv) {
@@ -129,6 +139,8 @@ export class CoinsComponent implements OnInit {
                 coinData => {
                     this.coins = coinData.coins;
                     this.marketCap = coinData.totalMarketCap;
+                    //this.marketCapVol = coinData.totalMarketCapVol;
+                    //this.marketCapBTC = coinData.totalMarketCapBTC;
                     this.source = new LocalDataSource(this.coins);
                     this.init = true;
                 }
@@ -186,6 +198,12 @@ export class CoinsComponent implements OnInit {
     toggleCardView() {
         this.cardView = !this.cardView;
         this.localStorageService.set('listCardView', this.cardView);
+    }
+    
+    marketCapPopover(event) {
+        console.log(event);
+        console.log(event.path[1]);
+        event.path[1].popover();
     }
     
 }
