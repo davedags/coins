@@ -15,6 +15,12 @@
         <a href="javascript:void(0)" title="Refresh List" (click)="bootstrapService.loadData()">
             <i class="material-icons">autorenew</i>
         </a>
+        <a *ngIf="mobileDevice && hideColumns" href="javascript:void(0)" title="Show All Columns" (click)="toggleColumnView()">
+            <i class="material-icons">add</i>
+        </a>
+        <a *ngIf="mobileDevice && !hideColumns" href="javascript:void(0)" title="Hide Columns" (click)="toggleColumnView()">
+            <i class="material-icons">remove</i>
+        </a>
         <!--<a href="javascript:void(0)" title="Card View" (click)="toggleCardView()">
             <i class="material-icons">apps</i>
         </a>-->
@@ -22,6 +28,7 @@
         <div *ngIf="!cardView" class="table-container">
             <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
         </div>
+
 
     </div>
 </div>

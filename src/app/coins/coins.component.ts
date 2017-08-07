@@ -8,6 +8,8 @@ import { LocalDataSource, ViewCell } from "ng2-smart-table/index";
 import { Router } from "@angular/router";
 import { CheckboxColumnComponent } from "./checkbox-column.component";
 import { Observable } from 'rxjs/Observable';
+import * as _ from "lodash";
+
 
 @Component({
     selector: 'app-coins',
@@ -26,6 +28,8 @@ export class CoinsComponent implements OnInit {
     public init: boolean = false;
     public loading: Observable<boolean>;
     public searchTerm: string = '';
+    public mobileDevice: boolean = false;
+    public hideColumns: boolean = false;
     public settings: Object = {};
     public allSettings: Object = {
         columns: {
@@ -59,7 +63,22 @@ export class CoinsComponent implements OnInit {
             },
             'symbol': {
                 title: 'Symbol',
-                width: '10%'
+                width: '10%',
+                type: 'html',
+                valuePrepareFunction: (value, row) => {
+                    if (this.mobileDevice) {
+                        let imgUrl = row.image_url;
+                        if (!imgUrl) {
+                            imgUrl = "/assets/icons/default.png";
+                        }
+
+                        return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                            "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                    } else {
+                        return value;
+                    }
+                }
+
             },
 
             'price': {
@@ -117,16 +136,26 @@ export class CoinsComponent implements OnInit {
                 private authService: AuthService,
                 private localStorageService: LocalStorageService,
                 private deviceService: Ng2DeviceService) {
-        this.settings = this.allSettings;
+        this.settings = _.cloneDeep(this.allSettings);
         this.loading = this.bootstrapService.getLoading();
         if (!this.authService.getToken()) {
             delete this.settings['columns'].in_portfolio;
         }
-        if (this.deviceService.isMobile()) {
+
+        this.mobileDevice = this.deviceService.isMobile();
+        let hc = this.getColumnViewFromStorage();
+        if (hc == null) {
+            this.hideColumns = this.mobileDevice;
+            this.saveColumnViewToStorage();
+        } else {
+            this.hideColumns = hc;
+        }
+        if (this.hideColumns) {
             delete this.settings['columns'].name;
             delete this.settings['columns'].marketCap;
-
+            delete this.settings['columns'].percent24;
         }
+
         let cv = this.localStorageService.get('listCardView');
         if (cv) {
             this.cardView = true;
@@ -198,8 +227,57 @@ export class CoinsComponent implements OnInit {
     toggleCardView() {
         this.cardView = !this.cardView;
         this.localStorageService.set('listCardView', this.cardView);
+        this.router.navigate(['']);
     }
-    
+
+    toggleColumnView() {
+
+        this.hideColumns = !this.hideColumns;
+        this.saveColumnViewToStorage();
+        let newCols = {};
+        if (this.hideColumns) {
+            newCols = _.cloneDeep(this.allSettings['columns']);
+            delete newCols['name'];
+            delete newCols['marketCap'];
+            delete newCols['percent24'];
+        } else {
+            newCols = _.cloneDeep(this.allSettings['columns']);
+        }
+        if (!this.authService.getToken()) {
+            delete newCols['in_portfolio'];
+        }
+        this.settings = {
+            columns: newCols,
+            hideSubHeader: true,
+            actions: {
+                add: false,
+                edit: false,
+                delete: false
+            },
+            pager: {
+                display: true,
+                top: true,
+                perPage: 50
+            },
+            attr: {
+                class: 'table table-bordered table-striped table-hover table-rankings'
+            },
+            noDataMessage: "Loading ..."
+        };
+
+
+    }
+
+    getColumnViewFromStorage() : any {
+        let val = this.localStorageService.get('listHideColumns');
+        return val;
+    }
+
+    saveColumnViewToStorage(): void {
+        this.localStorageService.set('listHideColumns', this.hideColumns);
+    }
+
+
     marketCapPopover(event) {
         console.log(event);
         console.log(event.path[1]);
