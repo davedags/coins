@@ -131,7 +131,7 @@ export class CoinsComponent implements OnInit {
     };
     public settings: Object = {};
 
-    
+
     constructor(private router: Router,
                 private bootstrapService: BootstrapService,
                 private authService: AuthService,
@@ -142,7 +142,6 @@ export class CoinsComponent implements OnInit {
     
     ngOnInit(): void {
         this.mobileDevice = this.deviceService.isMobile();
-        this.mobileDevice = true;
         this.loading = this.bootstrapService.getLoading();
         this.initializeTableSettings();
         this.bootstrapService.getCoins()
