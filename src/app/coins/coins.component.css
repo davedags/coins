@@ -1,7 +1,13 @@
 .market-cap-list {
-    margin-left: 20px;
+    margin-left: 10px;
+    white-space: nowrap;
     font-weight: bold;
 }
+.device-toggle {
+    white-space: nowrap;
+    color: gray;
+}
+
 :host /deep/ ng2-smart-table tbody > tr > td {
     font-size: 14px;
     cursor: pointer;

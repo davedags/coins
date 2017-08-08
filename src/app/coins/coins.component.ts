@@ -52,13 +52,17 @@ export class CoinsComponent implements OnInit {
                 width: '15%',
                 type: 'html',
                 valuePrepareFunction: (value, row) => {
-                    let imgUrl = row.image_url;
-                    if (!imgUrl) {
-                        imgUrl = "/assets/icons/default.png";
-                    }
+                    if (!this.hideColumns) {
+                        let imgUrl = row.image_url;
+                        if (!imgUrl) {
+                            imgUrl = "/assets/icons/default.png";
+                        }
 
-                    return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
-                        "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                        return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                            "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                    } else {
+                        return value;
+                    }
                 }
             },
             'symbol': {
@@ -66,7 +70,7 @@ export class CoinsComponent implements OnInit {
                 width: '10%',
                 type: 'html',
                 valuePrepareFunction: (value, row) => {
-                    if (this.mobileDevice) {
+                    if (this.hideColumns) {
                         let imgUrl = row.image_url;
                         if (!imgUrl) {
                             imgUrl = "/assets/icons/default.png";
@@ -141,6 +145,7 @@ export class CoinsComponent implements OnInit {
         if (!this.authService.getToken()) {
             delete this.settings['columns'].in_portfolio;
         }
+
 
         this.mobileDevice = this.deviceService.isMobile();
         let hc = this.getColumnViewFromStorage();
