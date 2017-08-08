@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CoinDetailService } from './coin-detail.service';
 import { PortfolioService } from '../portfolio/portfolio.service';
 import { MessageService } from '../common/message.service';
 import { BootstrapService } from '../common/bootstrap.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 import { AuthService } from '../common/auth.service';
 import { AssetService } from '../common/asset.service';
 import 'rxjs/add/operator/switchMap';
@@ -19,7 +20,7 @@ import 'rxjs/add/operator/switchMap';
     templateUrl: './coin-detail.component.html',
     styleUrls: ['./coin-detail.component.css']
 })
-export class CoinDetailComponent implements OnInit {
+export class CoinDetailComponent implements OnInit, OnDestroy {
 
     symbol: string;
     detail: any;
@@ -35,6 +36,7 @@ export class CoinDetailComponent implements OnInit {
     currentUser: any;
     tabs: any;
     digitInfo: string = '1.0-0';
+    subscription: Subscription;
 
     @Input()
     activeTab: string;
@@ -42,12 +44,12 @@ export class CoinDetailComponent implements OnInit {
     constructor(
         private coinService: CoinDetailService,
         private route: ActivatedRoute,
+        private router: Router,
         private messageService: MessageService,
         private authService: AuthService,
         private portfolioService: PortfolioService,
         private bootstrapService: BootstrapService,
         private assetService: AssetService) {
-
         this.detail = '';
         this.price = '';
         this.error = false;
@@ -68,6 +70,11 @@ export class CoinDetailComponent implements OnInit {
         this.getData();
     }
 
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
 
     getData(): void {
         this.coinService.getData(this.symbol)
@@ -86,6 +93,7 @@ export class CoinDetailComponent implements OnInit {
                 .subscribe(
                     data => {
                         this.inPortfolio = data;
+                        this.autoAddToPortfolio();
                     },
                     error => this.inPortfolio = false
                 );
@@ -102,7 +110,22 @@ export class CoinDetailComponent implements OnInit {
                 );
         }
     }
-    
+
+    autoAddToPortfolio() {
+        if (!this.inPortfolio) {
+            console.log('auto adding');
+            this.subscription = this.route
+                .queryParams
+                .subscribe(params => {
+                    if (params['portfolioAdd']) {
+                        this.portfolioAdd();
+                        this.router.navigate(["/coins", this.symbol]);
+                    }
+                });
+        } else {
+            console.log('allrady in, no need to add');
+        }
+    }
     selectTab(selectedTab: string, event): void {
         this.preventDefault(event);
         for (let i = 0; i < this.tabs.length; i++) {
@@ -119,15 +142,22 @@ export class CoinDetailComponent implements OnInit {
     }
 
     portfolioAdd() {
-        this.portfolioService.add(this.symbol)
-            .subscribe(
-                success => {
-                    this.bootstrapService.loadData();
-                    this.inPortfolio = true;
-                    this.messageService.sendMessage(this.symbol + ' has been added to your portfolio', 'Portfolio Updated');
-                },
-                error => this.inPortfolio = false
-            );
+        if (!this.loggedIn) {
+            let navExtras: NavigationExtras = {
+                queryParams: { 'rtl' : this.symbol }
+            }
+            this.router.navigate(["/login"], navExtras);
+        } else {
+            this.portfolioService.add(this.symbol)
+                .subscribe(
+                    success => {
+                        this.bootstrapService.loadData();
+                        this.inPortfolio = true;
+                        this.messageService.sendMessage(this.symbol + ' has been added to your portfolio', 'Portfolio Updated');
+                    },
+                    error => this.inPortfolio = false
+                );
+        }
     }
 
     portfolioRem() {
