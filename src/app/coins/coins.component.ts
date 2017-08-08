@@ -19,104 +19,100 @@ import * as _ from "lodash";
 })
 export class CoinsComponent implements OnInit {
 
-    public cardView: boolean = false;
     public coins: Coin[] = [];
     public source: LocalDataSource;
     public marketCap: number = 0;
-    public marketCapVol: number = 0;
-    public marketCapBTC: number = 0;
     public init: boolean = false;
     public loading: Observable<boolean>;
     public searchTerm: string = '';
     public mobileDevice: boolean = false;
     public hideColumns: boolean = false;
-    public settings: Object = {};
-    public allSettings: Object = {
-        columns: {
-            'in_portfolio': {
-                title: '+/-',
-                width: '2%',
-                type: 'custom',
-                renderComponent: CheckboxColumnComponent,
-                onComponentInitFunction(instance) {
-                    instance.save.subscribe(row => {
-                    });
-                }
-            },
-            'position': {
-                title: '#',
-                width: '5%'
-            },
-            'name': {
-                title: 'Name',
-                width: '15%',
-                type: 'html',
-                valuePrepareFunction: (value, row) => {
-                    if (!this.hideColumns) {
-                        let imgUrl = row.image_url;
-                        if (!imgUrl) {
-                            imgUrl = "/assets/icons/default.png";
-                        }
-
-                        return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
-                            "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
-                    } else {
-                        return value;
-                    }
-                }
-            },
-            'symbol': {
-                title: 'Symbol',
-                width: '10%',
-                type: 'html',
-                valuePrepareFunction: (value, row) => {
-                    if (this.hideColumns) {
-                        let imgUrl = row.image_url;
-                        if (!imgUrl) {
-                            imgUrl = "/assets/icons/default.png";
-                        }
-
-                        return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
-                            "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
-                    } else {
-                        return value;
-                    }
-                }
-
-            },
-
-            'price': {
-                title: 'Price',
-                width: '30%',
-                sort: 'desc',
-                valuePrepareFunction: (value) => {
-                    return '$' + Number(value).toLocaleString('en', {
-                            minimumFractionDigits: 4,
-                            maximumFractionDigits: 8
-                        })
-                },
-                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
-            },
-            'marketCap': {
-                title: 'Market Cap',
-                width: '30%',
-                sort: 'desc',
-                valuePrepareFunction: (value) => {
-                    return '$' + Number(value).toLocaleString('en',
-                            {maximumFractionDigits: 0})
-                },
-                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
-            },
-            'percent24': {
-                title: '%24Hr',
-                width: '10%',
-                sort: 'desc',
-                valuePrepareFunction: (value) => {
-                    return value + '%';
-                },
-                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+    public allColumns: Object = {
+        'in_portfolio': {
+            title: '+/-',
+            width: '2%',
+            type: 'custom',
+            renderComponent: CheckboxColumnComponent,
+            onComponentInitFunction(instance) {
+                instance.save.subscribe(row => {
+                });
             }
         },
+        'position': {
+            title: '#',
+            width: '5%'
+        },
+        'name': {
+            title: 'Name',
+            width: '15%',
+            type: 'html',
+            valuePrepareFunction: (value, row) => {
+                if (!this.hideColumns) {
+                    let imgUrl = row.image_url;
+                    if (!imgUrl) {
+                        imgUrl = "/assets/icons/default.png";
+                    }
+
+                    return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                        "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                } else {
+                    return value;
+                }
+            }
+        },
+        'symbol': {
+            title: 'Symbol',
+            width: '10%',
+            type: 'html',
+            valuePrepareFunction: (value, row) => {
+                if (this.hideColumns) {
+                    let imgUrl = row.image_url;
+                    if (!imgUrl) {
+                        imgUrl = "/assets/icons/default.png";
+                    }
+
+                    return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                        "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                } else {
+                    return value;
+                }
+            }
+
+        },
+
+        'price': {
+            title: 'Price',
+            width: '30%',
+            sort: 'desc',
+            valuePrepareFunction: (value) => {
+                return '$' + Number(value).toLocaleString('en', {
+                        minimumFractionDigits: 4,
+                        maximumFractionDigits: 8
+                    })
+            },
+            compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+        },
+        'marketCap': {
+            title: 'Market Cap',
+            width: '30%',
+            sort: 'desc',
+            valuePrepareFunction: (value) => {
+                return '$' + Number(value).toLocaleString('en',
+                        {maximumFractionDigits: 0})
+            },
+            compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+        },
+        'percent24': {
+            title: '%24Hr',
+            width: '10%',
+            sort: 'desc',
+            valuePrepareFunction: (value) => {
+                return value + '%';
+            },
+            compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+        }
+    };
+    public otherSettings: Object = {
         hideSubHeader: true,
         actions: {
             add: false,
@@ -132,54 +128,95 @@ export class CoinsComponent implements OnInit {
             class: 'table table-bordered table-striped table-hover table-rankings'
         },
         noDataMessage: "Loading ..."
-
     };
+    public settings: Object = {};
 
+    
     constructor(private router: Router,
                 private bootstrapService: BootstrapService,
                 private authService: AuthService,
                 private localStorageService: LocalStorageService,
-                private deviceService: Ng2DeviceService) {
-        this.settings = _.cloneDeep(this.allSettings);
-        this.loading = this.bootstrapService.getLoading();
-        if (!this.authService.getToken()) {
-            delete this.settings['columns'].in_portfolio;
-        }
+                private deviceService: Ng2DeviceService) { }
 
 
-        this.mobileDevice = this.deviceService.isMobile();
-        let hc = this.getColumnViewFromStorage();
-        if (hc == null) {
-            this.hideColumns = this.mobileDevice;
-            this.saveColumnViewToStorage();
-        } else {
-            this.hideColumns = hc;
-        }
-        if (this.hideColumns) {
-            delete this.settings['columns'].name;
-            delete this.settings['columns'].marketCap;
-            delete this.settings['columns'].percent24;
-        }
-
-        let cv = this.localStorageService.get('listCardView');
-        if (cv) {
-            this.cardView = true;
-        }
-    }
     
     ngOnInit(): void {
+        this.mobileDevice = this.deviceService.isMobile();
+        this.mobileDevice = true;
+        this.loading = this.bootstrapService.getLoading();
+        this.initializeTableSettings();
         this.bootstrapService.getCoins()
             .subscribe(
                 coinData => {
                     this.coins = coinData.coins;
                     this.marketCap = coinData.totalMarketCap;
-                    //this.marketCapVol = coinData.totalMarketCapVol;
-                    //this.marketCapBTC = coinData.totalMarketCapBTC;
                     this.source = new LocalDataSource(this.coins);
                     this.init = true;
                 }
             );
     }
+
+
+    initializeTableSettings(): void {
+        let mergedSettings = this.otherSettings;
+        mergedSettings['columns'] = _.cloneDeep(this.allColumns);
+        this.settings = mergedSettings;
+        this.initializeColumnView();
+    }
+
+    initializeColumnView(): void {
+        this.checkAndRemoveLoggedInColumns(this.settings['columns']);
+        if (!this.mobileDevice) {
+            this.hideColumns = false;
+        } else {
+            let colView = this.getColumnViewFromStorage();
+            if (colView == null) {
+                this.hideColumns = true;
+                this.saveColumnViewToStorage();
+            } else {
+                this.hideColumns = colView;
+            }
+            if (this.hideColumns) {
+                this.removeColumns(this.settings['columns']);
+            }
+        }
+    }
+
+    checkAndRemoveLoggedInColumns(cols) : void {
+        if (!this.authService.getToken()) {
+            //delete this.settings['columns'].in_portfolio;
+            delete cols.in_portfolio;
+        }
+    }
+
+    removeColumns(cols): void {
+        delete cols.name;
+        delete cols.marketCap;
+        delete cols.percent24;
+    }
+
+    toggleColumnView() {
+        this.hideColumns = !this.hideColumns;
+        this.saveColumnViewToStorage();
+        let newCols = _.cloneDeep(this.allColumns);
+        if (this.hideColumns) {
+            this.removeColumns(newCols);
+        }
+        this.checkAndRemoveLoggedInColumns(newCols);
+        let mergedSettings = this.otherSettings;
+        mergedSettings['columns'] = newCols;
+        this.settings = { ...mergedSettings};
+    }
+
+    getColumnViewFromStorage() : any {
+        let val = this.localStorageService.get('listHideColumns');
+        return val;
+    }
+
+    saveColumnViewToStorage(): void {
+        this.localStorageService.set('listHideColumns', this.hideColumns);
+    }
+
 
     doSearch(): void {
         if (this.init) {
@@ -225,68 +262,4 @@ export class CoinsComponent implements OnInit {
 
     }
 
-    clickCard(symbol): void {
-        this.router.navigate(['/coins', symbol]);
-    }
-    
-    toggleCardView() {
-        this.cardView = !this.cardView;
-        this.localStorageService.set('listCardView', this.cardView);
-        this.router.navigate(['']);
-    }
-
-    toggleColumnView() {
-
-        this.hideColumns = !this.hideColumns;
-        this.saveColumnViewToStorage();
-        let newCols = {};
-        if (this.hideColumns) {
-            newCols = _.cloneDeep(this.allSettings['columns']);
-            delete newCols['name'];
-            delete newCols['marketCap'];
-            delete newCols['percent24'];
-        } else {
-            newCols = _.cloneDeep(this.allSettings['columns']);
-        }
-        if (!this.authService.getToken()) {
-            delete newCols['in_portfolio'];
-        }
-        this.settings = {
-            columns: newCols,
-            hideSubHeader: true,
-            actions: {
-                add: false,
-                edit: false,
-                delete: false
-            },
-            pager: {
-                display: true,
-                top: true,
-                perPage: 50
-            },
-            attr: {
-                class: 'table table-bordered table-striped table-hover table-rankings'
-            },
-            noDataMessage: "Loading ..."
-        };
-
-
-    }
-
-    getColumnViewFromStorage() : any {
-        let val = this.localStorageService.get('listHideColumns');
-        return val;
-    }
-
-    saveColumnViewToStorage(): void {
-        this.localStorageService.set('listHideColumns', this.hideColumns);
-    }
-
-
-    marketCapPopover(event) {
-        console.log(event);
-        console.log(event.path[1]);
-        event.path[1].popover();
-    }
-    
 }
