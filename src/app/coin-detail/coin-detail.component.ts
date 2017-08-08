@@ -113,7 +113,7 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
 
     autoAddToPortfolio() {
         if (!this.inPortfolio) {
-            console.log('auto adding');
+            
             this.subscription = this.route
                 .queryParams
                 .subscribe(params => {
@@ -122,9 +122,7 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
                         this.router.navigate(["/coins", this.symbol]);
                     }
                 });
-        } else {
-            console.log('allrady in, no need to add');
-        }
+        } 
     }
     selectTab(selectedTab: string, event): void {
         this.preventDefault(event);

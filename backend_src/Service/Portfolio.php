@@ -138,7 +138,7 @@ class Portfolio extends Base
                         $totalValue += $value;
                     }
                     $output[] = [
-                        'name' => $row['long'],
+                        'long' => $row['long'],
                         'short' => $row['short'],
                         'price' => $row['price'],
                         'value' => $value,
