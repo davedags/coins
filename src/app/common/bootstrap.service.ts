@@ -34,7 +34,7 @@ export class BootstrapService {
     
     loadData(): void {
         this.loadingSubject.next(true);
-        this.symbolToPriceMap = {}; 
+        this.symbolToPriceMap = {};
         let idx = 0;
         let apiUrl = this.listUrl;
         if (this.authService.getToken()) {

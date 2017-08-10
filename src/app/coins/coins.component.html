@@ -12,7 +12,7 @@
 
         <button type="button" class="btn btn-primary btn-sm" (click)="doSearch()">Search</button>
         <button type="button" class="btn btn-secondary btn-sm" *ngIf="searchTerm" (click)="clearSearch()">Clear</button>
-        <a href="javascript:void(0)" title="Refresh List" (click)="bootstrapService.loadData()">
+        <a href="javascript:void(0)" title="Refresh List" (click)="refreshList()">
             <i class="material-icons">autorenew</i>
         </a>
 

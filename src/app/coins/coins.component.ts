@@ -8,8 +8,6 @@ import { LocalDataSource, ViewCell } from "ng2-smart-table/index";
 import { Router } from "@angular/router";
 import { CheckboxColumnComponent } from "./checkbox-column.component";
 import { Observable } from 'rxjs/Observable';
-import * as _ from "lodash";
-
 
 @Component({
     selector: 'app-coins',
@@ -22,7 +20,7 @@ export class CoinsComponent implements OnInit {
     public coins: Coin[] = [];
     public source: LocalDataSource;
     public marketCap: number = 0;
-    public init: boolean = false;
+    public refreshing: boolean = false;
     public loading: Observable<boolean>;
     public searchTerm: string = '';
     public mobileDevice: boolean = false;
@@ -131,7 +129,6 @@ export class CoinsComponent implements OnInit {
     };
     public settings: Object = {};
 
-
     constructor(private router: Router,
                 private bootstrapService: BootstrapService,
                 private authService: AuthService,
@@ -150,7 +147,11 @@ export class CoinsComponent implements OnInit {
                     this.coins = coinData.coins;
                     this.marketCap = coinData.totalMarketCap;
                     this.source = new LocalDataSource(this.coins);
-                    this.init = true;
+                    if (this.refreshing) {
+                        this.doSearch();
+                        this.refreshing = false;
+                    }
+
                 }
             );
     }
@@ -158,7 +159,7 @@ export class CoinsComponent implements OnInit {
 
     initializeTableSettings(): void {
         let mergedSettings = this.otherSettings;
-        mergedSettings['columns'] = _.cloneDeep(this.allColumns);
+        mergedSettings['columns'] = { ...this.allColumns};
         this.settings = mergedSettings;
         this.initializeColumnView();
     }
@@ -183,7 +184,6 @@ export class CoinsComponent implements OnInit {
 
     checkAndRemoveLoggedInColumns(cols) : void {
         if (!this.authService.getToken()) {
-            //delete this.settings['columns'].in_portfolio;
             delete cols.in_portfolio;
         }
     }
@@ -197,42 +197,42 @@ export class CoinsComponent implements OnInit {
     toggleColumnView() {
         this.hideColumns = !this.hideColumns;
         this.saveColumnViewToStorage();
-        let newCols = _.cloneDeep(this.allColumns);
+        let newCols = { ...this.allColumns};
+        this.checkAndRemoveLoggedInColumns(newCols);
         if (this.hideColumns) {
             this.removeColumns(newCols);
         }
-        this.checkAndRemoveLoggedInColumns(newCols);
         let mergedSettings = this.otherSettings;
         mergedSettings['columns'] = newCols;
         this.settings = { ...mergedSettings};
     }
 
     getColumnViewFromStorage() : any {
-        let val = this.localStorageService.get('listHideColumns');
-        return val;
+        return this.localStorageService.get('listHideColumns');
     }
 
     saveColumnViewToStorage(): void {
         this.localStorageService.set('listHideColumns', this.hideColumns);
     }
 
-
+    refreshList(): void {
+        this.refreshing = true;
+        this.bootstrapService.loadData();
+    }
     doSearch(): void {
-        if (this.init) {
-            if (this.searchTerm) {
-                this.source.setFilter([
-                    {
-                        field: 'name',
-                        search: this.searchTerm
-                    },
-                    {
-                        field: 'symbol',
-                        search: this.searchTerm
-                    }
-                ], false);
-            } else {
-                this.source.reset();
-            }
+        if (this.searchTerm) {
+            this.source.setFilter([
+                {
+                    field: 'name',
+                    search: this.searchTerm
+                },
+                {
+                    field: 'symbol',
+                    search: this.searchTerm
+                }
+            ], false);
+        } else {
+            this.source.reset();
         }
     }
 
@@ -253,7 +253,6 @@ export class CoinsComponent implements OnInit {
     }
 
     clickRow(event): void {
-
         let symbol = event.data.symbol;
         if (symbol) {
             this.router.navigate(['/coins', symbol]);
