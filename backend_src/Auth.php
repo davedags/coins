@@ -117,8 +117,8 @@ class Auth
         $issued_time = time();
         $expire_time = $issued_time + (3600 * 24 * 30); //1 month
         $token = [
-            'iss' => 'dagscoin.com',
-            'aud' => 'dagscoin.com',
+            'iss' => 'coinpedia.io',
+            'aud' => 'coinpedia.io',
             'iat' => $issued_time,
             'nbf' => $issued_time,
             'exp' => $expire_time

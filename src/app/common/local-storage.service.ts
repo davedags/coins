@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class LocalStorageService {
 
-    static readonly appKeyPrefix = 'dagscoin_';
+    static readonly appKeyPrefix = 'coinpedia_';
     static readonly authUserKey = 'currentUser';
     cache: any = {};
     isSupported: boolean;
