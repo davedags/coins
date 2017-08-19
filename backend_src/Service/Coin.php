@@ -55,20 +55,23 @@ class Coin extends Base
             'results' => [],
             'total' => 0
         ];
-       
-        $response = $this->http->get(self::API_MARKETCAP_BASE_URL . "front");
-        if ($response->getStatusCode() == 200) {
-            $body = $response->getBody()->getContents();
-            if (($decoded = json_decode($body, true)) !== null) {
-                $this->mungeMarketCapResults($decoded);
-                usort($decoded, ["\Coins\Service\Coin", "sortMarketCapList"]);
-                $collection['results'] = $decoded;
-                $collection['total'] = count($decoded);
-                $collection['marketCap'] = $this->getTotalMarketCap($collection['results']);
-                $this->cache->set($cache_key, $collection, 300);
-            }
-        }
 
+        try {
+            $response = $this->http->get(self::API_MARKETCAP_BASE_URL . "front");
+            if ($response->getStatusCode() == 200) {
+                $body = $response->getBody()->getContents();
+                if (($decoded = json_decode($body, true)) !== null) {
+                    $this->mungeMarketCapResults($decoded);
+                    usort($decoded, ["\Coins\Service\Coin", "sortMarketCapList"]);
+                    $collection['results'] = $decoded;
+                    $collection['total'] = count($decoded);
+                    $collection['marketCap'] = $this->getTotalMarketCap($collection['results']);
+                    $this->cache->set($cache_key, $collection, 300);
+                }
+            }
+        } catch (\GuzzleHttp\Exception\ConnectException $e) {
+
+        }
         return $collection;
         
     }

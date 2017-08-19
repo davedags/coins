@@ -125,7 +125,7 @@ export class CoinsComponent implements OnInit {
         attr: {
             class: 'table table-bordered table-striped table-hover table-rankings'
         },
-        noDataMessage: "Loading ..."
+        noDataMessage: "No Results"
     };
     public settings: Object = {};
 
