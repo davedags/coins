@@ -23,6 +23,19 @@
     overflow: hidden;
 }
 
+
+
+.chart-container {
+    width: 90%;
+    height: 90%;
+    min-height: 300px;
+    min-width: 100px;
+    margin-bottom: 10px;
+}
+
+
 .table-container {
     overflow: auto;
 }
+
+

@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule }   from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CollapseModule } from 'ngx-bootstrap';
 import { ToastModule, ToastOptions } from 'ng2-toastr';
 import { ToastConfig } from './common/toast-config';
@@ -27,7 +28,6 @@ import { MessageService } from './common/message.service';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { CheckboxColumnComponent } from './coins/checkbox-column.component';
 import { AboutComponent } from './about/about.component';
-
 
 const appRoutes: Routes = [
     { path: 'convertor', component: ConvertorComponent },
@@ -58,6 +58,7 @@ const appRoutes: Routes = [
         FocusModule,
         CollapseModule,
         BrowserAnimationsModule,
+        NgxChartsModule,
         LoadingModule.forRoot({
             animationType: ANIMATION_TYPES.rectangleBounce,
             backdropBorderRadius: '6px',

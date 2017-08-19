@@ -5,6 +5,17 @@
     <div *ngIf="init">
         <h3>My Portfolio</h3>
     </div>
+    <div *ngIf="init && showTable && !mobileDevice" class="chart-container row">
+        <ngx-charts-pie-chart
+                [scheme]="colorScheme"
+                [results]="chartData"
+                [legend]="showLegend"
+                [gradient]="gradient"
+                [labels]="showLabels"
+                [arcWidth]="arcWidth"
+                (select)="onChartSliceSelect($event)">
+        </ngx-charts-pie-chart>
+    </div>
     <div *ngIf="init" class="row">
         <div *ngIf="!showTable" class="alert alert-info" role="alert">
             <h4>Portfolio Empty</h4>Follow these simple steps to get started:

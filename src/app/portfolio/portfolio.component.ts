@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { PortfolioService } from './portfolio.service';
+import { Ng2DeviceService } from 'ng2-device-detector';
 import { LocalDataSource } from "ng2-smart-table/index";
 import { Asset } from '../model/asset';
 import { Router } from '@angular/router';
@@ -8,7 +9,8 @@ import { CheckboxColumnComponent } from '../coins/checkbox-column.component';
 @Component({
     selector: 'app-portfolio',
     providers: [
-        PortfolioService
+        PortfolioService,
+        Ng2DeviceService
     ],
     templateUrl: './portfolio.component.html',
     styleUrls: ['./portfolio.component.css']
@@ -96,9 +98,25 @@ export class PortfolioComponent implements OnInit {
 
     };
 
-    constructor(private portfolioService: PortfolioService, private router: Router) {}
+    chartData: any[] = [];
+    view: any[] = [250, 250];
+    gradient: boolean = true;
+    showLegend: boolean = true;
+    explodeSlices: boolean = true;
+    showLabels: boolean = true;
+    arcWidth: number = .25;
+    colorScheme = {
+        domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    };
+    mobileDevice: boolean = false;
+
+    constructor(private portfolioService: PortfolioService,
+                private router: Router,
+                private deviceService: Ng2DeviceService) {}
 
     ngOnInit() {
+        this.mobileDevice = this.deviceService.isMobile();
+
         this.initList();
     }
 
@@ -106,15 +124,21 @@ export class PortfolioComponent implements OnInit {
         this.portfolioService.getList()
             .subscribe(
                 coinData => {
+                    this.chartData = [];
                     this.coins = coinData.coins;
                     this.totalValue = coinData.totalValue;
                     this.source = new LocalDataSource(this.coins);
                     if (this.coins.length == 0) {
                         this.showTable = false;
+                    } else {
+                        for (let coin of this.coins) {
+                            this.chartData.push({ "name" : coin.symbol, "value": coin.value });
+                        }
                     }
                     this.init = true;
                 }
             );
+
     }
 
     compareNumbers(dir: number, a: any, b: any): number {
@@ -135,6 +159,10 @@ export class PortfolioComponent implements OnInit {
             this.router.navigate(['/coins', symbol]);
         }
 
+    }
+
+    onChartSliceSelect(event) {
+        console.log(event);
     }
 
 }
