@@ -63,7 +63,7 @@ const appRoutes: Routes = [
             animationType: ANIMATION_TYPES.rectangleBounce,
             backdropBorderRadius: '6px',
             backdropBackgroundColour: 'rgba(0,0,0,0.1)',
-            primaryColour: '#9c27b0'
+            primaryColour: '#ffffff'
         }),
 
         ToastModule.forRoot(),
