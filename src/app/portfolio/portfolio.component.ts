@@ -105,9 +105,7 @@ export class PortfolioComponent implements OnInit {
     explodeSlices: boolean = true;
     showLabels: boolean = true;
     arcWidth: number = .25;
-    colorScheme = {
-        domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-    };
+   
     mobileDevice: boolean = false;
 
     constructor(private portfolioService: PortfolioService,

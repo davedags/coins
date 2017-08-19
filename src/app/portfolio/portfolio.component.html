@@ -7,7 +7,6 @@
     </div>
     <div *ngIf="init && showTable && !mobileDevice" class="chart-container row">
         <ngx-charts-pie-chart
-                [scheme]="colorScheme"
                 [results]="chartData"
                 [legend]="showLegend"
                 [gradient]="gradient"
