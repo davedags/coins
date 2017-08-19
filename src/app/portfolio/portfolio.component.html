@@ -5,28 +5,58 @@
     <div *ngIf="init">
         <h3>My Portfolio</h3>
     </div>
-    <div *ngIf="init && showTable && !mobileDevice" class="chart-container row">
-        <ngx-charts-pie-chart
-                [results]="chartData"
-                [legend]="showLegend"
-                [gradient]="gradient"
-                [labels]="showLabels"
-                [arcWidth]="arcWidth"
-                (select)="onChartSliceSelect($event)">
-        </ngx-charts-pie-chart>
-    </div>
-    <div *ngIf="init" class="row">
-        <div *ngIf="!showTable" class="alert alert-info" role="alert">
-            <h4>Portfolio Empty</h4>Follow these simple steps to get started:
-            <ul>
-                <li><a routerLink="/">Browse all coins</a> to find your favorites.</li>
-                <li>Click anywhere in a coin row to see a detailed view.</li>
-                <li>From within the detailed view, click the "Add To Portfolio" button to start populating this list.</li>
-            </ul>
+
+    <div class="card card-nav-tabs card-plain">
+        <div class="header header-primary">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs coin-tabs" data-background-color="white">
+                        <li *ngFor="let tab of tabs" (click)="selectTab(tab.id, $event)" [class.active]="activeTab == tab.id">
+                            <a href="javascript:void(0)">{{ tab.name }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <span class="total-value" *ngIf="totalValue">Total Value: {{ totalValue | currency:'USD':true:'1.0-0' }}</span>
-        <div class="table-container">
-            <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
+        <div class="card-content">
+            <div class="tab-content coin-tabs-text">
+                <div [hidden]="activeTab != 'graph'" class="pane">
+                    <div *ngIf="init && showTable" class="chart-container row">
+                        <ngx-charts-pie-chart *ngIf="!mobileDevice"
+                                [results]="chartData"
+                                [legend]="showLegend"
+                                [gradient]="gradient"
+                                [labels]="showLabels"
+                                (select)="onChartSliceSelect($event)">
+                        </ngx-charts-pie-chart>
+                        <ngx-charts-pie-chart *ngIf="mobileDevice"
+                                [view]="view"
+                                              [results]="chartData"
+                                [legend]="showLegend"
+                                [gradient]="gradient"
+                                [labels]="showLabels"
+                                (select)="onChartSliceSelect($event)">
+                        </ngx-charts-pie-chart>
+                    </div>
+                    <span class="total-value" *ngIf="totalValue">Total Value: {{ totalValue | currency:'USD':true:'1.0-0' }}</span>
+                </div>
+                <div [hidden]="activeTab != 'list'" class="pane">
+                    <div *ngIf="init" class="row">
+                        <div *ngIf="!showTable" class="alert alert-info" role="alert">
+                            <h4>Portfolio Empty</h4>Follow these simple steps to get started:
+                            <ul>
+                                <li><a routerLink="/">Browse all coins</a> to find your favorites.</li>
+                                <li>Click anywhere in a coin row to see a detailed view.</li>
+                                <li>From within the detailed view, click the "Add To Portfolio" button to start populating this list.</li>
+                            </ul>
+                        </div>
+                        <span class="total-value" *ngIf="totalValue">Total Value: {{ totalValue | currency:'USD':true:'1.0-0' }}</span>
+                        <div class="table-container">
+                            <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

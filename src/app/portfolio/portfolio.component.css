@@ -28,8 +28,6 @@
 .chart-container {
     width: 90%;
     height: 90%;
-    min-height: 300px;
-    min-width: 100px;
     margin-bottom: 10px;
 }
 
@@ -39,3 +37,12 @@
 }
 
 
+.portfolio-list-img {
+    height: 25px !important;
+    width: 25px !important;
+}
+
+.card img {
+    height: auto;
+    width: auto;
+}
