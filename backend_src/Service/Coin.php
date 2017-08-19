@@ -24,7 +24,7 @@ class Coin extends Base
     {
         parent::__construct($args);
         $this->http = new Client([
-            'timeout' => 3
+            'timeout' => 10
         ]);
 
     }
