@@ -44,7 +44,7 @@ export class PortfolioComponent implements OnInit {
                     if (!imgUrl) {
                         imgUrl = "/assets/icons/default.png";
                     }
-                    return "<img src='" + imgUrl + "' class='portfolio-list-img'/> " + value;
+                    return "<img src='" + imgUrl + "' width='25px' height='25px' /> " + value;
                 }
             },
             'symbol': {
@@ -98,18 +98,14 @@ export class PortfolioComponent implements OnInit {
 
     };
 
-    tabs: any[] = [
-        { id: 'list', name: 'List', active: true},
-        { id: 'graph', name: 'Chart', active: false}
-    ];
-    activeTab: string = 'list';
     chartData: any[] = [];
-    view: any[] = [250, 200];
+    view: any[] = [250, 250];
     gradient: boolean = true;
     showLegend: boolean = true;
     explodeSlices: boolean = true;
     showLabels: boolean = true;
     arcWidth: number = .25;
+   
     mobileDevice: boolean = false;
 
     constructor(private portfolioService: PortfolioService,
@@ -118,9 +114,7 @@ export class PortfolioComponent implements OnInit {
 
     ngOnInit() {
         this.mobileDevice = this.deviceService.isMobile();
-        if (this.mobileDevice) {
-            this.showLegend = false;
-        }
+
         this.initList();
     }
 
@@ -167,22 +161,6 @@ export class PortfolioComponent implements OnInit {
 
     onChartSliceSelect(event) {
         console.log(event);
-    }
-
-    selectTab(selectedTab: string, event): void {
-        this.preventDefault(event);
-        for (let i = 0; i < this.tabs.length; i++) {
-            if (this.tabs[i].id == selectedTab) {
-                this.activeTab = selectedTab;
-                this.tabs[i].active = true;
-            } else {
-                this.tabs[i].active = false;
-            }
-        }
-    }
-
-    preventDefault(event): void {
-        event.preventDefault();
     }
 
 }
