@@ -9,7 +9,7 @@ import { CollapseModule } from 'ngx-bootstrap';
 import { ToastModule, ToastOptions } from 'ng2-toastr';
 import { ToastConfig } from './common/toast-config';
 import { FocusModule } from './focus/focus.module';
-import { LoadingModule } from 'ngx-loading';
+import { LoadingModule, ANIMATION_TYPES } from 'ngx-loading';
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 
 import { AppComponent } from './app.component';
@@ -58,7 +58,13 @@ const appRoutes: Routes = [
         FocusModule,
         CollapseModule,
         BrowserAnimationsModule,
-        LoadingModule,
+        LoadingModule.forRoot({
+            animationType: ANIMATION_TYPES.rectangleBounce,
+            backdropBorderRadius: '6px',
+            backdropBackgroundColour: 'rgba(0,0,0,0.1)',
+            primaryColour: '#9c27b0'
+        }),
+
         ToastModule.forRoot(),
         Ng2DeviceDetectorModule.forRoot(),
         RouterModule.forRoot(appRoutes)

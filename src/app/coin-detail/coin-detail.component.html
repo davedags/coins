@@ -1,12 +1,13 @@
 <div class="container section-header coin-detail">
     <div *ngIf="!detail" class="container" style="height: 100vh">
-        <ngx-loading [show]="!detail" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
+        <ngx-loading [show]="!detail"></ngx-loading>
     </div>
     <div *ngIf="detail" class="row">
         <div class="col-sm-8">
             <h1 class="detail-title"><img *ngIf="detail" class="img-rounded" width="55px" height="55px" src="{{ detail.image_url }}" />  {{ detail.name }}</h1>
             <div>
-                <button *ngIf="!inPortfolio" type="button" (click)="portfolioAdd(detail.symbol)" class="btn btn-round">
+                <button *ngIf="(loggedIn && !inPortfolioInit)" type="button" class="btn btn-round">Loading ... </button>
+                <button *ngIf="(!loggedIn || (inPortfolioInit && !inPortfolio))" type="button" (click)="portfolioAdd(detail.symbol)" class="btn btn-round">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add To Portfolio
                 </button>
                 <button *ngIf="inPortfolio" type="button" (click)="portfolioRem(detail.symbol)" class="btn btn-round">

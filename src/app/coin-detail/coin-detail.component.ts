@@ -26,6 +26,7 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
     detail: any;
     price: any;
     error: boolean;
+    inPortfolioInit: boolean = false;
     inPortfolio: boolean = false;
     portfolioValue: any;
     portfolioValueCalculated: boolean = false;
@@ -63,6 +64,8 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
         this.currentUser = this.authService.getCurrentUser();
         if (this.currentUser) {
             this.loggedIn = true;
+        } else {
+            this.inPortfolioInit = true;
         }
     }
 
@@ -93,9 +96,13 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
                 .subscribe(
                     data => {
                         this.inPortfolio = data;
+                        this.inPortfolioInit = true;
                         this.autoAddToPortfolio();
                     },
-                    error => this.inPortfolio = false
+                    error =>  {
+                        this.inPortfolio = false;
+                        this.inPortfolioInit = true;
+                    }
                 );
             this.assetService.get(this.symbol)
                 .subscribe(
