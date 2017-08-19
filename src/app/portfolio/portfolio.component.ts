@@ -51,16 +51,6 @@ export class PortfolioComponent implements OnInit {
                 title: 'Symbol',
                 width: '10%'
             },
-
-            'price': {
-                title: 'Price',
-                width: '30%',
-                sort: 'desc',
-                valuePrepareFunction: (value) => {
-                    return '$' + Number(value).toLocaleString('en', { minimumFractionDigits: 4, maximumFractionDigits: 8})
-                },
-                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
-            },
             'value': {
                 title: 'Value',
                 width: '30%',
@@ -99,7 +89,7 @@ export class PortfolioComponent implements OnInit {
     };
 
     chartData: any[] = [];
-    view: any[] = [250, 250];
+    view: any[] = [];
     gradient: boolean = true;
     showLegend: boolean = true;
     explodeSlices: boolean = true;
@@ -163,4 +153,13 @@ export class PortfolioComponent implements OnInit {
         console.log(event);
     }
 
+    @HostListener('window:resize', ['$event'])
+    onResize(event){
+        let w = event.target.innerWidth;
+        if (w < 450) {
+            this.showLegend = false;
+        } else {
+            this.showLegend = true;
+        }
+    }
 }
