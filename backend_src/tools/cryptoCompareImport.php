@@ -72,13 +72,6 @@ if ($response->getStatusCode() == 200) {
                 $em->persist($coin);
                 $em->flush();
                 $imported++;
-            } else {
-                echo 'Updating mkt cap ... ' . "\n";
-                if (!empty($mkt_cap_map[$coin->getSymbol()])) {
-                    $coin->setCmcapId($mkt_cap_map[$coin->getSymbol()]);
-                    $em->persist($coin);
-                    $em->flush();
-                }
             }
         }
     }
