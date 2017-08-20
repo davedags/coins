@@ -56,7 +56,7 @@ if ($response->getStatusCode() == 200) {
                 $em->persist($coin);
                 $em->flush();
                 $imported++;
-            } elseif (!$coin->getCryptocompareDetail()) {
+            } else {
                 echo 'Updating Detail ... ' . "\n";
                 $detail = getDetail($coin, $http, $api_endpoint);
                 if ($detail) {
