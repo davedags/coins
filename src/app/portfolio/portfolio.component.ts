@@ -92,19 +92,19 @@ export class PortfolioComponent implements OnInit {
     view: any[] = [];
     gradient: boolean = true;
     showLegend: boolean = true;
-    explodeSlices: boolean = true;
     showLabels: boolean = true;
-    arcWidth: number = .25;
-   
     mobileDevice: boolean = false;
-
+    showChart: boolean = true;
+    
     constructor(private portfolioService: PortfolioService,
                 private router: Router,
                 private deviceService: Ng2DeviceService) {}
 
     ngOnInit() {
         this.mobileDevice = this.deviceService.isMobile();
-
+        if (this.mobileDevice) {
+            this.showLegend = false;
+        }
         this.initList();
     }
 
@@ -152,11 +152,11 @@ export class PortfolioComponent implements OnInit {
     onChartSliceSelect(event) {
         console.log(event);
     }
-
+    
     @HostListener('window:resize', ['$event'])
     onResize(event){
         let w = event.target.innerWidth;
-        if (w < 450) {
+        if (w < 670) {
             this.showLegend = false;
         } else {
             this.showLegend = true;

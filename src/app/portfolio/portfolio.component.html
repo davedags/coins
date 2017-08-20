@@ -1,17 +1,16 @@
-<div class="container-fluid section-header">
+<div class="container section-header">
     <div *ngIf="!init" class="container loading-container">
         <ngx-loading [show]="!init"></ngx-loading>
     </div>
     <div *ngIf="init">
         <h3>My Portfolio</h3>
     </div>
-    <div *ngIf="init && showTable && !mobileDevice" class="chart-container row">
+    <div *ngIf="init && showTable && showChart" class="chart-container container-fluid">
         <ngx-charts-pie-chart
                 [results]="chartData"
                 [legend]="showLegend"
                 [gradient]="gradient"
                 [labels]="showLabels"
-                [arcWidth]="arcWidth"
                 (select)="onChartSliceSelect($event)">
         </ngx-charts-pie-chart>
     </div>

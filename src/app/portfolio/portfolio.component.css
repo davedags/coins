@@ -30,9 +30,33 @@
     height: 90%;
     min-height: 300px;
     min-width: 300px;
+    padding-top: 5px;
 }
 
+@media only screen and (max-width: 530px) {
+    .chart-container {
+        height: 250px;
+        min-height: 250px;
+    }
+}
 
+@media only screen and (max-width: 475px) {
+    .chart-container {
+        height: 225px;
+        min-height: 225px;
+    }
+
+}
+@media only screen and (max-width: 400px) {
+    .chart-container {
+        height: 180px;
+        min-height: 180px;
+        width: 250px;
+        min-width: 250px;
+        padding-top: 5px;
+    }
+
+}
 .table-container {
     overflow: auto;
 }
