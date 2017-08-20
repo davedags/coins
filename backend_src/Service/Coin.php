@@ -16,9 +16,10 @@ class Coin extends Base
     
     private $http = null;
     public static $class = 'Coin';
-    const API_MARKETCAP_BASE_URL = 'http://www.coincap.io/';
+    const API_COINCAP_BASE_URL = 'http://www.coincap.io/';
     const API_COMPARE_BASE_URL = 'https://www.cryptocompare.com/api/data/';
     const API_SIMPLE_PRICE_URL = 'https://min-api.cryptocompare.com/data/price?';
+    const API_COINMARKETCAP_BASE_URL = 'https://api.coinmarketcap.com/v1/ticker/';
 
     public function __construct(array $args = []) 
     {
@@ -57,7 +58,7 @@ class Coin extends Base
         ];
 
         try {
-            $response = $this->http->get(self::API_MARKETCAP_BASE_URL . "front");
+            $response = $this->http->get(self::API_COINCAP_BASE_URL . "front");
             if ($response->getStatusCode() == 200) {
                 $body = $response->getBody()->getContents();
                 if (($decoded = json_decode($body, true)) !== null) {
@@ -162,21 +163,38 @@ class Coin extends Base
         if ($data = $this->cache->get($cache_key)) {
             return $data;
         }
-        $query_params = [
-            'fsym' => strtoupper($symbol),
-            'tsyms' => 'USD'
-        ];
         $data = [];
-        $response = $this->http->get(self::API_SIMPLE_PRICE_URL . http_build_query($query_params));
-        if ($response->getStatusCode() == 200) {
-            $body = $response->getBody()->getContents();
-            if (($decoded = json_decode($body, true)) !== null) {
-                if (!empty($decoded['USD'])) {
-                    $data = $decoded['USD'];
-                    $this->cache->set($cache_key, $data, 180);
+        $coin = $this->getObjectByField($symbol, 'symbol');
+
+        if ($mkt_cap_id = $coin->getCmcapId()) {
+
+            $response = $this->http->get(self::API_COINMARKETCAP_BASE_URL . $mkt_cap_id);
+            if ($response->getStatusCode() == 200) {
+                $body = $response->getBody()->getContents();
+                if (($decoded = json_decode($body, true)) !== null) {
+                    $data = $decoded[0]['price_usd'];
+                }
+            }
+        } else {
+            $query_params = [
+                'fsym' => strtoupper($symbol),
+                'tsyms' => 'USD'
+            ];
+            $response = $this->http->get(self::API_SIMPLE_PRICE_URL . http_build_query($query_params));
+            if ($response->getStatusCode() == 200) {
+                $body = $response->getBody()->getContents();
+                if (($decoded = json_decode($body, true)) !== null) {
+                    if (!empty($decoded['USD'])) {
+                        $data = $decoded['USD'];
+                    }
                 }
             }
         }
+
+        if ($data) {
+            $this->cache->set($cache_key, $data, 300);
+        }
+
         return $data;
     }
 
