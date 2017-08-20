@@ -5,7 +5,7 @@
     <div *ngIf="init">
         <h3>My Portfolio</h3>
     </div>
-    <div *ngIf="init && showTable && showChart" class="chart-container container-fluid">
+    <div *ngIf="init && showTable && !mobileDevice" class="chart-container container-fluid">
         <ngx-charts-pie-chart
                 [results]="chartData"
                 [legend]="showLegend"

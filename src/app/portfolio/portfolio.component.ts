@@ -89,7 +89,7 @@ export class PortfolioComponent implements OnInit {
     };
 
     chartData: any[] = [];
-    view: any[] = [];
+    view: any[] = [500, 300];
     gradient: boolean = true;
     showLegend: boolean = true;
     showLabels: boolean = true;
