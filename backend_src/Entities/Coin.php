@@ -10,7 +10,7 @@ namespace Coins\Entities;
 
 /**
  * @Entity
- * @Table(name="coin",indexes={@Index(name="symbol_idx", columns={"symbol"}),@Index(name="cc_idx", columns={"cryptocompare_id"})})
+ * @Table(name="coin",indexes={@Index(name="symbol_idx", columns={"symbol"}), @Index(name="cc_idx", columns={"cryptocompare_id"}), @Index(name="cmcap_idx", columns={"cmcap_id"})})
  */
 class Coin
 {
@@ -46,6 +46,11 @@ class Coin
      */
     protected $cryptocompare_detail;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $cmcap_id;
+
     public function __construct() {}
 
     public function getId()
@@ -71,6 +76,16 @@ class Coin
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function getCmcapId()
+    {
+        return $this->cmcap_id;
+    }
+
+    public function setCmcapId($id)
+    {
+        $this->cmcap_id = $id;
     }
 
     public function getCryptocompareId()

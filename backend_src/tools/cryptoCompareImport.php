@@ -14,12 +14,24 @@ require_once './bootstrap.php';
 $em = $app->db->em;
 
 $api_endpoint = 'https://www.cryptocompare.com/api/data/';
+$coin_market_cap_api = 'https://api.coinmarketcap.com/v1/ticker/';
 $remote_url_base = 'https://www.cryptocompare.com';
 
 $http = new Client([
     'base_uri' => $api_endpoint,
     'timeout' => 3
 ]);
+
+$mkt_cap_map = [];
+$response = $http->get($coin_market_cap_api);
+if ($response->getStatusCode() == 200) {
+    $body = $response->getBody()->getContents();
+    if (($decoded = json_decode($body, true)) !== null) {
+        foreach ($decoded as $c) {
+            $mkt_cap_map[$c['symbol']] = $c['id'];
+        }
+    }
+}
 
 $imported = $counter = 0;
 $response = $http->get($api_endpoint . "coinlist/");
@@ -40,6 +52,10 @@ if ($response->getStatusCode() == 200) {
                 $coin->setName($row['CoinName']);
                 $coin->setCryptocompareId($row['Id']);
 
+                if (!empty($mkt_cap_map[$coin->getSymbol()])) {
+                    $coin->setCmcapId($mkt_cap_map[$coin->getSymbol()]);
+                }
+
                 if (!empty($row['ImageUrl'])) {
                     $url_parts = explode("/", $row['ImageUrl']);
                     $local_file_name = $row['Id'] . "_" . array_pop($url_parts);
@@ -57,10 +73,9 @@ if ($response->getStatusCode() == 200) {
                 $em->flush();
                 $imported++;
             } else {
-                echo 'Updating Detail ... ' . "\n";
-                $detail = getDetail($coin, $http, $api_endpoint);
-                if ($detail) {
-                    $coin->setCryptocompareDetail($detail);
+                echo 'Updating mkt cap ... ' . "\n";
+                if (!empty($mkt_cap_map[$coin->getSymbol()])) {
+                    $coin->setCmcapId($mkt_cap_map[$coin->getSymbol()]);
                     $em->persist($coin);
                     $em->flush();
                 }
