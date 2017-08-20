@@ -1,34 +1,42 @@
 <div class="container section-header">
-    <div class="login-header">
+    <!--<div class="login-header">
         <h3>Log-In <small class="no-wrap"> for a customized experience.</small></h3>
-    </div>
+    </div>-->
     <div class="container login-container">
-        <form class="form" name="form" #f="ngForm">
-            <div *ngIf="login_error || registration_error" class="alert alert-danger">
-                <div class="container-fluid">
-                    <div class="alert-icon">
-                        <i class="material-icons">error_outline</i>
-                    </div>
-                    <span *ngIf="login_error">Incorrect username or password.</span>
-                    <span *ngIf="registration_error">Username is already taken.</span>
+        <div class="card card-signup">
+            <form class="form" name="form" #f="ngForm">
+                <div class="header header-primary text-center">
+                    <h4 class="card-title">Log In</h4>
                 </div>
-            </div>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <i class="material-icons">face</i>
-                </span>
-                <input [(ngModel)]="username" name="username" type="text" placeholder="username" class="form-control"  required autofocus/>
-            </div>
-            <div class="input-group">
-                <span class="input-group-addon">
-                        <i class="material-icons">lock_outline</i>
-                </span>
-                <input type="password" [(ngModel)]="password" name="password" class="form-control" placeholder="password" type="password" required />
-            </div>
-            <div class="footer text-center">
-                <button (click)="login()" [disabled]="!f.form.valid" class="btn btn-primary btn-simple btn-wd btn-lg">Log-in</button>
-                <button (click)="register()" [disabled]="!f.form.valid" class="btn btn-link btn-simple btn-wd btn-lg">Register</button>
-            </div>
-        </form>
+                <p class="description text-center">for a customized experience</p>
+                <div class="card-content">
+                    <div *ngIf="login_error || registration_error" class="alert alert-danger">
+                        <div class="container-fluid">
+                            <div class="alert-icon">
+                                <i class="material-icons">error_outline</i>
+                            </div>
+                            <span *ngIf="login_error">Incorrect username or password.</span>
+                            <span *ngIf="registration_error">Username is already taken.</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">face</i>
+                        </span>
+                        <input [(ngModel)]="username" name="username" type="text" placeholder="username" class="form-control"  required autofocus/>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                                <i class="material-icons">lock_outline</i>
+                        </span>
+                        <input type="password" [(ngModel)]="password" name="password" class="form-control" placeholder="password" type="password" required />
+                    </div>
+                </div>
+                <div class="footer text-center">
+                    <button (click)="login()" [disabled]="!f.form.valid" class="btn btn-primary btn-simple btn-wd btn-lg">Log-in</button>
+                    <button (click)="register()" [disabled]="!f.form.valid" class="btn btn-link btn-simple btn-wd btn-lg">Register</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
