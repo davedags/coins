@@ -38,6 +38,7 @@
 }
 .current-price-text {
     margin: 5px 0 0 0;
+    white-space: nowrap;
 }
 .description-row {
    //margin-top: 10px;

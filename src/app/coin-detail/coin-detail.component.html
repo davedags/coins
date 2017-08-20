@@ -20,8 +20,12 @@
                 <div class="card-content">
                     <h5 class="card-title">{{ symbol }} Price</h5>
                     <div class="card-description">
-                        <h3 class="current-price-text" *ngIf="price >= 1">${{ price | number:'1.0-0'}} </h3>
-                        <h3 class="current-price-text" *ngIf="price < 1">${{ price | number:'1.2-6'}} </h3>
+                        <h3 class="current-price-text" *ngIf="price >= 1">${{ price | number:'1.0-0'}}
+                            <span *ngIf="percentChange">( {{ percentChange }}% )</span>
+                        </h3>
+                        <h3 class="current-price-text" *ngIf="price < 1">${{ price | number:'1.2-6'}}
+                            <span *ngIf="percentChange">( {{ percentChange }}% )</span>
+                        </h3>
                     </div>
                 </div>
             </div>

@@ -25,6 +25,7 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
     symbol: string;
     detail: any;
     price: any;
+    percentChange: any = '';
     error: boolean;
     inPortfolioInit: boolean = false;
     inPortfolio: boolean = false;
@@ -83,11 +84,19 @@ export class CoinDetailComponent implements OnInit, OnDestroy {
         this.coinService.getData(this.symbol)
             .subscribe(
                 data => {
-                        this.detail = data[0];
-                        this.price = data[1];
-                        if (this.loggedIn) {
-                            this.setPortfolioValue();
-                        }
+                    this.detail = data[0];
+                    this.price = data[1];
+                    let percentChangeRaw = data[2];
+                    if (percentChangeRaw) {
+                        this.percentChange = percentChangeRaw;
+                    } else {
+                        this.percentChange = false;
+                    }
+                    //temp
+                    this.percentChange = false;
+                    if (this.loggedIn) {
+                        this.setPortfolioValue();
+                    }
                 },
                 error => this.error = true
             );

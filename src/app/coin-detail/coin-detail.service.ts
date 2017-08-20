@@ -11,6 +11,7 @@ import 'rxjs/add/observable/forkJoin';
 
 @Injectable()
 export class CoinDetailService {
+
     private detailApiUrl = environment.baseAPIUrl + 'coins/';
     private priceApiUrl = environment.baseAPIUrl + 'price/';
 
@@ -19,7 +20,8 @@ export class CoinDetailService {
     getData(id:string):Observable<any> {
         return Observable.forkJoin(
             this.getDetail(id),
-            this.getPrice(id)
+            this.getPrice(id),
+            this.getPercentChange(id)
         );
     }
 
@@ -63,6 +65,18 @@ export class CoinDetailService {
                         return Observable.throw(error.message || error)
                     });
         }
+    }
+
+    getPercentChange(id:string):Observable<any> {
+        let data = this.bootstrapService.getDataBySymbol(id);
+        let percentChange = '';
+        if (data) {
+            if (data['percent24']) {
+                percentChange = data['percent24'];
+            }
+        }
+     
+        return Observable.of(percentChange).map(res => res);
     }
 
 
