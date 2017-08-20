@@ -189,7 +189,16 @@ class Coin extends Base
         }
         $data = [];
         $coin = $this->getObjectByField($symbol, 'symbol');
-        if ($coin) {
+
+        $storedData = $coin->getCryptocompareDetail();
+        if ($storedData) {
+            $storedDataText = stream_get_contents($storedData);
+            if ($storedDataText) {
+                $data = json_decode($storedDataText, true);
+            }
+        }
+
+        if (empty($data) && $coin) { 
             $query_params = [
                 'id' => $coin->getCryptocompareId()
             ];
@@ -199,9 +208,12 @@ class Coin extends Base
                 if (($decoded = json_decode($body, true)) !== null) {
                     $data = $decoded['Data']['General'];
                     $data['image_url'] = $coin->getImageWebPath();
-                    $this->cache->set($cache_key, $data, 3600 * 24);
                 }
             }
+        }
+     
+        if (!empty($data)) {
+            $this->cache->set($cache_key, $data, 3600 * 24);
         }
         return $data;
     }

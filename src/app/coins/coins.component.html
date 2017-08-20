@@ -23,7 +23,7 @@
           <i class="material-icons">remove</i>Minimize
         </button>
         <span class="market-cap-list" *ngIf="marketCap">Market Cap: {{ marketCap | currency:'USD':true:'1.0-0' }}</span>
-        <div *ngIf="!cardView" class="table-container">
+        <div *ngIf="!cardView" class="table-responsive">
             <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
         </div>
 

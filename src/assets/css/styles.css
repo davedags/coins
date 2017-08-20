@@ -6,3 +6,10 @@
 .loading-container {
     height: 100vh;
 }
+
+.positive-change {
+    color: green !important;
+}
+.negative-change {
+    color: red !important;
+}

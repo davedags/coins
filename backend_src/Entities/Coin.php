@@ -41,6 +41,11 @@ class Coin
      */
     protected $image_file_name;
 
+    /**
+     * @Column(type="blob", nullable=true)
+     */
+    protected $cryptocompare_detail;
+
     public function __construct() {}
 
     public function getId()
@@ -76,6 +81,16 @@ class Coin
     public function setCryptocompareId($id)
     {
         $this->cryptocompare_id = $id;
+    }
+
+    public function getCryptocompareDetail()
+    {
+        return $this->cryptocompare_detail;
+    }
+
+    public function setCryptocompareDetail($detail)
+    {
+        $this->cryptocompare_detail = $detail;
     }
 
     public function getImageFileName()

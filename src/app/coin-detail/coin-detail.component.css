@@ -11,6 +11,8 @@
 }
 .detail-title {
     margin-bottom: 5px;
+    white-space: nowrap;
+
 }
 .card-nav-tabs {
     margin-top: 35px;

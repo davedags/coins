@@ -57,4 +57,12 @@
     overflow: auto;
 }
 
+.positive-change {
+    font-color: green !important;
+    color: green !important;
+}
+.negative-change {
+    font-color: red !important;
+    color: red !important;
+}
 

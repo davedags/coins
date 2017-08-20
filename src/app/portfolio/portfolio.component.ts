@@ -51,6 +51,18 @@ export class PortfolioComponent implements OnInit {
                 title: 'Symbol',
                 width: '10%'
             },
+            'price': {
+                title: 'Price',
+                width: '30%',
+                sort: 'desc',
+                valuePrepareFunction: (value) => {
+                    return '$' + Number(value).toLocaleString('en', {
+                            minimumFractionDigits: 4,
+                            maximumFractionDigits: 8
+                        })
+                },
+                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+            },
             'value': {
                 title: 'Value',
                 width: '30%',
@@ -82,7 +94,7 @@ export class PortfolioComponent implements OnInit {
             perPage: 50
         },
         attr: {
-            class: 'table table-bordered table-striped table-hover table-rankings'
+            class: 'table table-rankings'
         },
         noDataMessage: "Loading Portfolio Data ..."
 

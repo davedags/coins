@@ -35,7 +35,6 @@ if ($response->getStatusCode() == 200) {
 
             $coin = $em->getRepository('Coins\Entities\Coin')->findOneBy(['symbol' => $row['Name']]);
             if (!$coin) {
-                
                 $coin = new \Coins\Entities\Coin();
                 $coin->setSymbol($row['Name']);
                 $coin->setName($row['CoinName']);
@@ -49,9 +48,22 @@ if ($response->getStatusCode() == 200) {
                     $coin->setImageFileName($local_file_name);
                 }
 
+                $detail = getDetail($coin, $http, $api_endpoint);
+                if ($detail) {
+                    $coin->setCryptocompareDetail($detail);
+                }
+
                 $em->persist($coin);
                 $em->flush();
                 $imported++;
+            } elseif (!$coin->getCryptocompareDetail()) {
+                echo 'Updating Detail ... ' . "\n";
+                $detail = getDetail($coin, $http, $api_endpoint);
+                if ($detail) {
+                    $coin->setCryptocompareDetail($detail);
+                    $em->persist($coin);
+                    $em->flush();
+                }
             }
         }
     }
@@ -59,6 +71,23 @@ if ($response->getStatusCode() == 200) {
 
 echo "Imported $imported coins\n\n";
 exit;
+
+function getDetail($coin, $http, $api_endpoint){
+    $query_params = [
+        'id' => $coin->getCryptocompareId()
+    ];
+    $response = $http->get($api_endpoint . "coinsnapshotfullbyid?" . http_build_query($query_params));
+    if ($response->getStatusCode() == 200) {
+        $body = $response->getBody()->getContents();
+        if (($decoded = json_decode($body, true)) !== null) {
+            $data = $decoded['Data']['General'];
+            $data['image_url'] = $coin->getImageWebPath();
+            $json = json_encode($data);
+            return $json;
+        }
+    }
+   return null;
+}
 
 function copyRemoteFile($http, $remote, $local) {
    if (file_exists($local)) {

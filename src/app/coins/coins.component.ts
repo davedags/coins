@@ -50,7 +50,6 @@ export class CoinsComponent implements OnInit {
                     if (!imgUrl) {
                         imgUrl = "/assets/icons/default.png";
                     }
-
                     return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
                         "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
                 } else {
@@ -104,8 +103,15 @@ export class CoinsComponent implements OnInit {
             title: '%24Hr',
             width: '10%',
             sort: 'desc',
+            type: 'html',
             valuePrepareFunction: (value) => {
-                return value + '%';
+                let className = '';
+                if (value >= 0) {
+                    className = 'positive-change';
+                } else {
+                    className = 'negative-change';
+                }
+                return "<span class='" + className + "'>" + value + "%</span>";
             },
             compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
         }
@@ -123,7 +129,7 @@ export class CoinsComponent implements OnInit {
             perPage: 50
         },
         attr: {
-            class: 'table table-bordered table-striped table-hover table-rankings'
+            class: 'table table-rankings'
         },
         noDataMessage: "No Results"
     };
@@ -138,6 +144,7 @@ export class CoinsComponent implements OnInit {
 
     
     ngOnInit(): void {
+
         this.mobileDevice = this.deviceService.isMobile();
         this.loading = this.bootstrapService.getLoading();
         this.initializeTableSettings();
