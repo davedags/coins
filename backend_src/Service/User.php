@@ -20,31 +20,7 @@ class User extends Base
 
     }
 
-    public function getAccount($user_id)
-    {
-        if (!$this->canUpdateAccount($user_id)) {
-            throw new \Exception('Unauthorized');
-        } else {
-            $user = $this->getObject($user_id);
-            return $this->prepareAccountResponse($user);
-        }
-    }
 
-    public function updateAccount($user_id, $user_data)
-    {
-        if (!$this->canUpdateAccount($user_id)) {
-            throw new \Exception('Unauthorized');
-        } else {
-            $user = $this->getObject($user_id);
-            $user->setDefaultPage($user_data['default_page']);
-            $this->checkPasswordUpdate($user, $user_data);
-
-            $this->em->persist($user);
-            $this->em->flush();
-            return $this->prepareAccountResponse($user);
-        }
-    }
-    
     public function login($credentials = [])
     {
 
@@ -64,12 +40,7 @@ class User extends Base
                 'user_id' => $user->getId(),
                 'username' => $username
             ]);
-            return [
-                'user_id' => $user->getId(),
-                'username' => $username,
-                'default_page' => $user->getDefaultPage(),
-                'token' => $token
-            ];
+            return $this->prepareUserResponse($user, $token);
         }
         
         return false;
@@ -105,12 +76,44 @@ class User extends Base
             'user_id' => $db_user->getId(),
             'username' => $username
         ]);
-        $response = [
-            'user_id' => $db_user->getId(),
-            'username'=> $db_user->getUsername(),
+        $response = $this->prepareUserResponse($db_user, $token);
+        return $response;
+    }
+
+    public function getAccount($user_id)
+    {
+        if (!$this->canUpdateAccount($user_id)) {
+            throw new \Exception('Unauthorized');
+        } else {
+            $user = $this->getObject($user_id);
+            return $this->prepareAccountResponse($user);
+        }
+    }
+
+    public function updateAccount($user_id, $user_data)
+    {
+        if (!$this->canUpdateAccount($user_id)) {
+            throw new \Exception('Unauthorized');
+        } else {
+            $user = $this->getObject($user_id);
+            $user->setDefaultPage($user_data['default_page']);
+            $user->setDefaultChartVisibility($user_data['default_chart_visibility']);
+            $this->checkPasswordUpdate($user, $user_data);
+            $this->em->persist($user);
+            $this->em->flush();
+            return $this->prepareAccountResponse($user);
+        }
+    }
+
+    function prepareUserResponse($user, $token)
+    {
+        return [
+            'user_id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'default_page' => $user->getDefaultPage(),
+            'default_chart_visibility' => $user->getDefaultChartVisibility() == '1' ? 'show' : 'hide',
             'token' => $token
         ];
-        return $response;
     }
 
     function prepareAccountResponse($user)
@@ -118,7 +121,8 @@ class User extends Base
         $data = [
             'user_id' => $user->getId(),
             'username' => $user->getUsername(),
-            'default_page' => $user->getDefaultPage()
+            'default_page' => $user->getDefaultPage(),
+            'default_chart_visibility' => $user->getDefaultChartVisibility() == '1' ? 'show' : 'hide'
         ];
         return $data;
     }

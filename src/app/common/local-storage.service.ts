@@ -50,6 +50,7 @@ export class LocalStorageService {
             localStorage.clear();
         }
     }
+    
 
     checkSupport(): boolean {
         let test = 'test';

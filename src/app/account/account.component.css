@@ -6,7 +6,7 @@
     text-align: center;
 }
 
-.account-card {
+.card-signup {
     margin-top: 50px;
 }
 
@@ -22,9 +22,12 @@
     margin-bottom: 10px;
 }
 
+/**
 .header-primary {
-    background: linear-gradient(60deg, #999999, #989898);
+     background: linear-gradient(60deg, #999999, #989898);
 }
+**/
+
 
 .form-group {
     padding-bottom: 3px;

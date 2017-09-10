@@ -1,39 +1,42 @@
-<div class="container-fluid">
-    <div class="title convertor">
-        <h3>Convertor</h3>
-    </div>
-    <div class="top-panel">
-        <span class="label label-primary" (click)="changeCoin('BTC')">BTC</span>
-        <span class="label label-info" (click)="changeCoin('ETH')">ETH</span>
-        <span class="label label-success" (click)="changeCoin('LTC')">LTC</span>
-        <span class="label label-danger" (click)="changeCoin('XMR')">XMR</span>
-    </div>
-</div>
-<div class="Pane">
-
-    <div class="Sub">
-        <div class="Focus" id="ratePane">
-            <div class="Center">
-                <span class="Segmented">
-                    <input class="Num Seg LeftSeg" id="invField" [(ngModel)]="coinAmount"
-                           (change)="updateFiatPrice()" (click)="selectText($event)" name="coinAmount" type="tel"
-                           pattern="[0-9]*" formnovalidate>
-                    <span class="Cur Seg RightSeg" id="unitABut" style="cursor: default" tabindex="-1">
-                        <span class="Prefix" id="prefixField" style="display: none"></span>
-                        <span id="unitASym">{{ coinSymbol }}</span>
-                    </span>
-                </span>
-                <span class="Equal">=</span>
-                <span class="Segmented">
-                    <input class="Num Seg LeftSeg" id="numField" [(ngModel)]="fiatAmount"
-                           (change)="updateCoinAmount()" (click)="selectText($event)" name="fiatAmount" type="tel"
-                           pattern="[0-9]*" formnovalidate>
-                    <span class="Cur Seg RightSeg" id="curBut" tabindex="-1">
-                        <span id="unitBSym">USD</span>
-                    </span>
-                </span>
-                <div class="Gauge" id="gaugeField"></div>
-
+<div class="container section-header">
+    <div class="container convertor-container">
+        <div class="card card-signup">
+            <div class="header header-primary text-center">
+                <h4 class="card-title">Convertor</h4>
+            </div>
+            <div class="card-description">
+                <div class="top-panel">
+                    <span class="label label-primary" (click)="changeCoin('BTC')">BTC</span>
+                    <span class="label label-info" (click)="changeCoin('ETH')">ETH</span>
+                    <span class="label label-success" (click)="changeCoin('LTC')">LTC</span>
+                    <span class="label label-danger" (click)="changeCoin('XMR')">XMR</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-row">
+                        <input id="invField" [(ngModel)]="coinAmount"
+                               (change)="updateFiatPrice()" (click)="selectText($event)" name="coinAmount" type="tel"
+                               pattern="[0-9]*" size="18" formnovalidate>
+                        <span id="unitABut" style="cursor: default" tabindex="-1">
+                            <span class="Prefix" id="prefixField" style="display: none"></span>
+                            <span id="unitASym">{{ coinSymbol }}</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-row">=</div>
+                </div>
+                <div class="row last-row">
+                    <div class="input-row">
+                        <input id="numField" [(ngModel)]="fiatAmount"
+                               (change)="updateCoinAmount()" (click)="selectText($event)" name="fiatAmount" type="tel"
+                               pattern="[0-9]*" size="18" formnovalidate>
+                        <span  id="curBut" tabindex="-1">
+                            <span id="unitBSym">USD</span>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

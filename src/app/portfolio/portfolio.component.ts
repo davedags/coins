@@ -2,6 +2,8 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { PortfolioService } from './portfolio.service';
 import { Ng2DeviceService } from 'ng2-device-detector';
 import { LocalDataSource } from "ng2-smart-table/index";
+import { AuthService } from "../common/auth.service";
+import { LocalStorageService } from "../common/local-storage.service";
 import { Asset } from '../model/asset';
 import { Router } from '@angular/router';
 import { CheckboxColumnComponent } from '../coins/checkbox-column.component';
@@ -51,6 +53,16 @@ export class PortfolioComponent implements OnInit {
                 title: 'Symbol',
                 width: '10%'
             },
+            'quantity': {
+                title: '# Owned',
+                width: '10%',
+                sort: 'desc',
+                valuePrepareFunction: (value) => {
+                    return Number(value).toLocaleString('en',
+                        { maximumFractionDigits: 5 })
+                },
+                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+            },
             'price': {
                 title: 'Price',
                 width: '30%',
@@ -69,16 +81,6 @@ export class PortfolioComponent implements OnInit {
                 sort: 'asc',
                 valuePrepareFunction: (value) => {
                     return '$' + Number(value).toLocaleString('en', { minimumFractionDigits: 0, maximumFractionDigits: 2})
-                },
-                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
-            },
-            'quantity': {
-                title: '# Owned',
-                width: '10%',
-                sort: 'desc',
-                valuePrepareFunction: (value) => {
-                    return Number(value).toLocaleString('en',
-                            { maximumFractionDigits: 5 })
                 },
                 compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
             }
@@ -106,17 +108,20 @@ export class PortfolioComponent implements OnInit {
     showLegend: boolean = true;
     showLabels: boolean = true;
     mobileDevice: boolean = false;
-    showChart: boolean = true;
+    showChart: boolean = false;
     
     constructor(private portfolioService: PortfolioService,
                 private router: Router,
-                private deviceService: Ng2DeviceService) {}
+                private deviceService: Ng2DeviceService,
+                private authService: AuthService,
+                private localStorageService:  LocalStorageService) {}
 
     ngOnInit() {
         this.mobileDevice = this.deviceService.isMobile();
         if (this.mobileDevice) {
             this.showLegend = false;
         }
+        this.setDefaultFilters();
         this.initList();
     }
 
@@ -159,6 +164,34 @@ export class PortfolioComponent implements OnInit {
             this.router.navigate(['/coins', symbol]);
         }
 
+    }
+
+    toggleChartVisibility(): void {
+        this.showChart = !this.showChart;
+        this.localStorageService.set(PortfolioComponent.getChartVisibilityStorageKey(), this.showChart);
+    }
+
+    static getChartVisibilityStorageKey(): string  {
+        return 'portfolio_show_chart';
+    }
+
+    setDefaultFilters(): void {
+        let defaultKey = 'portfolio_default_filters';
+        let setDefaults = this.localStorageService.get(defaultKey);
+        if (!setDefaults) {
+            let currentUser = this.authService.getCurrentUser();
+            if (currentUser['default_chart_visibility'] == 'show') {
+                this.showChart = true;
+            } else {
+                this.showChart = false;
+            }
+            this.localStorageService.set(defaultKey, true);
+        } else {
+            let storedValue = this.localStorageService.get(PortfolioComponent.getChartVisibilityStorageKey());
+            if (storedValue) {
+                this.showChart = true;
+            }
+        }
     }
 
     onChartSliceSelect(event) {

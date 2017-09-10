@@ -37,6 +37,11 @@ class User
     protected $default_page;
 
     /**
+     * @Column(type="boolean")
+     */
+    protected $default_chart_visibility;
+
+    /**
      * @Column(type="datetime", nullable=true)
      */
     protected $created;
@@ -88,6 +93,22 @@ class User
     {
         $this->default_page = $page;
     }
+
+    public function getDefaultChartVisibility()
+    {
+        return $this->default_chart_visibility;
+    }
+
+    public function setDefaultChartVisibility($visibility)
+    {
+        if ($visibility == 'show') {
+            $visibility = 1;
+        } else {
+            $visibility = 0;
+        }
+        $this->default_chart_visibility =  $visibility;
+    }
+
     public function getCreated()
     {
         return $this->created;

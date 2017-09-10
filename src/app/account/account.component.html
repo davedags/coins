@@ -1,6 +1,6 @@
 <div class="container section-header">
     <div class="container account-container">
-        <div class="card account-card">
+        <div class="card card-signup">
             <form class="form" name="form" #f="ngForm">
                 <div class="header header-primary text-center">
                     <h4 class="card-title">My Account</h4>
@@ -24,6 +24,23 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="form-label">Portfolio Chart Default Visibility</label>
+                        <div class="input-group">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" value="show" name="default_chart_visibility" [(ngModel)]="accountData.default_chart_visibility" required>
+                                    Show Chart
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" value="hide" name="default_chart_visibility" [(ngModel)]="accountData.default_chart_visibility" required>
+                                    Hide Chart
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label password-label">Update Password</label>
                         <input type="password" [(ngModel)]="accountData.existing_password" name="existing_password" class="form-control"
                                placeholder="existing password" type="password"/>
@@ -38,7 +55,7 @@
                     </div>
                 </div>
                 <div class="footer text-center">
-                    <button [disabled]="!f.form.valid" (click)="submitForm()" class="btn btn-round">update account</button>
+                    <button [disabled]="!f.form.valid" (click)="submitForm()" class="btn btn-round btn-primary">update account</button>
                     <!--<button (click)="login()" [disabled]="!f.form.valid" class="btn btn-primary btn-simple btn-wd btn-lg">Save</button>-->
                 </div>
             </form>

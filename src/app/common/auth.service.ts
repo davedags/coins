@@ -41,8 +41,8 @@ export class AuthService {
             event.preventDefault();
         }
         this.currentUser = '';
-        let storageKey = AuthService.getUserKey();
-        this.localStorage.del(storageKey);
+        this.localStorage.delAll();
+       
         this.loggedInUserSubject.next('');
         this.localStorage.set('logout', true);
         this.router.navigate(['/login']);

@@ -1,18 +1,27 @@
-<div class="container section-header">
+<div class="container-fluid section-header">
     <div *ngIf="!init" class="container loading-container">
         <ngx-loading [show]="!init"></ngx-loading>
     </div>
     <div *ngIf="init">
         <h3>My Portfolio</h3>
     </div>
-    <div *ngIf="init && showTable && !mobileDevice" class="chart-container container-fluid">
-        <ngx-charts-pie-chart
+    <div class="chart-toggle-container" *ngIf="!mobileDevice">
+        <div class="togglebutton">
+            <label>
+                <input type="checkbox" [attr.checked]="showChart ? 'checked' : null" (change)="toggleChartVisibility()">
+                Show Chart
+            </label>
+        </div>
+        <div *ngIf="init && showTable && showChart" class="chart-container container-fluid">
+
+            <ngx-charts-pie-chart
                 [results]="chartData"
                 [legend]="showLegend"
                 [gradient]="gradient"
                 [labels]="showLabels"
                 (select)="onChartSliceSelect($event)">
-        </ngx-charts-pie-chart>
+            </ngx-charts-pie-chart>
+        </div>
     </div>
     <div *ngIf="init" class="row">
         <div *ngIf="!showTable" class="alert alert-info" role="alert">
