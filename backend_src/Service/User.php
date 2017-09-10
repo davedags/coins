@@ -13,13 +13,38 @@ use Coins\Auth;
 class User extends Base
 {
     public static $class = 'User';
-    
+
     public function __construct(array $args = [])
     {
         parent::__construct($args);
 
     }
 
+    public function getAccount($user_id)
+    {
+        if (!$this->canUpdateAccount($user_id)) {
+            throw new \Exception('Unauthorized');
+        } else {
+            $user = $this->getObject($user_id);
+            return $this->prepareAccountResponse($user);
+        }
+    }
+
+    public function updateAccount($user_id, $user_data)
+    {
+        if (!$this->canUpdateAccount($user_id)) {
+            throw new \Exception('Unauthorized');
+        } else {
+            $user = $this->getObject($user_id);
+            $user->setDefaultPage($user_data['default_page']);
+            $this->checkPasswordUpdate($user, $user_data);
+
+            $this->em->persist($user);
+            $this->em->flush();
+            return $this->prepareAccountResponse($user);
+        }
+    }
+    
     public function login($credentials = [])
     {
 
@@ -42,6 +67,7 @@ class User extends Base
             return [
                 'user_id' => $user->getId(),
                 'username' => $username,
+                'default_page' => $user->getDefaultPage(),
                 'token' => $token
             ];
         }
@@ -85,5 +111,38 @@ class User extends Base
             'token' => $token
         ];
         return $response;
+    }
+
+    function prepareAccountResponse($user)
+    {
+        $data = [
+            'user_id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'default_page' => $user->getDefaultPage()
+        ];
+        return $data;
+    }
+    
+    private function canUpdateAccount($user_id)
+    {
+        if (!empty($user_id) && $user_id == $this->getUser()) {
+            return true;
+        } 
+        return false;
+    }
+
+    private function checkPasswordUpdate($user, $data) {
+        if (!empty($data['existing_password']) && !empty($data['new_password']) && !empty($data['verify_password'])) {
+            if (trim($data['new_password']) == trim($data['verify_password'])) {
+                $existing_password = trim($data['existing_password']);
+                $new_password = trim($data['new_password']);
+                $auth = new Auth();
+                if ($auth->verifyPassword($user->getPassword(), $existing_password)) {
+                    $user->setPassword($auth->hashPassword($new_password));
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

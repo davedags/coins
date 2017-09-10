@@ -30,6 +30,12 @@ class User
      * @Column(type="string")
      */
     protected $password;
+
+    /**
+     * @Column(type="string")
+     */
+    protected $default_page;
+
     /**
      * @Column(type="datetime", nullable=true)
      */
@@ -73,6 +79,15 @@ class User
         $this->password = $password;
     }
 
+    public function getDefaultPage()
+    {
+        return $this->default_page;
+    }
+
+    public function setDefaultPage($page)
+    {
+        $this->default_page = $page;
+    }
     public function getCreated()
     {
         return $this->created;

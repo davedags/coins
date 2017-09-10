@@ -20,6 +20,9 @@
                 <li (click)="collapseNav()">
                     <a href="" routerLink="/convertor">Converter</a>
                 </li>
+                <li (click)="collapseNav()" *ngIf="(loggedInUser | async)">
+                    <a href="" routerLink="/account">Account</a>
+                </li>
                 <li (click)="collapseNav()">
                     <a href="" routerLink="/about">About</a>
                 </li>

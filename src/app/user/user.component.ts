@@ -69,7 +69,7 @@ export class UserComponent implements  OnInit, AfterViewInit, OnDestroy {
         };
         this.authService.login(credentials)
             .subscribe(
-                success => {
+                userData => {
                     this.bootstrapService.loadData();
                     if (this.postLoginCoin) {
                         let navExtras: NavigationExtras = {
@@ -77,7 +77,11 @@ export class UserComponent implements  OnInit, AfterViewInit, OnDestroy {
                         }
                         this.router.navigate(["/coins", this.postLoginCoin], navExtras);
                     } else {
-                        this.router.navigate(['']);
+                        if (userData['default_page'] == 'portfolio') {
+                            this.router.navigate(['/portfolio']);
+                        } else {
+                            this.router.navigate(['']);
+                        }
                     }
                 },
                 error => {

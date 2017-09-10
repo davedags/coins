@@ -1,0 +1,32 @@
+.account-container {
+    max-width: 400px;
+}
+
+.account-header {
+    text-align: center;
+}
+
+.account-card {
+    margin-top: 50px;
+}
+
+.card-content {
+    padding: 0px 20px 0px 20px;
+}
+.form-label {
+    color: #3C4958;
+    margin-top: 10px;
+}
+
+.password-label {
+    margin-bottom: 10px;
+}
+
+.header-primary {
+    background: linear-gradient(60deg, #999999, #989898);
+}
+
+.form-group {
+    padding-bottom: 3px;
+    margin: 15px 0 0 0;
+}

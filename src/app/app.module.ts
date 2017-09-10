@@ -28,14 +28,17 @@ import { MessageService } from './common/message.service';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { CheckboxColumnComponent } from './coins/checkbox-column.component';
 import { AboutComponent } from './about/about.component';
+import { AccountComponent } from './account/account.component';
 
 const appRoutes: Routes = [
     { path: 'convertor', component: ConvertorComponent },
     { path: 'coins/:id', component: CoinDetailComponent },
     { path: 'login', component: UserComponent, canActivate: [ AuthGuardService ] },
     { path: 'portfolio', component: PortfolioComponent, canActivate: [ AuthGuardService ]},
+    { path: 'account', component: AccountComponent, canActivate: [ AuthGuardService ]},
     { path: 'about', component: AboutComponent },
-    { path: '', component: CoinsComponent }
+    { path: '', component: CoinsComponent },
+    { path: "**", redirectTo: '/' }
 ];
 
 @NgModule({
@@ -48,7 +51,8 @@ const appRoutes: Routes = [
         NavComponent,
         PortfolioComponent,
         CheckboxColumnComponent,
-        AboutComponent
+        AboutComponent,
+        AccountComponent
     ],
     imports: [  
         BrowserModule,

@@ -11,11 +11,11 @@ namespace Coins\Controller;
 
 class Base
 {
-    
+
     public static $service_namespace = 'Coins\Service\\';
     protected $container;
     protected $service;
-    
+
     public function __construct($container)
     {
         $this->container = $container;
@@ -29,5 +29,13 @@ class Base
     public function getServiceClass()
     {
         return static::$service_class;
+    }
+
+    public function getUser()
+    {
+        if ($this->container && !empty($this->container['user'])) {
+            return $this->container['user'];
+        }
+        return null;
     }
 }

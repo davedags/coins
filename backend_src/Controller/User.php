@@ -20,6 +20,35 @@ class User extends Base
         parent::__construct($container);
     }
 
+    public function get($request, $response, $args)
+    {
+        $user = $args['id'];
+        try {
+            $user = $this->service->getAccount($user);
+            return $response->withJson($user);
+        } catch (\Exception $e) {
+            $error = [
+                'error_message' => $e->getMessage()
+            ];
+            return $response->withStatus(400)->withJson($error);
+        }
+    }
+    
+    public function updateAccount($request, $response, $args)
+    {
+        $user = $args['id'];
+        $accountData = $request->getParsedBody();
+        try {
+            $user = $this->service->updateAccount($user, $accountData);
+            return $response->withJson($user);
+        } catch (\Exception $e) {
+            $error = [
+                'error_message' => $e->getMessage()
+            ];
+            return $response->withStatus(400)->withJson($error);
+        }
+    }
+    
     public function create($request, $response, $args)
     {
         $payload = $request->getParsedBody();
