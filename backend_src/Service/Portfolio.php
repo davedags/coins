@@ -130,17 +130,17 @@ class Portfolio extends Base
         $portfolio = $this->getPortfolio();
         if (!empty($portfolio)) {
             foreach ($list as $row) {
-                if (isset($portfolio[$row['short']])) {
-                    $quantity = $portfolio[$row['short']][0];
+                if (isset($portfolio[$row['symbol']])) {
+                    $quantity = $portfolio[$row['symbol']][0];
                     $value = 0;
                     if ($quantity) {
-                        $value = $row['price'] * $quantity;
+                        $value = $row['price_usd'] * $quantity;
                         $totalValue += $value;
                     }
                     $output[] = [
-                        'long' => $row['long'],
-                        'short' => $row['short'],
-                        'price' => $row['price'],
+                        'name' => $row['name'],
+                        'symbol' => $row['symbol'],
+                        'price_usd' => $row['price_usd'],
                         'value' => $value,
                         'quantity' => $quantity,
                         'image_url' => !empty($row['image_url']) ? $row['image_url'] : ''

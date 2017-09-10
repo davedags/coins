@@ -13,9 +13,9 @@ export class Asset {
 
     constructor(data?: any) {
         if (data) {
-            this.name = data.long;
-            this.symbol = data.short;
-            this.price = data.price;
+            this.name = data.name;
+            this.symbol = data.symbol;
+            this.price = data.price_usd;
             this.value = data.value;
             this.quantity = data.quantity;
             if (data.image_url) {

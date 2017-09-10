@@ -16,7 +16,6 @@ class Coin extends Base
     
     private $http = null;
     public static $class = 'Coin';
-    const API_COINCAP_BASE_URL = 'http://www.coincap.io/';
     const API_COMPARE_BASE_URL = 'https://www.cryptocompare.com/api/data/';
     const API_SIMPLE_PRICE_URL = 'https://min-api.cryptocompare.com/data/price?';
     const API_COINMARKETCAP_BASE_URL = 'https://api.coinmarketcap.com/v1/ticker/';
@@ -57,26 +56,41 @@ class Coin extends Base
             'total' => 0
         ];
 
+        if ($api_results = $this->getCoinMarketCapAPIData()) {
+            $this->mungeMarketCapResults($api_results);
+            usort($api_results, ["\Coins\Service\Coin", "sortMarketCapList"]);
+            $collection['results'] = $api_results;
+            $collection['total'] = count($api_results);
+            $collection['marketCap'] = $this->getTotalMarketCap($collection['results']);
+            $this->cache->set($cache_key, $collection, 300);
+        }
+
+        return $collection;
+    }
+
+    public function getCoinMarketCapAPIData()
+    {
+        $cache_key = 'coins.mkcap.api';
+        if ($data = $this->cache->get($cache_key)) {
+            return $data;
+        }
+
+        $api_results = [];
         try {
-            $response = $this->http->get(self::API_COINCAP_BASE_URL . "front");
+            $response = $this->http->get(self::API_COINMARKETCAP_BASE_URL);
             if ($response->getStatusCode() == 200) {
                 $body = $response->getBody()->getContents();
                 if (($decoded = json_decode($body, true)) !== null) {
-                    $this->mungeMarketCapResults($decoded);
-                    usort($decoded, ["\Coins\Service\Coin", "sortMarketCapList"]);
-                    $collection['results'] = $decoded;
-                    $collection['total'] = count($decoded);
-                    $collection['marketCap'] = $this->getTotalMarketCap($collection['results']);
-                    $this->cache->set($cache_key, $collection, 300);
+                    $api_results = $decoded;
+                    $this->cache->set($cache_key, $api_results, 300);
                 }
             }
         } catch (\GuzzleHttp\Exception\ConnectException $e) {
 
         }
-        return $collection;
-        
+        return $api_results;
     }
-    
+
     public function mungeMarketCapResults(&$data)
     {
         $symbol_map = $this->getSymbolMap();
@@ -89,23 +103,23 @@ class Coin extends Base
             $portfolio_map = $portfolio_service->getSymbolMap();
         }
         foreach ($data as $idx => $row) {
-            $row['short'] = strtoupper($row['short']);
-            if (!empty($symbol_map[$row['short']])) {
-                $coin = $symbol_map[$row['short']];
+            $row['symbol'] = strtoupper($row['symbol']);
+            if (!empty($symbol_map[$row['symbol']])) {
+                $coin = $symbol_map[$row['symbol']];
                 if (!empty($coin['image_file_name'])) {
                     $data[$idx]['image_url'] = COIN_IMAGE_PATH . '/' . $coin['image_file_name'];
                 }
             }
             $fields = [
-                'price',
-                'mktcap'
+                'price_usd',
+                'market_cap_usd'
             ];
             foreach ($fields as $field) {
                 if ($row[$field] === "NaN") {
                     $data[$idx][$field] = 0;
                 }
             }
-            if (!empty($portfolio_map[$row['short']])) {
+            if (!empty($portfolio_map[$row['symbol']])) {
                 $data[$idx]['in_portfolio'] = true;
             } else {
                 $data[$idx]['in_portfolio'] = false;
@@ -118,7 +132,7 @@ class Coin extends Base
     {
         $total = 0;
         foreach ($data as $row) {
-            $total += $row['mktcap'];
+            $total += $row['market_cap_usd'];
         }
         return $total;
     }
@@ -127,9 +141,9 @@ class Coin extends Base
     public static function sortMarketCapList($a, $b)
     {
 
-        if ((float) $a['mktcap'] < (float) $b['mktcap']) {
+        if ((float) $a['market_cap_usd'] < (float) $b['market_cap_usd']) {
             return 1;
-        } elseif ((float) $a['mktcap'] > (float) $b['mktcap']) {
+        } elseif ((float) $a['market_cap_usd'] > (float) $b['market_cap_usd']) {
             return -1;
         } else {
             return 0;

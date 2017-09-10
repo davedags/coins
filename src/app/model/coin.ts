@@ -17,11 +17,11 @@ export class Coin {
 
         if (data) {
             this.position = data.idx;
-            this.name = data.long;
-            this.symbol = data.short;
-            this.price = data.price;
-            this.marketCap = data.mktcap;
-            this.percent24 = data.cap24hrChange;
+            this.name = data.name;
+            this.symbol = data.symbol;
+            this.price = data.price_usd;
+            this.marketCap = data.market_cap_usd;
+            this.percent24 = data.percent_change_24h;
             if (data.image_url) {
                 this.image_url = data.image_url;
             }
