@@ -4,7 +4,7 @@
             <div class="header header-primary text-center">
                 <h4 class="card-title">Convertor</h4>
             </div>
-            <div class="card-description">
+            <div class="card-description container-fluid">
                 <div class="top-panel">
                     <span class="label label-primary" (click)="changeCoin('BTC')">BTC</span>
                     <span class="label label-info" (click)="changeCoin('ETH')">ETH</span>
@@ -14,27 +14,24 @@
             </div>
             <div class="card-content">
                 <div class="row">
-                    <div class="input-row">
+                    <div class="input-row col-sm-12">
                         <input id="invField" [(ngModel)]="coinAmount"
                                (change)="updateFiatPrice()" (click)="selectText($event)" name="coinAmount" type="tel"
-                               pattern="[0-9]*" size="18" formnovalidate>
-                        <span id="unitABut" style="cursor: default" tabindex="-1">
-                            <span class="Prefix" id="prefixField" style="display: none"></span>
-                            <span id="unitASym">{{ coinSymbol }}</span>
-                        </span>
+                               pattern="[0-9]*" size="15" formnovalidate>
+
+                        <span id="unitASym">{{ coinSymbol }}</span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-row">=</div>
+                    <div class="equal-row col-sm-12">=</div>
                 </div>
                 <div class="row last-row">
-                    <div class="input-row">
+                    <div class="input-row col-sm-12">
                         <input id="numField" [(ngModel)]="fiatAmount"
                                (change)="updateCoinAmount()" (click)="selectText($event)" name="fiatAmount" type="tel"
-                               pattern="[0-9]*" size="18" formnovalidate>
-                        <span  id="curBut" tabindex="-1">
-                            <span id="unitBSym">USD</span>
-                        </span>
+                               pattern="[0-9]*" size="15" formnovalidate>
+
+                        <span id="unitBSym">USD</span>
                     </div>
                 </div>
             </div>

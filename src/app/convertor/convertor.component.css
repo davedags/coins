@@ -20,7 +20,7 @@
 
 .top-panel {
      padding-top: 10px;
-    padding-left: 50px;
+    text-align: center;
 }
 
 .top-panel span {
@@ -35,6 +35,18 @@
     font-weight: bold;
 }
 
+.input-row input {
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+.input-row span {
+    font-size: 20px;
+}
+.equal-row {
+    font-size: 20px;
+    text-align: center;
+}
 .header-primary {
     background: linear-gradient(60deg, #999999, #989898);
 }
