@@ -2,39 +2,43 @@
     <div *ngIf="!init" class="container loading-container">
         <ngx-loading [show]="!init"></ngx-loading>
     </div>
-    <div *ngIf="init">
-        <h3>My Portfolio</h3>
-    </div>
-    <div class="chart-toggle-container" *ngIf="!mobileDevice">
-        <div class="togglebutton">
-            <label>
-                <input type="checkbox" [attr.checked]="showChart ? 'checked' : null" (change)="toggleChartVisibility()">
-                Show Chart
-            </label>
+    <div *ngIf="init" class="card card-portfolio">
+        <div class="header header-primary text-center">
+            <h4 class="card-title">Portfolio</h4>
         </div>
-        <div *ngIf="init && showTable && showChart" class="chart-container container-fluid">
+        <div class="card-content">
+            <div class="chart-toggle-container" *ngIf="!mobileDevice">
+                <div class="togglebutton">
+                    <label>
+                        <input type="checkbox" [attr.checked]="showChart ? 'checked' : null" (change)="toggleChartVisibility()">
+                        Show Chart
+                    </label>
+                </div>
+                <div *ngIf="init && showTable && showChart" class="chart-container container-fluid">
 
-            <ngx-charts-pie-chart
-                [results]="chartData"
-                [legend]="showLegend"
-                [gradient]="gradient"
-                [labels]="showLabels"
-                (select)="onChartSliceSelect($event)">
-            </ngx-charts-pie-chart>
-        </div>
-    </div>
-    <div *ngIf="init" class="row">
-        <div *ngIf="!showTable" class="alert alert-info" role="alert">
-            <h4>Portfolio Empty</h4>Follow these simple steps to get started:
-            <ul>
-                <li><a routerLink="/">Browse all coins</a> to find your favorites.</li>
-                <li>Click anywhere in a coin row to see a detailed view.</li>
-                <li>From within the detailed view, click the "Add To Portfolio" button to start populating this list.</li>
-            </ul>
-        </div>
-        <span class="total-value" *ngIf="totalValue">Total Value: {{ totalValue | currency:'USD':true:'1.0-0' }}</span>
-        <div class="table-responsive">
-            <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
+                    <ngx-charts-pie-chart
+                        [results]="chartData"
+                        [legend]="showLegend"
+                        [gradient]="gradient"
+                        [labels]="showLabels"
+                        (select)="onChartSliceSelect($event)">
+                    </ngx-charts-pie-chart>
+                </div>
+            </div>
+            <div *ngIf="init" class="row">
+                <div *ngIf="!showTable" class="alert alert-info" role="alert">
+                    <h4>Portfolio Empty</h4>Follow these simple steps to get started:
+                    <ul>
+                        <li><a routerLink="/">Browse all coins</a> to find your favorites.</li>
+                        <li>Click anywhere in a coin row to see a detailed view.</li>
+                        <li>From within the detailed view, click the "Add To Portfolio" button to start populating this list.</li>
+                    </ul>
+                </div>
+                <span class="total-value" *ngIf="totalValue">Total Value: {{ totalValue | currency:'USD':true:'1.0-0' }}</span>
+                <div class="table-responsive">
+                    <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

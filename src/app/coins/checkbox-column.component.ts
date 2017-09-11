@@ -7,13 +7,11 @@ import { BootstrapService } from '../common/bootstrap.service';
 @Component({
     selector: 'button-view',
     template: `
-       
         <div class="checkbox" (click)="setChecked($event)" >  
               <label>
                   <input type="checkbox" [checked]="checked"  />  
               </label>
         </div>
-       
     `,
     providers: [ PortfolioService ]
 })
