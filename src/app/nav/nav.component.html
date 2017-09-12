@@ -20,14 +20,15 @@
                 <li (click)="collapseNav()">
                     <a href="" routerLink="/convertor">Converter</a>
                 </li>
-                <li (click)="collapseNav()" *ngIf="(loggedInUser | async)">
-                    <a href="" routerLink="/account">Account</a>
-                </li>
+
                 <li (click)="collapseNav()">
                     <a href="" routerLink="/about">About</a>
                 </li>
                 <li (click)="collapseNav()" *ngIf="!(loggedInUser | async)">
                     <a routerLink="/login" routerLinkActive="active">Log-In / Create Account</a>
+                </li>
+                <li (click)="collapseNav()" *ngIf="(loggedInUser | async)">
+                    <a href="" routerLink="/account">Account</a>
                 </li>
                 <li *ngIf="(loggedInUser | async)" (click)="collapseNav();authService.logout($event)">
                     <a href="">Log-Out [{{ (loggedInUser | async )?.username }}]</a>

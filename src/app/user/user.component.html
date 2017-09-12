@@ -6,15 +6,18 @@
             </div>
             <p class="description text-center">for a customized experience</p>
             <div class="card-content">
-                <div *ngIf="login_error || registration_error" class="alert alert-danger">
-                    <div class="container-fluid">
-                        <div class="alert-icon">
-                            <i class="material-icons">error_outline</i>
-                        </div>
-                        <span *ngIf="login_error">Incorrect username or password.</span>
-                        <span *ngIf="registration_error">Username is already taken.</span>
-                    </div>
+                <div *ngIf="login_error || registration_error" class="container-fluid alert-container">
+                    <span>
+                        <i class="material-icons">error_outline</i>
+                    </span>
+                    <span *ngIf="login_error">
+                        Incorrect username or password.
+                    </span>
+                    <span *ngIf="registration_error">
+                        Username is already taken.
+                    </span>
                 </div>
+
                 <div class="input-group">
                     <span class="input-group-addon">
                         <i class="material-icons">face</i>

@@ -12,6 +12,18 @@
 .no-wrap {
     white-space: nowrap;
 }
+
 .header-primary {
-    background: linear-gradient(60deg, #999999, #989898);
+    //background: linear-gradient(60deg, #999999, #989898);
 }
+
+.alert-container {
+    margin-top: 15px;
+    margin-bottom: -5px;
+}
+
+.alert-container span {
+    color: red;
+    margin-left: 10px;
+}
+
