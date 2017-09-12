@@ -24,86 +24,86 @@ export class PortfolioComponent implements OnInit {
     public source: LocalDataSource;
     public totalValue: number;
     public init;
-    public settings: Object = {
-        columns: {
-            'in_portfolio': {
-                title: '+/-',
-                width: '5%',
-                type: 'custom',
-                renderComponent: CheckboxColumnComponent,
-                onComponentInitFunction(instance) {
-                    instance.portfolio = true;
-                    instance.save.subscribe(row => {
-                    });
-                }
-            },
-            'name': {
-                title: 'Name',
-                width: '15%',
-                type: 'html',
-                valuePrepareFunction: (value, row) => {
-                    if (!this.hideColumns) {
-                        let imgUrl = row.image_url;
-                        if (!imgUrl) {
-                            imgUrl = "/assets/icons/default.png";
-                        }
-                        return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
-                            "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
-                    } else {
-                        return value;
-                    }
-                }
-            },
-            'symbol': {
-                title: 'Symbol',
-                width: '10%',
-                type: 'html',
-                valuePrepareFunction: (value, row) => {
-                    if (this.hideColumns) {
-                        let imgUrl = row.image_url;
-                        if (!imgUrl) {
-                            imgUrl = "/assets/icons/default.png";
-                        }
-
-                        return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
-                            "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
-                    } else {
-                        return value;
-                    }
-                }
-            },
-            'quantity': {
-                title: '# Owned',
-                width: '10%',
-                sort: 'desc',
-                valuePrepareFunction: (value) => {
-                    return Number(value).toLocaleString('en',
-                        { maximumFractionDigits: 5 })
-                },
-                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
-            },
-            'price': {
-                title: 'Price',
-                width: '30%',
-                sort: 'desc',
-                valuePrepareFunction: (value) => {
-                    return '$' + Number(value).toLocaleString('en', {
-                            minimumFractionDigits: 4,
-                            maximumFractionDigits: 8
-                        })
-                },
-                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
-            },
-            'value': {
-                title: 'Value',
-                width: '30%',
-                sort: 'asc',
-                valuePrepareFunction: (value) => {
-                    return '$' + Number(value).toLocaleString('en', { minimumFractionDigits: 0, maximumFractionDigits: 2})
-                },
-                compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+    public allColumns: Object = {
+        'in_portfolio': {
+            title: '+/-',
+            width: '5%',
+            type: 'custom',
+            renderComponent: CheckboxColumnComponent,
+            onComponentInitFunction(instance) {
+                instance.portfolio = true;
+                instance.save.subscribe(row => {
+                });
             }
         },
+        'name': {
+            title: 'Name',
+            width: '15%',
+            type: 'html',
+            valuePrepareFunction: (value, row) => {
+                if (!this.hideColumns) {
+                    let imgUrl = row.image_url;
+                    if (!imgUrl) {
+                        imgUrl = "/assets/icons/default.png";
+                    }
+                    return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                        "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                } else {
+                    return value;
+                }
+            }
+        },
+        'symbol': {
+            title: 'Symbol',
+            width: '10%',
+            type: 'html',
+            valuePrepareFunction: (value, row) => {
+                if (this.hideColumns) {
+                    let imgUrl = row.image_url;
+                    if (!imgUrl) {
+                        imgUrl = "/assets/icons/default.png";
+                    }
+
+                    return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                        "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                } else {
+                    return value;
+                }
+            }
+        },
+        'price': {
+            title: 'Price',
+            width: '20%',
+            sort: 'desc',
+            valuePrepareFunction: (value) => {
+                return '$' + Number(value).toLocaleString('en', {
+                        minimumFractionDigits: 4,
+                        maximumFractionDigits: 8
+                    })
+            },
+            compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+        },
+        'quantity': {
+            title: 'Qty',
+            width: '20%',
+            sort: 'desc',
+            valuePrepareFunction: (value) => {
+                return Number(value).toLocaleString('en',
+                    {maximumFractionDigits: 5})
+            },
+            compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+        },
+        'value': {
+            title: 'Value',
+            width: '30%',
+            sort: 'asc',
+            valuePrepareFunction: (value) => {
+                return '$' + Number(value).toLocaleString('en', {minimumFractionDigits: 0, maximumFractionDigits: 2})
+            },
+            compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
+        }
+    };
+    public otherSettings: Object = {
         hideSubHeader: true,
         actions: {
             add: false,
@@ -112,15 +112,15 @@ export class PortfolioComponent implements OnInit {
         },
         pager: {
             display: true,
+            top: true,
             perPage: 50
         },
         attr: {
             class: 'table table-rankings'
         },
-        noDataMessage: "Loading Portfolio Data ..."
-
+        noDataMessage: "Loading Portfolio Data"
     };
-
+    public settings: Object = {};
     chartData: any[] = [];
     view: any[] = [500, 300];
     gradient: boolean = true;
@@ -139,14 +139,66 @@ export class PortfolioComponent implements OnInit {
 
     ngOnInit() {
         this.mobileDevice = this.deviceService.isMobile();
+        this.mobileDevice = true;
         if (this.mobileDevice) {
             this.showLegend = false;
         }
+        this.initializeTableSettings();
         this.setDefaultFilters();
         if (this.showChart) {
             this.toggleDisplay = 'hide chart';
         }
         this.initList();
+    }
+
+    initializeTableSettings(): void {
+        let mergedSettings = this.otherSettings;
+        mergedSettings['columns'] = { ...this.allColumns};
+        this.settings = mergedSettings;
+        this.initializeColumnView();
+    }
+
+    initializeColumnView(): void {
+        if (!this.mobileDevice) {
+            this.hideColumns = false;
+        } else {
+            let colView = this.getColumnViewFromStorage();
+            if (colView == null) {
+                this.hideColumns = true;
+                this.saveColumnViewToStorage();
+            } else {
+                this.hideColumns = colView;
+            }
+            if (this.hideColumns) {
+                this.removeColumns(this.settings['columns']);
+            }
+        }
+    }
+
+
+    removeColumns(cols): void {
+        delete cols.name;
+        delete cols.price;
+    }
+
+    toggleColumnView() {
+        this.hideColumns = !this.hideColumns;
+        this.saveColumnViewToStorage();
+        let newCols = { ...this.allColumns};
+        if (this.hideColumns) {
+            this.removeColumns(newCols);
+        }
+        let mergedSettings = this.otherSettings;
+        mergedSettings['columns'] = newCols;
+        this.settings = { ...mergedSettings};
+    }
+
+    getColumnViewFromStorage() : any {
+        return this.localStorageService.get('portfolioHideColumns');
+    }
+
+    saveColumnViewToStorage(): void {
+        this.localStorageService.set('portfolioHideColumns', this.hideColumns);
     }
 
     initList(): void {

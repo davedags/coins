@@ -1,7 +1,9 @@
 
 .total-value {
-    margin-left: 20px;
+    margin-left: 10px;
+    white-space: nowrap;
     font-weight: bold;
+
 }
 :host /deep/ ng2-smart-table tbody > tr > td {
     font-size: 14px;
@@ -73,11 +75,11 @@
     color: red !important;
 }
 
-.coin-img {
-    float: left;
+
+
+.device-toggle {
+    white-space: nowrap;
+    color: gray;
 }
 
-.coin-img-text {
-    overflow: hidden;
-}
 

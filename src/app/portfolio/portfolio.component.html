@@ -33,6 +33,12 @@
                 <li>From within the detailed view, click the "Add To Portfolio" button to start populating this list.</li>
             </ul>
         </div>
+        <button *ngIf="mobileDevice && hideColumns" type="button" class="btn btn-round btn-simple btn-sm device-toggle" (click)="toggleColumnView()">
+            <i class="material-icons">add</i>Expand
+        </button>
+        <button *ngIf="mobileDevice && !hideColumns" type="button" class="btn btn-round btn-simple btn-sm device-toggle" (click)="toggleColumnView()">
+            <i class="material-icons">remove</i>Minimize
+        </button>
         <span class="total-value" *ngIf="totalValue">Total Value: {{ totalValue | currency:'USD':true:'1.0-0' }}</span>
         <div class="table-responsive">
             <ng2-smart-table *ngIf="showTable" [settings]="settings" [source]="source" (userRowSelect)="clickRow($event)" ></ng2-smart-table>
