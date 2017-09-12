@@ -6,10 +6,6 @@
     text-align: center;
 }
 
-.card-signup {
-    margin-top: 50px;
-}
-
 .card-content {
     padding: 0px 20px 0px 20px;
 }
@@ -25,4 +21,8 @@
 .form-group {
     padding-bottom: 3px;
     margin: 15px 0 0 0;
+}
+
+.header-primary {
+    background: linear-gradient(60deg, #999999, #989898);
 }

@@ -12,7 +12,6 @@
 .no-wrap {
     white-space: nowrap;
 }
-
-.card-signup {
-    margin-top: 50px;
+.header-primary {
+    background: linear-gradient(60deg, #999999, #989898);
 }

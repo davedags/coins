@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 .section-header {
-    max-width: 90%;
+    max-width: 95%;
 }
 
 .loading-container {
@@ -14,8 +14,7 @@
     color: red !important;
 }
 
-.card-title {
-// font-family: Roboto,Helvetica,Arial,sans-serif;
-    font-weight: 300;
+.card-signup {
+    margin-top: 50px;
 }
 

@@ -1,3 +1,6 @@
+.header-primary {
+    background: linear-gradient(60deg, #999999, #989898);
+}
 .about-wrapper {
     margin: auto;
     padding-top: 6px;
@@ -9,19 +12,7 @@
 
 }
 
-.card-profile {
-    margin-top: 40px;
-}
-
-@media only screen and (max-width: 420px) {
-    .card-container {
-        width: 100%;
-        margin: auto;
-    }
-}
-@media only screen and (min-width: 500px) {
-    .card-container {
-        width: 450px;
-        margin: auto;
-    }
+.card-container {
+    max-width: 450px;
+    margin: auto;
 }

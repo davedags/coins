@@ -42,16 +42,35 @@ export class PortfolioComponent implements OnInit {
                 width: '15%',
                 type: 'html',
                 valuePrepareFunction: (value, row) => {
-                    let imgUrl = row.image_url;
-                    if (!imgUrl) {
-                        imgUrl = "/assets/icons/default.png";
+                    if (!this.hideColumns) {
+                        let imgUrl = row.image_url;
+                        if (!imgUrl) {
+                            imgUrl = "/assets/icons/default.png";
+                        }
+                        return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                            "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                    } else {
+                        return value;
                     }
-                    return "<img src='" + imgUrl + "' width='25px' height='25px' /> " + value;
                 }
             },
             'symbol': {
                 title: 'Symbol',
-                width: '10%'
+                width: '10%',
+                type: 'html',
+                valuePrepareFunction: (value, row) => {
+                    if (this.hideColumns) {
+                        let imgUrl = row.image_url;
+                        if (!imgUrl) {
+                            imgUrl = "/assets/icons/default.png";
+                        }
+
+                        return "<div><img class='coin-img' src='" + imgUrl + "' width='25px' height='25px' />" +
+                            "<span class='coin-img-text'>&nbsp;&nbsp;" + value + "</span></div>";
+                    } else {
+                        return value;
+                    }
+                }
             },
             'quantity': {
                 title: '# Owned',
@@ -109,7 +128,9 @@ export class PortfolioComponent implements OnInit {
     showLabels: boolean = true;
     mobileDevice: boolean = false;
     showChart: boolean = false;
-    
+    toggleDisplay: string = 'show chart';
+    hideColumns: boolean = false;
+
     constructor(private portfolioService: PortfolioService,
                 private router: Router,
                 private deviceService: Ng2DeviceService,
@@ -122,6 +143,9 @@ export class PortfolioComponent implements OnInit {
             this.showLegend = false;
         }
         this.setDefaultFilters();
+        if (this.showChart) {
+            this.toggleDisplay = 'hide chart';
+        }
         this.initList();
     }
 
@@ -168,6 +192,11 @@ export class PortfolioComponent implements OnInit {
 
     toggleChartVisibility(): void {
         this.showChart = !this.showChart;
+        if (this.showChart) {
+            this.toggleDisplay = 'hide chart';
+        } else {
+            this.toggleDisplay = 'show chart';
+        }
         this.localStorageService.set(PortfolioComponent.getChartVisibilityStorageKey(), this.showChart);
     }
 
