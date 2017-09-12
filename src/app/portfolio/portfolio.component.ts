@@ -139,7 +139,6 @@ export class PortfolioComponent implements OnInit {
 
     ngOnInit() {
         this.mobileDevice = this.deviceService.isMobile();
-        this.mobileDevice = true;
         if (this.mobileDevice) {
             this.showLegend = false;
         }
