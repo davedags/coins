@@ -74,10 +74,9 @@ class Coin extends Base
         if ($data = $this->cache->get($cache_key)) {
             return $data;
         }
-
         $api_results = [];
         try {
-            $response = $this->http->get(self::API_COINMARKETCAP_BASE_URL);
+            $response = $this->http->get(self::API_COINMARKETCAP_BASE_URL . "?limit=0");
             if ($response->getStatusCode() == 200) {
                 $body = $response->getBody()->getContents();
                 if (($decoded = json_decode($body, true)) !== null) {
@@ -206,7 +205,8 @@ class Coin extends Base
         }
 
         if ($data) {
-            $this->cache->set($cache_key, $data, 300);
+            //$this->cache->set($cache_key, $data, 300);
+            $this->cache->set($cache_key, $data, 600);
         }
 
         return $data;

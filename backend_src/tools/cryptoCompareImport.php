@@ -14,7 +14,7 @@ require_once './bootstrap.php';
 $em = $app->db->em;
 
 $api_endpoint = 'https://www.cryptocompare.com/api/data/';
-$coin_market_cap_api = 'https://api.coinmarketcap.com/v1/ticker/';
+$coin_market_cap_api = 'https://api.coinmarketcap.com/v1/ticker/?limit=0';
 $remote_url_base = 'https://www.cryptocompare.com';
 
 $http = new Client([
