@@ -13,14 +13,14 @@ use GuzzleHttp\Client;
 class Coin extends Base
 {
 
-    
+
     private $http = null;
     public static $class = 'Coin';
     const API_COMPARE_BASE_URL = 'https://www.cryptocompare.com/api/data/';
     const API_SIMPLE_PRICE_URL = 'https://min-api.cryptocompare.com/data/price?';
     const API_COINMARKETCAP_BASE_URL = 'https://api.coinmarketcap.com/v1/ticker/';
 
-    public function __construct(array $args = []) 
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
         $this->http = new Client([
@@ -33,8 +33,8 @@ class Coin extends Base
     {
         return 'coins.mk.list.' . $user ?: 'public';
     }
-    
-    public static function clearMarketCapCache($user = null) 
+
+    public static function clearMarketCapCache($user = null)
     {
         $cache_key = self::getMarketCapCacheKey($user);
         $cache = \Coins\Cache::Instance();
@@ -42,10 +42,10 @@ class Coin extends Base
             $cache->set($cache_key, null);
         }
     }
-    
-    public function getMarketCapList(array $args = []) 
+
+    public function getMarketCapList(array $args = [])
     {
-        
+
         $cache_key = self::getMarketCapCacheKey($this->getUser());
         if ($data = $this->cache->get($cache_key)) {
             return $data;
@@ -81,6 +81,13 @@ class Coin extends Base
                 $body = $response->getBody()->getContents();
                 if (($decoded = json_decode($body, true)) !== null) {
                     $api_results = $decoded;
+                    foreach ($api_results as $idx => $data) {
+                        if ($data['price_usd']) {
+                            $cache_key = self::getPriceCacheKey($data['symbol']);
+                            $this->cache->set($cache_key, $data['price_usd'], 300);
+                        }
+                    }
+                    $cache_key = 'coins.mkcap.api';
                     $this->cache->set($cache_key, $api_results, 300);
                 }
             }
@@ -126,7 +133,7 @@ class Coin extends Base
         }
 
     }
-    
+
     public function getTotalMarketCap($data)
     {
         $total = 0;
@@ -136,13 +143,13 @@ class Coin extends Base
         return $total;
     }
 
-    
+
     public static function sortMarketCapList($a, $b)
     {
 
-        if ((float) $a['market_cap_usd'] < (float) $b['market_cap_usd']) {
+        if ((float)$a['market_cap_usd'] < (float)$b['market_cap_usd']) {
             return 1;
-        } elseif ((float) $a['market_cap_usd'] > (float) $b['market_cap_usd']) {
+        } elseif ((float)$a['market_cap_usd'] > (float)$b['market_cap_usd']) {
             return -1;
         } else {
             return 0;
@@ -151,7 +158,7 @@ class Coin extends Base
 
     public function getSymbolMap()
     {
-    
+
         $cache_key = 'coins.cc.symbolmap';
         if ($data = $this->cache->get($cache_key)) {
             return $data;
@@ -170,9 +177,15 @@ class Coin extends Base
     }
 
 
+    public static function getPriceCacheKey($symbol)
+    {
+        return 'coins.cc.price.' . strtoupper($symbol);
+    }
+
     public function getPriceBySymbol($symbol)
     {
-        $cache_key = 'coins.cc.price.' . $symbol;
+
+        $cache_key = self::getPriceCacheKey($symbol);
         if ($data = $this->cache->get($cache_key)) {
             return $data;
         }
@@ -205,7 +218,6 @@ class Coin extends Base
         }
 
         if ($data) {
-            //$this->cache->set($cache_key, $data, 300);
             $this->cache->set($cache_key, $data, 600);
         }
 
