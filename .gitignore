@@ -45,3 +45,4 @@ error_log.txt
 /config/config.inc
 /config/.env
 /local/*
+/logs/*
