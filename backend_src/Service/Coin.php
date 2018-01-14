@@ -19,6 +19,7 @@ class Coin extends Base
     const API_COMPARE_BASE_URL = 'https://www.cryptocompare.com/api/data/';
     const API_SIMPLE_PRICE_URL = 'https://min-api.cryptocompare.com/data/price?';
     const API_COINMARKETCAP_BASE_URL = 'https://api.coinmarketcap.com/v1/ticker/';
+    const API_CACHE_TIME = 600;
 
     public function __construct(array $args = [])
     {
@@ -62,7 +63,7 @@ class Coin extends Base
             $collection['results'] = $api_results;
             $collection['total'] = count($api_results);
             $collection['marketCap'] = $this->getTotalMarketCap($collection['results']);
-            $this->cache->set($cache_key, $collection, 300);
+            $this->cache->set($cache_key, $collection, self::API_CACHE_TIME);
         }
 
         return $collection;
@@ -70,8 +71,8 @@ class Coin extends Base
 
     public function getCoinMarketCapAPIData()
     {
-        $cache_key = 'coins.mkcap.api';
-        if ($data = $this->cache->get($cache_key)) {
+        $list_cache_key = 'coins.mkcap.api';
+        if ($data = $this->cache->get($list_cache_key)) {
             return $data;
         }
         $api_results = [];
@@ -83,12 +84,10 @@ class Coin extends Base
                     $api_results = $decoded;
                     foreach ($api_results as $idx => $data) {
                         if ($data['price_usd']) {
-                            $cache_key = self::getPriceCacheKey($data['symbol']);
-                            $this->cache->set($cache_key, $data['price_usd'], 300);
+                            $this->cache->set(self::getPriceCacheKey($data['symbol']), $data['price_usd'], self::API_CACHE_TIME);
                         }
                     }
-                    $cache_key = 'coins.mkcap.api';
-                    $this->cache->set($cache_key, $api_results, 300);
+                    $this->cache->set($list_cache_key, $api_results, self::API_CACHE_TIME);
                 }
             }
         } catch (\GuzzleHttp\Exception\ConnectException $e) {
@@ -192,6 +191,8 @@ class Coin extends Base
         $data = [];
         $coin = $this->getObjectByField($symbol, 'symbol');
 
+        /**
+         API LIMITS KILL ABILITY TO LOOK UP PRICES IN REAL TIME.   MOVED TO CRON JOB
         if ($mkt_cap_id = $coin->getCmcapId()) {
 
             $response = $this->http->get(self::API_COINMARKETCAP_BASE_URL . $mkt_cap_id);
@@ -201,24 +202,24 @@ class Coin extends Base
                     $data = $decoded[0]['price_usd'];
                 }
             }
-        } else {
-            $query_params = [
-                'fsym' => strtoupper($symbol),
-                'tsyms' => 'USD'
-            ];
-            $response = $this->http->get(self::API_SIMPLE_PRICE_URL . http_build_query($query_params));
-            if ($response->getStatusCode() == 200) {
-                $body = $response->getBody()->getContents();
-                if (($decoded = json_decode($body, true)) !== null) {
-                    if (!empty($decoded['USD'])) {
-                        $data = $decoded['USD'];
-                    }
+         **/
+        $query_params = [
+            'fsym' => strtoupper($symbol),
+            'tsyms' => 'USD'
+        ];
+        $response = $this->http->get(self::API_SIMPLE_PRICE_URL . http_build_query($query_params));
+        if ($response->getStatusCode() == 200) {
+            $body = $response->getBody()->getContents();
+            if (($decoded = json_decode($body, true)) !== null) {
+                if (!empty($decoded['USD'])) {
+                    $data = $decoded['USD'];
                 }
             }
         }
 
+
         if ($data) {
-            $this->cache->set($cache_key, $data, 600);
+            $this->cache->set($cache_key, $data, self::API_CACHE_TIME);
         }
 
         return $data;
