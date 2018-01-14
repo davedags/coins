@@ -10,6 +10,8 @@ use GuzzleHttp\Client;
 
 require_once './bootstrap.php';
 
+echo "Job Starting: " . date("Y-m-d H:i:s") . "\n\n";
+
 $coin_market_cap_api = 'https://api.coinmarketcap.com/v1/ticker/?limit=0';
 
 $cache = Cache::Instance();
@@ -34,5 +36,6 @@ if ($response->getStatusCode() == 200) {
     }
 }
 
-echo 'Cached ' . $x . ' coin prices';
+echo "Cached  $x coin prices \n\n";
+echo "Job Complete:: " . date("Y-m-d H:i:s") . "\n\n";
 exit;
