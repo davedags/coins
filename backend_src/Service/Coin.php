@@ -19,7 +19,7 @@ class Coin extends Base
     const API_COMPARE_BASE_URL = 'https://www.cryptocompare.com/api/data/';
     const API_SIMPLE_PRICE_URL = 'https://min-api.cryptocompare.com/data/price?';
     const API_COINMARKETCAP_BASE_URL = 'https://api.coinmarketcap.com/v1/ticker/';
-    const API_CACHE_TIME = 600;
+    const API_CACHE_TIME = 660;
 
     public function __construct(array $args = [])
     {
