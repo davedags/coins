@@ -18,8 +18,8 @@ class Coin extends Base
     public static $class = 'Coin';
     const API_COMPARE_BASE_URL = 'https://www.cryptocompare.com/api/data/';
     const API_SIMPLE_PRICE_URL = 'https://min-api.cryptocompare.com/data/price?';
-    const API_COINMARKETCAP_BASE_URL = 'https://api.coinmarketcap.com/v1/ticker/';
-    const API_CACHE_TIME = 660;
+    const API_COINMARKETCAP_BASE_URL ='https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest';
+    const API_CACHE_TIME = 600;
 
     public function __construct(array $args = [])
     {
@@ -46,6 +46,7 @@ class Coin extends Base
 
     public function getMarketCapList(array $args = [])
     {
+
 
         $cache_key = self::getMarketCapCacheKey($this->getUser());
         if ($data = $this->cache->get($cache_key)) {
@@ -75,16 +76,40 @@ class Coin extends Base
         if ($data = $this->cache->get($list_cache_key)) {
             return $data;
         }
+
         $api_results = [];
         try {
-            $response = $this->http->get(self::API_COINMARKETCAP_BASE_URL . "?limit=0");
+            $response = $this->http->request('GET', self::API_COINMARKETCAP_BASE_URL, [
+                'query' => [
+                    'start' => '1',
+                    'limit' => '2000',
+                    'convert' => 'USD'
+                ],
+                'headers' => [
+                    'Accepts' => 'application/json',
+                    'X-CMC_PRO_API_KEY' => ' ee9bdd37-227c-457e-aff1-7e85fb8973f5'
+                ]
+            ]);
             if ($response->getStatusCode() == 200) {
                 $body = $response->getBody()->getContents();
                 if (($decoded = json_decode($body, true)) !== null) {
-                    $api_results = $decoded;
+                    $api_results = $decoded['data'];
+                    
                     foreach ($api_results as $idx => $data) {
-                        if ($data['price_usd']) {
-                            $this->cache->set(self::getPriceCacheKey($data['symbol']), $data['price_usd'], self::API_CACHE_TIME);
+                        $quote = $data['quote']['USD'];
+                        if (is_array($quote)) {
+                            foreach ($quote as $quote_field => $quote_data) {
+                                if (in_array($quote_field, ['price', 'market_cap'])) {
+                                    $set_field = $quote_field . '_usd';
+                                } else {
+                                    $set_field = $quote_field;
+                                }
+                                $api_results[$idx][$set_field] = $quote_data;
+                            }
+                            unset($api_results[$idx]['quote']);
+                        }
+                        if ($price = $api_results[$idx]['price_usd']) {
+                            $this->cache->set(self::getPriceCacheKey($data['symbol']), $price, self::API_CACHE_TIME);
                         }
                     }
                     $this->cache->set($list_cache_key, $api_results, self::API_CACHE_TIME);
@@ -107,6 +132,7 @@ class Coin extends Base
             );
             $portfolio_map = $portfolio_service->getSymbolMap();
         }
+
         foreach ($data as $idx => $row) {
             $row['symbol'] = strtoupper($row['symbol']);
             if (!empty($symbol_map[$row['symbol']])) {

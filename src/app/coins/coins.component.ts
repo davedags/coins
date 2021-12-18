@@ -82,9 +82,15 @@ export class CoinsComponent implements OnInit {
             width: '30%',
             sort: 'desc',
             valuePrepareFunction: (value) => {
+                let minfd = 2;
+                let maxfd = 2;
+                if (Number(value) < 1) {
+                   minfd = 4;
+                   maxfd = 8;
+                } 
                 return '$' + Number(value).toLocaleString('en', {
-                        minimumFractionDigits: 4,
-                        maximumFractionDigits: 8
+                        minimumFractionDigits: minfd,
+                        maximumFractionDigits: maxfd
                     })
             },
             compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
@@ -111,7 +117,11 @@ export class CoinsComponent implements OnInit {
                 } else {
                     className = 'negative-change';
                 }
-                return "<span class='" + className + "'>" + value + "%</span>";
+                let formattedValue = Number(value).toLocaleString('en', { 
+                                        minimumFractionDigits: 2, 
+                                        maximumFractionDigits: 2
+                                       });                                       
+                return "<span class='" + className + "'>" + formattedValue + "%</span>";
             },
             compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)
         }

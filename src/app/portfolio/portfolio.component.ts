@@ -76,9 +76,15 @@ export class PortfolioComponent implements OnInit {
             width: '20%',
             sort: 'desc',
             valuePrepareFunction: (value) => {
-                return '$' + Number(value).toLocaleString('en', {
-                        minimumFractionDigits: 4,
-                        maximumFractionDigits: 8
+               let minfd = 2;
+               let maxfd = 2;
+               if (Number(value) < 1) {
+                   minfd = 4;
+                   maxfd = 8;
+               }  
+               return '$' + Number(value).toLocaleString('en', {
+                        minimumFractionDigits: minfd,
+                        maximumFractionDigits: maxfd
                     })
             },
             compareFunction: (dir, a, b) => this.compareNumbers(dir, a, b)

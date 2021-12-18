@@ -14,7 +14,8 @@ require_once './bootstrap.php';
 $em = $app->db->em;
 
 $api_endpoint = 'https://www.cryptocompare.com/api/data/';
-$coin_market_cap_api = 'https://api.coinmarketcap.com/v1/ticker/?limit=0';
+//$coin_market_cap_api = 'https://api.coinmarketcap.com/v1/ticker/?limit=0';
+$coin_market_cap_api = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest';
 $remote_url_base = 'https://www.cryptocompare.com';
 
 $http = new Client([
@@ -23,16 +24,26 @@ $http = new Client([
 ]);
 
 $mkt_cap_map = [];
-$response = $http->get($coin_market_cap_api);
+//$response = $http->get($coin_market_cap_api);
+$response = $http->request('GET', $coin_market_cap_api, [
+    'query' => [
+        'start' => '1',
+        'limit' => '5000',
+        'convert' => 'USD'
+    ],
+    'headers' => [
+        'Accepts' => 'application/json',
+        'X-CMC_PRO_API_KEY' => ' ee9bdd37-227c-457e-aff1-7e85fb8973f5'
+    ]
+]);
 if ($response->getStatusCode() == 200) {
     $body = $response->getBody()->getContents();
     if (($decoded = json_decode($body, true)) !== null) {
-        foreach ($decoded as $c) {
+        foreach ($decoded['data'] as $c) {
             $mkt_cap_map[$c['symbol']] = $c['id'];
         }
     }
 }
-
 $imported = $counter = 0;
 $response = $http->get($api_endpoint . "coinlist/");
 if ($response->getStatusCode() == 200) {
@@ -44,9 +55,9 @@ if ($response->getStatusCode() == 200) {
 
         foreach ($results as $id => $row) {
             echo $counter++ . "\r";
-
             $coin = $em->getRepository('Coins\Entities\Coin')->findOneBy(['symbol' => $row['Name']]);
             if (!$coin) {
+                echo 'Looking to import coin ' . $row['Name'] . "\n";
                 $coin = new \Coins\Entities\Coin();
                 $coin->setSymbol($row['Name']);
                 $coin->setName($row['CoinName']);
@@ -68,7 +79,6 @@ if ($response->getStatusCode() == 200) {
                 if ($detail) {
                     $coin->setCryptocompareDetail($detail);
                 }
-
                 $em->persist($coin);
                 $em->flush();
                 $imported++;
